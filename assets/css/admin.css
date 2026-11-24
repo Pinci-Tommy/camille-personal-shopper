@@ -1,0 +1,44 @@
+/* Camille settings page (WooCommerce > Camille). */
+.camille-ps .camille-ps-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	max-width: 760px;
+	margin: 16px 0;
+	padding: 4px 24px 20px;
+}
+.camille-ps .camille-ps-danger h2 { color: #b32d2e; }
+.camille-ps .camille-ps-code {
+	font-size: 22px;
+	letter-spacing: 6px;
+	width: 10em;
+}
+.camille-ps .camille-ps-inline-form { margin-top: 8px; }
+.camille-ps .camille-ps-facts th {
+	text-align: left;
+	padding: 4px 24px 4px 0;
+	font-weight: 600;
+}
+.camille-ps .camille-ps-badge {
+	display: inline-block;
+	border-radius: 4px;
+	padding: 6px 10px;
+	background: #f0f0f1;
+}
+.camille-ps .camille-ps-badge.is-success { background: #edfaef; color: #00450c; }
+.camille-ps .camille-ps-badge.is-info { background: #f0f6fc; color: #0a4b78; }
+.camille-ps .camille-ps-badge.is-warning { background: #fcf9e8; color: #614200; }
+.camille-ps .camille-ps-badge.is-error { background: #fcf0f1; color: #8a2424; }
+.camille-ps .camille-ps-visibility label {
+	display: block;
+	margin: 0 0 12px;
+}
+.camille-ps .camille-ps-visibility .description {
+	display: block;
+	margin-left: 24px;
+}
+.camille-ps .camille-ps-rejected { margin: 12px 0; }
+.camille-ps .camille-ps-rejected summary { cursor: pointer; font-weight: 600; }
+.camille-ps .camille-ps-field-error input,
+.camille-ps .camille-ps-field-error select { border-color: #d63638; }
+.camille-ps .camille-ps-error-text { color: #b32d2e; margin: 4px 0 0; }

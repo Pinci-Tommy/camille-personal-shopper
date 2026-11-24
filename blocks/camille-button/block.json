@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "camille-personal-shopper/button",
+	"version": "0.1.0",
+	"title": "Camille button",
+	"category": "widgets",
+	"icon": "format-chat",
+	"description": "A button that opens Camille, the AI personal shopper. On a product page it can open Camille with that product.",
+	"keywords": [ "camille", "personal shopper", "chat", "try on" ],
+	"textdomain": "camille-personal-shopper",
+	"attributes": {
+		"label": { "type": "string", "default": "" },
+		"mode": { "type": "string", "enum": [ "tryon", "chat" ], "default": "tryon" }
+	},
+	"supports": { "html": false, "align": [ "left", "center", "right" ] },
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,634 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Camille - AI Personal Shopper 0.1.0\n"
+"Report-Msgid-Bugs-To: support@pinci.ai\n"
+"POT-Creation-Date: 2026-11-24 10:00+0000\n"
+"PO-Revision-Date: 2026-11-24 10:00+0000\n"
+"Last-Translator: Instamark S.r.l.\n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: camille-personal-shopper\n"
+
+#: includes/class-camille-ps-catalog-sync.php:47
+msgid "WooCommerce background tasks (Action Scheduler) are not available. Update WooCommerce and try again."
+msgstr "Las tareas en segundo plano de WooCommerce (Action Scheduler) no están disponibles. Actualice WooCommerce e inténtelo de nuevo."
+
+#: includes/class-camille-ps-plugin.php:48
+msgid "Camille – AI Personal Shopper needs WooCommerce. Install and activate WooCommerce to use it."
+msgstr "Camille – AI Personal Shopper necesita WooCommerce. Instale y active WooCommerce para usarlo."
+
+#: includes/class-camille-ps-frontend.php:177 blocks/camille-button/index.js:15
+msgid "Try with Camille"
+msgstr "Probar con Camille"
+
+#: includes/class-camille-ps-frontend.php:177 blocks/camille-button/index.js:14
+msgid "Ask Camille"
+msgstr "Preguntar a Camille"
+
+#: includes/class-camille-ps-admin.php:36 includes/class-camille-ps-admin.php:36 includes/class-camille-ps-admin.php:449
+msgid "Camille"
+msgstr "Camille"
+
+#: includes/class-camille-ps-admin.php:46
+msgid "Settings"
+msgstr "Ajustes"
+
+#: includes/class-camille-ps-admin.php:118
+msgid "You are not allowed to change these settings."
+msgstr "No tiene permiso para cambiar estos ajustes."
+
+#: includes/class-camille-ps-admin.php:141
+msgid "Please enter a valid email address."
+msgstr "Introduzca una dirección de correo electrónico válida."
+
+#. translators: %s: email address.
+#: includes/class-camille-ps-admin.php:156
+#, php-format
+msgid "We sent a 6-digit code to %s. It is valid for 15 minutes."
+msgstr "Hemos enviado un código de 6 cifras a %s. Es válido durante 15 minutos."
+
+#: includes/class-camille-ps-admin.php:158
+msgid "Camille needs your shop to be served over HTTPS. Enable HTTPS and try again."
+msgstr "Camille necesita que su tienda funcione con HTTPS. Active HTTPS e inténtelo de nuevo."
+
+#: includes/class-camille-ps-admin.php:173
+msgid "The code has expired. Please ask for a new one."
+msgstr "El código ha caducado. Solicite uno nuevo."
+
+#: includes/class-camille-ps-admin.php:177
+msgid "The code has 6 digits."
+msgstr "El código tiene 6 cifras."
+
+#: includes/class-camille-ps-admin.php:210
+msgid "Your shop is connected to Camille. Now send her your catalog."
+msgstr "Su tienda está conectada a Camille. Ahora envíele su catálogo."
+
+#: includes/class-camille-ps-admin.php:212
+msgid "You received 300 free credits to get started."
+msgstr "Ha recibido 300 créditos gratuitos para empezar."
+
+#. translators: %d: tries left.
+#: includes/class-camille-ps-admin.php:218
+#, php-format
+msgid "Wrong code. %d try left."
+msgid_plural "Wrong code. %d tries left."
+msgstr[0] "Código incorrecto. Queda %d intento."
+msgstr[1] "Código incorrecto. Quedan %d intentos."
+
+#. translators: %s: sign-up link.
+#: includes/class-camille-ps-admin.php:223
+#, php-format
+msgid "There is no Pinci account with this email. %s, then connect the shop again."
+msgstr "No existe ninguna cuenta de Pinci con este correo. %s y después vuelva a conectar la tienda."
+
+#. translators: %s: sign-up link.
+#: includes/class-camille-ps-admin.php:223
+msgid "Create your account"
+msgstr "Cree su cuenta"
+
+#: includes/class-camille-ps-admin.php:227
+msgid "Your Pinci account is not verified yet. Open the confirmation email Pinci sent you, then connect the shop again."
+msgstr "Su cuenta de Pinci aún no está verificada. Abra el correo de confirmación que le envió Pinci y después vuelva a conectar la tienda."
+
+#: includes/class-camille-ps-admin.php:231
+msgid "This email belongs to a Shopify store on Pinci. Use another Pinci account for your WooCommerce shop."
+msgstr "Este correo pertenece a una tienda Shopify en Pinci. Use otra cuenta de Pinci para su tienda WooCommerce."
+
+#: includes/class-camille-ps-admin.php:235
+msgid "This website is already connected to another Pinci account. Contact support@pinci.ai."
+msgstr "Este sitio ya está conectado a otra cuenta de Pinci. Escriba a support@pinci.ai."
+
+#: includes/class-camille-ps-admin.php:239
+msgid "This Pinci account is blocked. Contact support@pinci.ai."
+msgstr "Esta cuenta de Pinci está bloqueada. Escriba a support@pinci.ai."
+
+#: includes/class-camille-ps-admin.php:243
+msgid "The code has expired or was tried too many times. Please ask for a new one."
+msgstr "El código ha caducado o se ha intentado demasiadas veces. Solicite uno nuevo."
+
+#: includes/class-camille-ps-admin.php:267
+msgid "Settings saved, but Camille could not be switched on or off right now:"
+msgstr "Ajustes guardados, pero ahora mismo no se ha podido activar o desactivar a Camille:"
+
+#: includes/class-camille-ps-admin.php:272
+msgid "Settings saved."
+msgstr "Ajustes guardados."
+
+#: includes/class-camille-ps-admin.php:290
+msgid "Billing details saved."
+msgstr "Datos de facturación guardados."
+
+#: includes/class-camille-ps-admin.php:302
+msgid "Some billing details are missing or not valid. Check the marked fields."
+msgstr "Faltan algunos datos de facturación o no son válidos. Revise los campos marcados."
+
+#: includes/class-camille-ps-admin.php:315
+msgid "Catalog sync started. It runs in the background: you can leave this page."
+msgstr "Sincronización del catálogo iniciada. Continúa en segundo plano: puede salir de esta página."
+
+#: includes/class-camille-ps-admin.php:330
+msgid "The shop was disconnected here, but Camille could not be told. Write to support@pinci.ai to close it on Pinci too."
+msgstr "La tienda se ha desconectado aquí, pero no se ha podido avisar a Camille. Escriba a support@pinci.ai para cerrarla también en Pinci."
+
+#: includes/class-camille-ps-admin.php:332
+msgid "The shop is disconnected. Camille no longer appears on it."
+msgstr "La tienda está desconectada. Camille ya no aparece en ella."
+
+#: includes/class-camille-ps-admin.php:362
+msgid "Camille, your AI personal shopper"
+msgstr "Camille, su personal shopper con IA"
+
+#: includes/class-camille-ps-admin.php:388
+msgid "Connect your shop"
+msgstr "Conecte su tienda"
+
+#: includes/class-camille-ps-admin.php:390
+msgid "Camille works with a Pinci account. Enter the email of your account: we will send you a code to confirm it is yours."
+msgstr "Camille funciona con una cuenta de Pinci. Introduzca el correo de su cuenta: le enviaremos un código para confirmar que es suya."
+
+#: includes/class-camille-ps-admin.php:394
+msgid "Pinci account email"
+msgstr "Correo de la cuenta de Pinci"
+
+#: includes/class-camille-ps-admin.php:396
+msgid "Send the code"
+msgstr "Enviar el código"
+
+#. translators: %s: sign-up link.
+#: includes/class-camille-ps-admin.php:402
+#, php-format
+msgid "No account yet? %s, it is free and includes 300 credits to try Camille."
+msgstr "¿Aún no tiene cuenta? %s, es gratis e incluye 300 créditos para probar Camille."
+
+#. translators: %s: sign-up link.
+#: includes/class-camille-ps-admin.php:403
+msgid "Create one on pinci.ai"
+msgstr "Cree una en pinci.ai"
+
+#. translators: %s: email address.
+#: includes/class-camille-ps-admin.php:415
+#, php-format
+msgid "Enter the 6-digit code sent to %s."
+msgstr "Introduzca el código de 6 cifras enviado a %s."
+
+#: includes/class-camille-ps-admin.php:419
+msgid "Code"
+msgstr "Código"
+
+#: includes/class-camille-ps-admin.php:421
+msgid "Connect the shop"
+msgstr "Conectar la tienda"
+
+#: includes/class-camille-ps-admin.php:427
+msgid "Use another email or send a new code"
+msgstr "Usar otro correo o enviar un código nuevo"
+
+#: includes/class-camille-ps-admin.php:443
+msgid "Status"
+msgstr "Estado"
+
+#: includes/class-camille-ps-admin.php:445
+msgid "Camille is temporarily paused by Pinci. Your shop keeps working normally."
+msgstr "Pinci ha pausado temporalmente a Camille. Su tienda sigue funcionando con normalidad."
+
+#: includes/class-camille-ps-admin.php:448
+msgid "Pinci account"
+msgstr "Cuenta de Pinci"
+
+#: includes/class-camille-ps-admin.php:449
+msgid "On"
+msgstr "Activada"
+
+#: includes/class-camille-ps-admin.php:449 includes/class-camille-ps-admin.php:574
+msgid "Off"
+msgstr "Desactivada"
+
+#: includes/class-camille-ps-admin.php:451
+msgid "Credits left"
+msgstr "Créditos restantes"
+
+#: includes/class-camille-ps-admin.php:453
+msgid "Buy credits"
+msgstr "Comprar créditos"
+
+#: includes/class-camille-ps-admin.php:457
+msgid "Before buying credits, enter your billing details so we can send you the invoice."
+msgstr "Antes de comprar créditos, introduzca sus datos de facturación para que podamos enviarle la factura."
+
+#: includes/class-camille-ps-admin.php:457 includes/class-camille-ps-admin.php:684
+msgid "Billing details"
+msgstr "Datos de facturación"
+
+#: includes/class-camille-ps-admin.php:460
+msgid "Last catalog sync"
+msgstr "Última sincronización del catálogo"
+
+#: includes/class-camille-ps-admin.php:460
+msgid "Never"
+msgstr "Nunca"
+
+#: includes/class-camille-ps-admin.php:473 includes/class-camille-ps-admin.php:474
+msgid "Your catalog is over the 5,000 product limit."
+msgstr "Su catálogo supera el límite de 5.000 productos."
+
+#: includes/class-camille-ps-admin.php:475
+msgid "No product could be sent: check that your products have a price and a photo."
+msgstr "No se ha podido enviar ningún producto: compruebe que sus productos tienen precio y foto."
+
+#: includes/class-camille-ps-admin.php:476
+msgid "Pinci was not reachable for a long time. Start the sync again."
+msgstr "Pinci no ha estado disponible durante mucho tiempo. Vuelva a iniciar la sincronización."
+
+#: includes/class-camille-ps-admin.php:477
+msgid "Camille was not reachable for a long time. Start the sync again."
+msgstr "Camille no ha estado disponible durante mucho tiempo. Vuelva a iniciar la sincronización."
+
+#: includes/class-camille-ps-admin.php:478
+msgid "Camille does not find this shop any more. Disconnect and connect it again."
+msgstr "Camille ya no encuentra esta tienda. Desconéctela y vuelva a conectarla."
+
+#: includes/class-camille-ps-admin.php:479
+msgid "The sync stopped halfway. Start it again."
+msgstr "La sincronización se ha detenido a medias. Vuelva a iniciarla."
+
+#: includes/class-camille-ps-admin.php:480
+msgid "A newer sync replaced this one."
+msgstr "Una sincronización más reciente ha sustituido a esta."
+
+#: includes/class-camille-ps-admin.php:482
+msgid "The sync stopped because of an error. Start it again; if it happens again write to support@pinci.ai."
+msgstr "La sincronización se ha detenido por un error. Vuelva a iniciarla; si vuelve a ocurrir, escriba a support@pinci.ai."
+
+#: includes/class-camille-ps-admin.php:493
+msgid "no name"
+msgstr "sin nombre"
+
+#: includes/class-camille-ps-admin.php:494
+msgid "no price"
+msgstr "sin precio"
+
+#: includes/class-camille-ps-admin.php:495
+msgid "no photo"
+msgstr "sin foto"
+
+#: includes/class-camille-ps-admin.php:496
+msgid "product address not valid"
+msgstr "dirección del producto no válida"
+
+#: includes/class-camille-ps-admin.php:497
+msgid "currency not valid"
+msgstr "moneda no válida"
+
+#: includes/class-camille-ps-admin.php:499
+msgid "data not valid"
+msgstr "datos no válidos"
+
+#: includes/class-camille-ps-admin.php:507
+msgid "Catalog"
+msgstr "Catálogo"
+
+#: includes/class-camille-ps-admin.php:508
+msgid "Camille only suggests products she knows. Sync again after adding products or changing prices, so she always shows what you sell."
+msgstr "Camille solo propone los productos que conoce. Vuelva a sincronizar después de añadir productos o cambiar precios, para que muestre siempre lo que vende."
+
+#. translators: %d: number of products.
+#: includes/class-camille-ps-admin.php:513
+#, php-format
+msgid "Sending products to Camille: %d so far."
+msgstr "Enviando productos a Camille: %d hasta ahora."
+
+#: includes/class-camille-ps-admin.php:523
+msgid "Restart the sync"
+msgstr "Reiniciar la sincronización"
+
+#: includes/class-camille-ps-admin.php:523
+msgid "Sync the catalog"
+msgstr "Sincronizar el catálogo"
+
+#. translators: 1: rows imported, 2: rows to import.
+#: includes/class-camille-ps-admin.php:541
+#, php-format
+msgid "Camille is importing your catalog: %1$d of %2$d."
+msgstr "Camille está importando su catálogo: %1$d de %2$d."
+
+#: includes/class-camille-ps-admin.php:543
+msgid "Pinci is busy: the import will continue by itself in a few minutes."
+msgstr "Pinci está ocupado: la importación continuará sola en unos minutos."
+
+#. translators: %d: number of catalog items.
+#: includes/class-camille-ps-admin.php:547
+#, php-format
+msgid "Last sync completed: %d item in Camille's catalog."
+msgid_plural "Last sync completed: %d items in Camille's catalog."
+msgstr[0] "Última sincronización completada: %d artículo en el catálogo de Camille."
+msgstr[1] "Última sincronización completada: %d artículos en el catálogo de Camille."
+
+#. translators: %d: number of catalog items.
+#: includes/class-camille-ps-admin.php:548
+msgid "Each colour of a product is a separate item. Camille finishes studying new items in a few minutes."
+msgstr "Cada color de un producto es un artículo distinto. Camille termina de estudiar los artículos nuevos en pocos minutos."
+
+#. translators: %d: number of items.
+#: includes/class-camille-ps-admin.php:557
+#, php-format
+msgid "%d item left out"
+msgid_plural "%d items left out"
+msgstr[0] "%d artículo excluido"
+msgstr[1] "%d artículos excluidos"
+
+#: includes/class-camille-ps-admin.php:574
+msgid "Camille does not appear and does not use credits."
+msgstr "Camille no aparece y no consume créditos."
+
+#: includes/class-camille-ps-admin.php:575
+msgid "Only shop administrators"
+msgstr "Solo administradores de la tienda"
+
+#: includes/class-camille-ps-admin.php:575
+msgid "To try Camille while logged in to WordPress, before your customers see her."
+msgstr "Para probar a Camille con la sesión de WordPress iniciada, antes de que la vean sus clientes."
+
+#: includes/class-camille-ps-admin.php:576
+msgid "Only logged-in customers"
+msgstr "Solo clientes con sesión iniciada"
+
+#: includes/class-camille-ps-admin.php:576
+msgid "Customers with an account on your shop, once logged in."
+msgstr "Los clientes con una cuenta en su tienda, una vez iniciada la sesión."
+
+#: includes/class-camille-ps-admin.php:577
+msgid "All visitors"
+msgstr "Todos los visitantes"
+
+#: includes/class-camille-ps-admin.php:577
+msgid "Everyone who visits your shop."
+msgstr "Cualquier persona que visite su tienda."
+
+#: includes/class-camille-ps-admin.php:580
+msgid "Who sees Camille"
+msgstr "Quién ve a Camille"
+
+#: includes/class-camille-ps-admin.php:589
+msgid "Appearance"
+msgstr "Apariencia"
+
+#: includes/class-camille-ps-admin.php:591
+msgid "Chat button"
+msgstr "Botón del chat"
+
+#: includes/class-camille-ps-admin.php:592
+msgid "Bottom right"
+msgstr "Abajo a la derecha"
+
+#: includes/class-camille-ps-admin.php:593
+msgid "Bottom left"
+msgstr "Abajo a la izquierda"
+
+#: includes/class-camille-ps-admin.php:594
+msgid "Height of the chat button"
+msgstr "Altura del botón del chat"
+
+#: includes/class-camille-ps-admin.php:595
+msgid "At the bottom of the screen"
+msgstr "En la parte inferior de la pantalla"
+
+#: includes/class-camille-ps-admin.php:596
+msgid "Below the site header"
+msgstr "Debajo de la cabecera del sitio"
+
+#: includes/class-camille-ps-admin.php:598
+msgid "Colour"
+msgstr "Color"
+
+#: includes/class-camille-ps-admin.php:599
+msgid "Product pages"
+msgstr "Páginas de producto"
+
+#: includes/class-camille-ps-admin.php:599
+msgid "Show the \"Try with Camille\" button below \"Add to cart\""
+msgstr "Mostrar el botón «Probar con Camille» debajo de «Añadir al carrito»"
+
+#: includes/class-camille-ps-admin.php:602
+msgid "You can also place a Camille button anywhere with the <strong>Camille button</strong> block or the shortcode <code>[camille_button]</code>."
+msgstr "También puede colocar un botón de Camille donde quiera con el bloque <strong>Botón de Camille</strong> o el shortcode <code>[camille_button]</code>."
+
+#: includes/class-camille-ps-admin.php:608
+msgid "Save"
+msgstr "Guardar"
+
+#: includes/class-camille-ps-admin.php:621
+msgid "Company name"
+msgstr "Razón social"
+
+#: includes/class-camille-ps-admin.php:622
+msgid "VAT number"
+msgstr "NIF-IVA"
+
+#: includes/class-camille-ps-admin.php:623
+msgid "Tax code"
+msgstr "Código fiscal"
+
+#: includes/class-camille-ps-admin.php:623
+msgid "Italy only, if different from the VAT number."
+msgstr "Solo para Italia, si es distinto del NIF-IVA."
+
+#: includes/class-camille-ps-admin.php:624
+msgid "Address"
+msgstr "Dirección"
+
+#: includes/class-camille-ps-admin.php:625
+msgid "Postcode"
+msgstr "Código postal"
+
+#: includes/class-camille-ps-admin.php:626
+msgid "City"
+msgstr "Ciudad"
+
+#: includes/class-camille-ps-admin.php:627
+msgid "Province"
+msgstr "Provincia"
+
+#: includes/class-camille-ps-admin.php:627
+msgid "For Italy, the two letters (for example BS)."
+msgstr "Para Italia, las dos letras (por ejemplo BS)."
+
+#: includes/class-camille-ps-admin.php:628
+msgid "Country"
+msgstr "País"
+
+#: includes/class-camille-ps-admin.php:629
+msgid "SDI recipient code"
+msgstr "Código de destinatario SDI"
+
+#: includes/class-camille-ps-admin.php:629
+msgid "Italy only: 7 characters. If you do not have one, enter your PEC below."
+msgstr "Solo para Italia: 7 caracteres. Si no lo tiene, introduzca su PEC más abajo."
+
+#: includes/class-camille-ps-admin.php:630
+msgid "PEC"
+msgstr "PEC"
+
+#: includes/class-camille-ps-admin.php:630
+msgid "Italy only: certified email address for electronic invoices."
+msgstr "Solo para Italia: dirección de correo certificado para las facturas electrónicas."
+
+#: includes/class-camille-ps-admin.php:631
+msgid "Email for invoices"
+msgstr "Correo para las facturas"
+
+#: includes/class-camille-ps-admin.php:644
+msgid "Enter the SDI code or the PEC."
+msgstr "Introduzca el código SDI o la PEC."
+
+#: includes/class-camille-ps-admin.php:646
+msgid "Required."
+msgstr "Obligatorio."
+
+#: includes/class-camille-ps-admin.php:646
+msgid "Not valid, please check it."
+msgstr "No válido, revíselo."
+
+#: includes/class-camille-ps-admin.php:685
+msgid "Credits are invoiced by Instamark S.r.l., the company behind Camille. We use these details only for the invoices of your purchases."
+msgstr "Los créditos los factura Instamark S.r.l., la empresa que desarrolla Camille. Usamos estos datos solo para las facturas de sus compras."
+
+#: includes/class-camille-ps-admin.php:714
+msgid "Save billing details"
+msgstr "Guardar los datos de facturación"
+
+#: includes/class-camille-ps-admin.php:725
+msgid "Disconnect"
+msgstr "Desconectar"
+
+#: includes/class-camille-ps-admin.php:726
+msgid "Camille disappears from your shop. Your Pinci account, credits and catalog stay: connect again with the same email to pick up where you left off."
+msgstr "Camille desaparece de su tienda. Su cuenta de Pinci, sus créditos y su catálogo se conservan: vuelva a conectarse con el mismo correo para continuar donde lo dejó."
+
+#: includes/class-camille-ps-admin.php:731
+msgid "Disconnect the shop"
+msgstr "Desconectar la tienda"
+
+#: includes/class-camille-ps-admin.php:735
+msgid "Disconnect the shop from Camille?"
+msgstr "¿Desconectar la tienda de Camille?"
+
+#: includes/class-camille-ps-api.php:40
+msgid "The shop is not connected to Camille."
+msgstr "La tienda no está conectada a Camille."
+
+#: includes/class-camille-ps-api.php:146
+msgid "Camille could not be reached. Please try again in a few minutes."
+msgstr "No se ha podido contactar con Camille. Inténtelo de nuevo en unos minutos."
+
+#: includes/class-camille-ps-api.php:149
+msgid "Camille is temporarily paused. Your shop keeps working normally."
+msgstr "Camille está pausada temporalmente. Su tienda sigue funcionando con normalidad."
+
+#: includes/class-camille-ps-api.php:152
+msgid "Camille is not available right now. Please try again in a few minutes."
+msgstr "Camille no está disponible en este momento. Inténtelo de nuevo en unos minutos."
+
+#: includes/class-camille-ps-api.php:155
+msgid "Camille did not recognise this shop. Disconnect and connect it again."
+msgstr "Camille no ha reconocido esta tienda. Desconéctela y vuelva a conectarla."
+
+#: includes/class-camille-ps-api.php:158
+msgid "Too many attempts. Please wait a few minutes and try again."
+msgstr "Demasiados intentos. Espere unos minutos e inténtelo de nuevo."
+
+#. translators: %d: HTTP status code.
+#: includes/class-camille-ps-api.php:161
+#, php-format
+msgid "Unexpected answer from Camille (code %d)."
+msgstr "Respuesta inesperada de Camille (código %d)."
+
+#: includes/class-camille-ps-privacy.php:32
+msgid "Camille is provided by Pinci (Instamark S.r.l.). The text below is a suggestion: adapt it to your shop."
+msgstr "Camille la ofrece Pinci (Instamark S.r.l.). El texto de abajo es una sugerencia: adáptelo a su tienda."
+
+#: includes/class-camille-ps-privacy.php:33
+msgid "Suggested text:"
+msgstr "Texto sugerido:"
+
+#: includes/class-camille-ps-privacy.php:34
+msgid "This shop offers Camille, an AI personal shopper provided by Pinci (Instamark S.r.l., Italy). When you open the chat, it is loaded from pinci.ai and what you write, the photos you choose to upload for the virtual try-on and the products you look at are processed by Pinci to answer you and to show the products on a virtual model. The chat does not receive your name, email or orders from this shop."
+msgstr "Esta tienda ofrece Camille, una personal shopper con IA proporcionada por Pinci (Instamark S.r.l., Italia). Cuando abre el chat, se carga desde pinci.ai; lo que escribe, las fotos que decide subir para la prueba virtual y los productos que mira los trata Pinci para responderle y mostrar los productos en un modelo virtual. El chat no recibe de esta tienda su nombre, su correo ni sus pedidos."
+
+#. translators: %s: link to the Pinci privacy policy.
+#: includes/class-camille-ps-privacy.php:38
+#, php-format
+msgid "How Pinci processes these data, how long it keeps them and how to ask for access or erasure: %s."
+msgstr "Cómo trata Pinci estos datos, cuánto tiempo los conserva y cómo solicitar el acceso o la supresión: %s."
+
+#: includes/class-camille-ps-privacy.php:43
+msgid "Camille – AI Personal Shopper"
+msgstr "Camille – AI Personal Shopper"
+
+#. block title
+#: blocks/camille-button/block.json blocks/camille-button/index.js:24
+msgid "Camille button"
+msgstr "Botón de Camille"
+
+#. block description
+#: blocks/camille-button/block.json
+msgid "A button that opens Camille, the AI personal shopper. On a product page it can open Camille with that product."
+msgstr "Un botón que abre Camille, la personal shopper con IA. En una página de producto puede abrir Camille con ese producto."
+
+#. block keyword
+#: blocks/camille-button/block.json
+msgid "camille"
+msgstr "camille"
+
+#. block keyword
+#: blocks/camille-button/block.json
+msgid "personal shopper"
+msgstr "personal shopper"
+
+#. block keyword
+#: blocks/camille-button/block.json
+msgid "chat"
+msgstr "chat"
+
+#. block keyword
+#: blocks/camille-button/block.json
+msgid "try on"
+msgstr "probar"
+
+#: blocks/camille-button/index.js:26
+msgid "Text"
+msgstr "Texto"
+
+#: blocks/camille-button/index.js:27
+msgid "Leave empty for the default text in the language of the page."
+msgstr "Déjelo vacío para usar el texto predeterminado en el idioma de la página."
+
+#: blocks/camille-button/index.js:34
+msgid "What it opens"
+msgstr "Qué abre"
+
+#: blocks/camille-button/index.js:37
+msgid "Camille with this product (on product pages)"
+msgstr "Camille con este producto (en páginas de producto)"
+
+#: blocks/camille-button/index.js:38
+msgid "The chat with Camille"
+msgstr "El chat con Camille"
+
+#. Plugin Name of the plugin
+#: camille-personal-shopper.php
+msgid "Camille – AI Personal Shopper for WooCommerce"
+msgstr "Camille – AI Personal Shopper para WooCommerce"
+
+#. Description of the plugin
+#: camille-personal-shopper.php
+msgid "Camille is an AI personal shopper for fashion stores: she advises your customers in chat, suggests outfits from your catalog and shows them on a virtual model."
+msgstr "Camille es una personal shopper con IA para tiendas de moda: aconseja a sus clientes en el chat, propone outfits de su catálogo y los muestra en un modelo virtual."
+
+#. Author of the plugin
+#: camille-personal-shopper.php
+msgid "Instamark S.r.l."
+msgstr "Instamark S.r.l."
