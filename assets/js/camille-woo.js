@@ -310,9 +310,10 @@
       if (sf.language) qs.set('sfLang', String(sf.language));
       if (sf.country) qs.set('sfCountry', String(sf.country));
       if (sf.currency) qs.set('sfCurrency', String(sf.currency));
-      /* No sfRoot (WordPress permalinks already carry any sub-folder) and no sfPath: the store
-         sign-in links the chat builds are Shopify ones. */
+      /* No sfRoot (WordPress permalinks already carry any sub-folder) and no sfPath. The chat's
+         "sign in" links go to the store's My account page (sfAccount, same host only). */
       if (sf.host) qs.set('sfHost', String(sf.host));
+      if (sf.accountUrl) qs.set('sfAccount', String(sf.accountUrl));
       return PINCI_BASE + '/demo/' + encodeURIComponent(storeId) + '?' + qs.toString();
     }
 

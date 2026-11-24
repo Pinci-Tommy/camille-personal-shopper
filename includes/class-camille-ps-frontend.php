@@ -106,11 +106,13 @@ class Camille_PS_Frontend {
 			 */
 			'headerCssSelector' => (string) apply_filters( 'camille_ps_header_selector', '' ),
 			'storefront'        => array(
-				'language' => $language,
-				'country'  => WC()->countries ? WC()->countries->get_base_country() : '',
-				'currency' => get_woocommerce_currency(),
-				'rootPath' => $home_path ? $home_path : '/',
-				'host'     => (string) wp_parse_url( home_url( '/' ), PHP_URL_HOST ),
+				'language'   => $language,
+				'country'    => WC()->countries ? WC()->countries->get_base_country() : '',
+				'currency'   => get_woocommerce_currency(),
+				'rootPath'   => $home_path ? $home_path : '/',
+				'host'       => (string) wp_parse_url( home_url( '/' ), PHP_URL_HOST ),
+				// Where shoppers sign in or register, for the chat's "sign in" links.
+				'accountUrl' => wc_get_page_permalink( 'myaccount' ),
 			),
 			'currentProduct'    => self::current_product(),
 		);
