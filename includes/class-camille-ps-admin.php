@@ -34,7 +34,7 @@ class Camille_PS_Admin {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu' ), 60 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( CAMILLE_PS_FILE ), array( __CLASS__, 'action_links' ) );
-		foreach ( array( 'connect_start', 'connect_verify', 'connect_cancel', 'save_settings', 'save_limits', 'save_filters', 'save_billing', 'sync_start', 'disconnect' ) as $action ) {
+		foreach ( array( 'connect_start', 'connect_verify', 'connect_cancel', 'save_settings', 'save_limits', 'save_filters', 'save_persona', 'save_billing', 'sync_start', 'disconnect' ) as $action ) {
 			add_action( 'admin_post_camille_ps_' . $action, array( __CLASS__, 'handle_' . $action ) );
 		}
 		add_action( 'wp_ajax_' . self::PROGRESS_ACTION, array( __CLASS__, 'ajax_sync_progress' ) );
@@ -424,6 +424,103 @@ class Camille_PS_Admin {
 		self::back( '#camille-ps-limits' );
 	}
 
+	/** Uploaded photos above this size are refused before anything else. */
+	const AVATAR_MAX_BYTES = 10485760;
+
+	/**
+	 * Saves the name, gender and photo of the personal shopper. A new photo is shrunk here and sent
+	 * first, then chosen.
+	 */
+	public static function handle_save_persona() {
+		$post   = self::verified_post( 'save_persona' );
+		$name   = isset( $post['persona_name'] ) ? sanitize_text_field( (string) $post['persona_name'] ) : '';
+		$gender = isset( $post['persona_gender'] ) && 'male' === $post['persona_gender'] ? 'male' : 'female';
+		$avatar = isset( $post['persona_avatar'] ) ? sanitize_key( (string) $post['persona_avatar'] ) : '';
+		$upload = self::read_avatar_upload();
+		if ( is_wp_error( $upload ) ) {
+			self::notice( 'error', $upload->get_error_message() );
+			self::back( '#camille-ps-persona' );
+		}
+		if ( null !== $upload ) {
+			$result = Camille_PS_API::signed( 'POST', '/v1/shop/persona/avatar', array( 'imageBase64' => $upload ), 60 );
+			if ( is_wp_error( $result ) || 200 !== $result['code'] ) {
+				self::notice( 'error', ! is_wp_error( $result ) && 400 === $result['code'] ? __( 'Camille could not use this photo. Use a JPEG, PNG or WebP image of up to 10 MB.', 'camille-personal-shopper' ) : Camille_PS_API::error_message( $result ) );
+				self::back( '#camille-ps-persona' );
+			}
+			$avatar = 'custom';
+		}
+		$result = Camille_PS_API::signed(
+			'POST',
+			'/v1/shop/persona',
+			array(
+				'name'           => $name,
+				'gender'         => $gender,
+				'avatarPresetId' => $avatar,
+			)
+		);
+		if ( ! is_wp_error( $result ) && 200 === $result['code'] && isset( $result['body']['persona']['name'] ) ) {
+			Camille_PS_API::remember_status( array( 'personaName' => sanitize_text_field( (string) $result['body']['persona']['name'] ) ) );
+			self::notice( 'success', __( 'Personal shopper saved. Your customers see the new name and photo from their next visit.', 'camille-personal-shopper' ) );
+		} elseif ( ! is_wp_error( $result ) && 400 === $result['code'] ) {
+			$detail = isset( $result['body']['detail'] ) ? (string) $result['body']['detail'] : '';
+			if ( 0 === strpos( $detail, 'name' ) || '' === $detail ) {
+				self::notice( 'error', __( 'The name must have 2 to 30 characters and contain only letters, spaces, apostrophes, dots and hyphens.', 'camille-personal-shopper' ) );
+			} elseif ( false !== strpos( $detail, 'gender' ) ) {
+				self::notice( 'error', __( 'Choose a photo that matches the gender, or your own photo.', 'camille-personal-shopper' ) );
+			} else {
+				self::notice( 'error', __( 'Choose a photo from the gallery or upload your own.', 'camille-personal-shopper' ) );
+			}
+		} else {
+			self::notice( 'error', Camille_PS_API::error_message( $result ) );
+		}
+		self::back( '#camille-ps-persona' );
+	}
+
+	/**
+	 * The photo uploaded with the persona form, shrunk to 1024 px and base64-encoded.
+	 *
+	 * @return string|null|WP_Error Null when no photo was uploaded.
+	 */
+	private static function read_avatar_upload() {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- verified in handle_save_persona().
+		if ( empty( $_FILES['persona_photo'] ) || ! isset( $_FILES['persona_photo']['error'], $_FILES['persona_photo']['tmp_name'], $_FILES['persona_photo']['size'] ) ) {
+			return null;
+		}
+		$error = (int) $_FILES['persona_photo']['error'];
+		if ( UPLOAD_ERR_NO_FILE === $error ) {
+			return null;
+		}
+		$tmp  = sanitize_text_field( wp_unslash( $_FILES['persona_photo']['tmp_name'] ) );
+		$size = (int) $_FILES['persona_photo']['size'];
+		// phpcs:enable
+		$invalid = new WP_Error( 'camille_ps_photo', __( 'Camille could not use this photo. Use a JPEG, PNG or WebP image of up to 10 MB.', 'camille-personal-shopper' ) );
+		if ( UPLOAD_ERR_OK !== $error || $size <= 0 || $size > self::AVATAR_MAX_BYTES || ! is_uploaded_file( $tmp ) ) {
+			return $invalid;
+		}
+		$info = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( $tmp ) : getimagesize( $tmp );
+		if ( ! is_array( $info ) || ! in_array( (int) $info[2], array( IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_WEBP ), true ) ) {
+			return $invalid;
+		}
+		$path   = $tmp;
+		$editor = wp_get_image_editor( $tmp );
+		if ( ! is_wp_error( $editor ) ) {
+			$editor->resize( 1024, 1024, false );
+			$editor->set_quality( 88 );
+			$saved = $editor->save( wp_tempnam( 'camille-ps-photo' ) . '.jpg', 'image/jpeg' );
+			if ( ! is_wp_error( $saved ) && ! empty( $saved['path'] ) ) {
+				$path = $saved['path'];
+			}
+		}
+		$bytes = file_get_contents( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local temporary file.
+		if ( $path !== $tmp ) {
+			wp_delete_file( $path );
+		}
+		if ( false === $bytes || strlen( $bytes ) > 1400000 ) {
+			return $invalid; // Could not shrink it: too heavy to send.
+		}
+		return base64_encode( $bytes ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- image sent as JSON.
+	}
+
 	/**
 	 * Saves which products Camille suggests, and syncs the catalog when asked.
 	 */
@@ -517,9 +614,10 @@ class Camille_PS_Admin {
 	 * @param string   $action Action name.
 	 * @param callable $fields Prints the fields.
 	 * @param string   $css_class Extra class of the form.
+	 * @param bool     $has_file  Whether the form uploads a file.
 	 */
-	private static function form( $action, $fields, $css_class = '' ) {
-		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="' . esc_attr( $css_class ) . '">';
+	private static function form( $action, $fields, $css_class = '', $has_file = false ) {
+		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="' . esc_attr( $css_class ) . '"' . ( $has_file ? ' enctype="multipart/form-data"' : '' ) . '>';
 		echo '<input type="hidden" name="action" value="' . esc_attr( 'camille_ps_' . $action ) . '">';
 		wp_nonce_field( 'camille_ps_' . $action );
 		$fields();
@@ -548,6 +646,7 @@ class Camille_PS_Admin {
 			self::render_status( $connection, $status );
 			self::render_products();
 			self::render_catalog();
+			self::render_persona();
 			self::render_settings();
 			self::render_limits( $status );
 			self::render_billing( $connection, $status );
@@ -704,6 +803,58 @@ class Camille_PS_Admin {
 	}
 
 	/**
+	 * Name, gender and photo of the personal shopper (the same choices as on Pinci for Shopify).
+	 */
+	private static function render_persona() {
+		echo '<div class="camille-ps-card" id="camille-ps-persona">';
+		echo '<h2>' . esc_html__( 'Customise Camille', 'camille-personal-shopper' ) . '</h2>';
+		echo '<p>' . esc_html__( 'Give your personal shopper the name and the face that suit your shop. Customers see them in the chat and on the chat button.', 'camille-personal-shopper' ) . '</p>';
+		$result = Camille_PS_API::signed( 'GET', '/v1/shop/persona' );
+		if ( is_wp_error( $result ) || 200 !== $result['code'] || ! isset( $result['body']['persona'] ) || ! is_array( $result['body']['persona'] ) ) {
+			echo '<p class="camille-ps-badge is-warning">' . esc_html__( 'The personal shopper settings cannot be read right now. Please try again in a few minutes.', 'camille-personal-shopper' ) . '</p></div>';
+			return;
+		}
+		$persona = $result['body']['persona'];
+		$name    = isset( $persona['name'] ) ? (string) $persona['name'] : 'Camille';
+		$gender  = isset( $persona['gender'] ) && 'male' === $persona['gender'] ? 'male' : 'female';
+		$current = isset( $persona['avatarPresetId'] ) ? (string) $persona['avatarPresetId'] : '';
+		$avatars = isset( $persona['avatars'] ) && is_array( $persona['avatars'] ) ? $persona['avatars'] : array();
+		Camille_PS_API::remember_status( array( 'personaName' => $name ) );
+		self::form(
+			'save_persona',
+			static function () use ( $name, $gender, $current, $avatars ) {
+				echo '<table class="form-table" role="presentation"><tbody>';
+				echo '<tr><th scope="row"><label for="camille-ps-persona-name">' . esc_html__( 'Name', 'camille-personal-shopper' ) . '</label></th><td><input type="text" id="camille-ps-persona-name" name="persona_name" class="regular-text" minlength="2" maxlength="30" required value="' . esc_attr( $name ) . '"></td></tr>';
+				echo '<tr><th scope="row">' . esc_html__( 'Gender', 'camille-personal-shopper' ) . '</th><td class="camille-ps-gender">';
+				echo '<label><input type="radio" name="persona_gender" value="female" ' . checked( $gender, 'female', false ) . '> ' . esc_html__( 'Woman', 'camille-personal-shopper' ) . '</label> ';
+				echo '<label><input type="radio" name="persona_gender" value="male" ' . checked( $gender, 'male', false ) . '> ' . esc_html__( 'Man', 'camille-personal-shopper' ) . '</label>';
+				echo '</td></tr>';
+				echo '<tr><th scope="row">' . esc_html__( 'Photo', 'camille-personal-shopper' ) . '</th><td><div class="camille-ps-avatars">';
+				foreach ( $avatars as $avatar ) {
+					if ( ! is_array( $avatar ) || empty( $avatar['id'] ) || empty( $avatar['imageUrl'] ) ) {
+						continue;
+					}
+					$id        = sanitize_key( (string) $avatar['id'] );
+					$is_custom = ! empty( $avatar['isCustom'] );
+					echo '<label class="camille-ps-avatar-option" data-gender="' . esc_attr( $is_custom ? 'any' : (string) $avatar['gender'] ) . '"><input type="radio" name="persona_avatar" value="' . esc_attr( $id ) . '" ' . checked( $current, $id, false ) . '><img src="' . esc_url( (string) $avatar['imageUrl'] ) . '" alt="" width="72" height="72" loading="lazy">';
+					if ( $is_custom ) {
+						echo '<span>' . esc_html__( 'Your photo', 'camille-personal-shopper' ) . '</span>';
+					}
+					echo '</label>';
+				}
+				echo '</div>';
+				echo '<p><label for="camille-ps-persona-photo">' . esc_html__( 'Or upload your own photo', 'camille-personal-shopper' ) . '</label><br><input type="file" id="camille-ps-persona-photo" name="persona_photo" accept="image/jpeg,image/png,image/webp"></p>';
+				echo '<p class="description">' . esc_html__( 'JPEG, PNG or WebP, up to 10 MB. It is cut to a square from the centre: choose a portrait with the face in the middle. Use only photos you have the rights to.', 'camille-personal-shopper' ) . '</p>';
+				echo '</td></tr></tbody></table>';
+				submit_button( __( 'Save the personal shopper', 'camille-personal-shopper' ) );
+			},
+			'',
+			true
+		);
+		echo '</div>';
+	}
+
+	/**
 	 * Which products Camille may suggest: categories, price range, single products.
 	 */
 	private static function render_products() {
@@ -852,6 +1003,7 @@ class Camille_PS_Admin {
 		$labels   = array(
 			Camille_PS_Options::VISIBILITY_OFF       => array( __( 'Off', 'camille-personal-shopper' ), __( 'Camille does not appear and does not use credits.', 'camille-personal-shopper' ) ),
 			Camille_PS_Options::VISIBILITY_ADMINS    => array( __( 'Only shop administrators', 'camille-personal-shopper' ), __( 'To try Camille while logged in to WordPress, before your customers see her.', 'camille-personal-shopper' ) ),
+			Camille_PS_Options::VISIBILITY_CHOSEN    => array( __( 'Administrators and chosen customers', 'camille-personal-shopper' ), __( 'Only the customers you choose, once logged in: tick "This customer can see Camille" on their profile, or select them in Users and use the bulk action "Show Camille".', 'camille-personal-shopper' ) ),
 			Camille_PS_Options::VISIBILITY_CUSTOMERS => array( __( 'Only logged-in customers', 'camille-personal-shopper' ), __( 'Customers with an account on your shop, once logged in.', 'camille-personal-shopper' ) ),
 			Camille_PS_Options::VISIBILITY_EVERYONE  => array( __( 'All visitors', 'camille-personal-shopper' ), __( 'Everyone who visits your shop.', 'camille-personal-shopper' ) ),
 		);
@@ -862,7 +1014,13 @@ class Camille_PS_Admin {
 			static function () use ( $settings, $labels ) {
 				echo '<fieldset class="camille-ps-visibility">';
 				foreach ( $labels as $value => $text ) {
-					echo '<label><input type="radio" name="visibility" value="' . esc_attr( $value ) . '" ' . checked( $settings['visibility'], $value, false ) . '> <strong>' . esc_html( $text[0] ) . '</strong><span class="description">' . esc_html( $text[1] ) . '</span></label>';
+					echo '<label><input type="radio" name="visibility" value="' . esc_attr( $value ) . '" ' . checked( $settings['visibility'], $value, false ) . '> <strong>' . esc_html( $text[0] ) . '</strong><span class="description">' . esc_html( $text[1] );
+					if ( Camille_PS_Options::VISIBILITY_CHOSEN === $value ) {
+						$chosen = Camille_PS_Customers::count_chosen();
+						/* translators: %s: number of customers. */
+						echo ' <a href="' . esc_url( Camille_PS_Customers::list_url() ) . '">' . esc_html( sprintf( _n( '%s customer chosen', '%s customers chosen', $chosen, 'camille-personal-shopper' ), number_format_i18n( $chosen ) ) ) . '</a>';
+					}
+					echo '</span></label>';
 				}
 				echo '</fieldset>';
 				echo '<h3>' . esc_html__( 'Appearance', 'camille-personal-shopper' ) . '</h3>';

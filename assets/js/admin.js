@@ -124,6 +124,66 @@
     }
   }
 
+  /* ------------------------------------------------------------ personal shopper */
+
+  /* The gallery shows the portraits of the chosen gender (the shop's own photo fits both); a new
+     photo picked from the computer is shown in place of the selected portrait until saved. */
+  function setupPersona() {
+    var form = document.querySelector('#camille-ps-persona form');
+    if (!form) {
+      return;
+    }
+    var options = Array.prototype.slice.call(form.querySelectorAll('.camille-ps-avatar-option'));
+    var genders = Array.prototype.slice.call(form.querySelectorAll('input[name="persona_gender"]'));
+    var file = form.querySelector('input[name="persona_photo"]');
+
+    function currentGender() {
+      var picked = genders.filter(function (input) { return input.checked; })[0];
+      return picked ? picked.value : 'female';
+    }
+
+    function filter() {
+      var gender = currentGender();
+      var selectedHidden = false;
+      options.forEach(function (option) {
+        var fits = option.getAttribute('data-gender') === 'any' || option.getAttribute('data-gender') === gender;
+        option.hidden = !fits;
+        var radio = option.querySelector('input');
+        if (!fits && radio.checked) {
+          radio.checked = false;
+          selectedHidden = true;
+        }
+      });
+      if (selectedHidden || !options.some(function (o) { return !o.hidden && o.querySelector('input').checked; })) {
+        var first = options.filter(function (o) { return !o.hidden; })[0];
+        if (first && !(file && file.files && file.files.length)) {
+          first.querySelector('input').checked = true;
+        }
+      }
+    }
+
+    genders.forEach(function (input) {
+      input.addEventListener('change', filter);
+    });
+    options.forEach(function (option) {
+      option.querySelector('input').addEventListener('change', function () {
+        if (file) {
+          file.value = '';
+        }
+      });
+    });
+    if (file) {
+      file.addEventListener('change', function () {
+        if (file.files && file.files.length) {
+          options.forEach(function (option) {
+            option.querySelector('input').checked = false;
+          });
+        }
+      });
+    }
+    filter();
+  }
+
   /* ------------------------------------------------------------ sync progress */
 
   var ACTIVE = { reading: 0, saving: 1, studying: 2 };
@@ -327,10 +387,12 @@
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       setupSelection();
+      setupPersona();
       setupProgress();
     });
   } else {
     setupSelection();
+    setupPersona();
     setupProgress();
   }
 })();

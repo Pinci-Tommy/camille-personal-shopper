@@ -4,7 +4,7 @@ Tags: personal shopper, virtual try-on, fashion, chatbot, ai
 Requires at least: 6.2
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 0.2.0
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,7 @@ This plugin connects your shop to **Pinci**, the service that runs Camille, prov
 * **When you connect the shop** (WooCommerce > Camille), the plugin sends the email of your Pinci account, your site address, the site name and the admin language to `https://woo.pinci.ai`, which emails you a confirmation code.
 * **When you sync the catalog**, the plugin sends the published products you chose for Camille (WooCommerce > Camille) to `https://woo.pinci.ai`: name, description, categories, tags, brand, attributes, prices, stock status, product address and photo addresses. These are public data of your shop. No order, customer or personal data is sent.
 * **When you save the billing details** (company name, VAT number, address, SDI code or PEC, invoice email), the plugin sends them to `https://woo.pinci.ai`. Instamark S.r.l. uses them only to invoice your credit purchases.
+* **When you customise the personal shopper**, the plugin sends the name, the gender and, if you upload one, the photo you chose to `https://woo.pinci.ai`.
 * **Once an hour, and when you open the settings page**, the plugin asks `https://woo.pinci.ai` whether Camille is on, how many credits are left and the usage limits you set for your customers. Once, after connecting, it receives the key it uses to sign the account number of logged-in visitors.
 * **On your shop pages**, for the visitors you chose, the browser loads the chat window from `https://pinci.ai` and reads Camille's name and photo from `https://api.pinci.ai`. What a visitor writes in the chat, the photos they choose to upload for the virtual try-on and the product they open Camille from are processed by Pinci to answer them. For a logged-in visitor the chat also receives the number of their account on your shop, signed by the plugin, so the usage limits you set follow them; shop managers are marked as such and have no limits. The plugin does not send visitors' names, emails or orders.
 
@@ -74,6 +75,10 @@ Yes. With "All visitors" cached pages include the chat button. With "Only admini
 No. Credits and catalog stay on your Pinci account. Connect again with the same email to pick up where you left off.
 
 == Changelog ==
+
+= 0.3.0 =
+* Customise the personal shopper: name, gender, a portrait from the gallery or your own photo.
+* New visibility "Administrators and chosen customers": choose customers on their profile or with the bulk actions in Users.
 
 = 0.2.0 =
 * Usage limits for customers: chats per day for visitors without an account, try-ons for visitors on or off, try-ons per day for each logged-in customer. Shop managers have no limits.

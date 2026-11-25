@@ -59,6 +59,9 @@ class Camille_PS_Frontend {
 			case Camille_PS_Options::VISIBILITY_ADMINS:
 				$is_visible = current_user_can( 'manage_woocommerce' );
 				break;
+			case Camille_PS_Options::VISIBILITY_CHOSEN:
+				$is_visible = current_user_can( 'manage_woocommerce' ) || Camille_PS_Customers::is_chosen( get_current_user_id() );
+				break;
 		}
 		/**
 		 * Filters whether the current visitor sees Camille.
@@ -161,12 +164,14 @@ class Camille_PS_Frontend {
 			);
 		}
 		$user_id = (string) get_current_user_id();
+		// Chosen customers carry the same mark as Shopify's camille-preview tag.
+		$tag = Camille_PS_Customers::is_chosen( get_current_user_id() ) ? '1' : '0';
 		return array(
 			'customerId' => $user_id,
 			'cid'        => $user_id,
-			'tag'        => '0',
+			'tag'        => $tag,
 			'ts'         => $now,
-			'sig'        => hash_hmac( 'sha256', 'camille-proof-v1.' . $user_id . '.0.' . $now, $key ),
+			'sig'        => hash_hmac( 'sha256', 'camille-proof-v1.' . $user_id . '.' . $tag . '.' . $now, $key ),
 		);
 	}
 
@@ -210,7 +215,10 @@ class Camille_PS_Frontend {
 			return '';
 		}
 		$mode  = 'chat' === $mode ? 'generic' : 'tryon';
-		$label = '' !== trim( $label ) ? $label : ( 'tryon' === $mode ? __( 'Try with Camille', 'camille-personal-shopper' ) : __( 'Ask Camille', 'camille-personal-shopper' ) );
+		$status  = Camille_PS_API::cached_status();
+		$persona = ! empty( $status['personaName'] ) ? (string) $status['personaName'] : 'Camille';
+		/* translators: %s: name of the personal shopper (Camille unless the shop renamed her). */
+		$label = '' !== trim( $label ) ? $label : sprintf( 'tryon' === $mode ? __( 'Try with %s', 'camille-personal-shopper' ) : __( 'Ask %s', 'camille-personal-shopper' ), $persona );
 		return '<button type="button" class="camille-ps-open wp-element-button" data-camille-mode="' . esc_attr( $mode ) . '">' . esc_html( $label ) . '</button>';
 	}
 

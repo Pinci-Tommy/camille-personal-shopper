@@ -130,3 +130,28 @@
 	.camille-ps .camille-ps-bar.is-indeterminate span { animation: none; left: 0; width: 100%; opacity: .4; }
 	.camille-ps .camille-ps-progress-line.is-shown { animation: none; }
 }
+
+/* Personal shopper */
+.camille-ps .camille-ps-gender label { margin-right: 16px; }
+.camille-ps .camille-ps-avatars { display: flex; flex-wrap: wrap; gap: 10px; }
+.camille-ps .camille-ps-avatar-option {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	cursor: pointer;
+	font-size: 12px;
+}
+.camille-ps .camille-ps-avatar-option[hidden] { display: none; }
+.camille-ps .camille-ps-avatar-option input { position: absolute; opacity: 0; pointer-events: none; }
+.camille-ps .camille-ps-avatar-option img {
+	width: 72px;
+	height: 72px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 3px solid transparent;
+	box-shadow: 0 0 0 1px #dcdcde;
+}
+.camille-ps .camille-ps-avatar-option input:checked + img { border-color: #7c3aed; box-shadow: none; }
+.camille-ps .camille-ps-avatar-option input:focus-visible + img { outline: 2px solid #2271b1; outline-offset: 2px; }

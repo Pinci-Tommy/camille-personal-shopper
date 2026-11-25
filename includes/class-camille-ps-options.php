@@ -22,6 +22,7 @@ class Camille_PS_Options {
 
 	const VISIBILITY_OFF       = 'off';
 	const VISIBILITY_ADMINS    = 'admins';
+	const VISIBILITY_CHOSEN    = 'chosen';
 	const VISIBILITY_CUSTOMERS = 'customers';
 	const VISIBILITY_EVERYONE  = 'everyone';
 
@@ -31,7 +32,7 @@ class Camille_PS_Options {
 	 * @return string[]
 	 */
 	public static function visibility_values() {
-		return array( self::VISIBILITY_OFF, self::VISIBILITY_ADMINS, self::VISIBILITY_CUSTOMERS, self::VISIBILITY_EVERYONE );
+		return array( self::VISIBILITY_OFF, self::VISIBILITY_ADMINS, self::VISIBILITY_CHOSEN, self::VISIBILITY_CUSTOMERS, self::VISIBILITY_EVERYONE );
 	}
 
 	/**
