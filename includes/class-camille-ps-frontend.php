@@ -115,6 +115,7 @@ class Camille_PS_Frontend {
 				'accountUrl' => wc_get_page_permalink( 'myaccount' ),
 			),
 			'currentProduct'    => self::current_product(),
+			'shopper'           => self::shopper_proof(),
 		);
 		/**
 		 * Filters the settings given to the Camille chat button.
@@ -134,6 +135,39 @@ class Camille_PS_Frontend {
 		);
 		wp_add_inline_script( self::SCRIPT, 'window.CamilleWooConfig = ' . wp_json_encode( $config ) . ';', 'before' );
 		wp_enqueue_script( self::SCRIPT );
+	}
+
+	/**
+	 * Tells Camille who the visitor is, signed with the shop's key so nobody can pretend to be
+	 * someone else. Shop managers are recognised as the merchant: no limit applies to them.
+	 * Customers are known by their numeric account id only (no name, no email). Guests get nothing.
+	 * The page is personal for logged-in visitors, so page caches do not share these values.
+	 *
+	 * @return array<string,string>|null
+	 */
+	private static function shopper_proof() {
+		if ( ! is_user_logged_in() ) {
+			return null;
+		}
+		$key = Camille_PS_Options::widget_key();
+		if ( '' === $key ) {
+			return null;
+		}
+		$now = (string) time();
+		if ( current_user_can( 'manage_woocommerce' ) ) {
+			return array(
+				'dts'  => $now,
+				'dsig' => hash_hmac( 'sha256', 'camille-design-v1.' . $now, $key ),
+			);
+		}
+		$user_id = (string) get_current_user_id();
+		return array(
+			'customerId' => $user_id,
+			'cid'        => $user_id,
+			'tag'        => '0',
+			'ts'         => $now,
+			'sig'        => hash_hmac( 'sha256', 'camille-proof-v1.' . $user_id . '.0.' . $now, $key ),
+		);
 	}
 
 	/**

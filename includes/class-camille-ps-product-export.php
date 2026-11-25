@@ -49,13 +49,17 @@ class Camille_PS_Product_Export {
 	}
 
 	/**
-	 * Whether a product may reach Camille: visible in the shop, not behind a password.
+	 * Whether a product may reach Camille: visible in the shop, not behind a password, and inside the
+	 * merchant's selection (categories, price range, products left out by hand).
 	 *
 	 * @param WC_Product $product Product.
 	 * @return bool
 	 */
 	public static function is_exportable( $product ) {
 		if ( 'hidden' === $product->get_catalog_visibility() || '' !== (string) $product->get_post_password() ) {
+			return false;
+		}
+		if ( ! Camille_PS_Catalog_Filter::allows( $product ) ) {
 			return false;
 		}
 		/**

@@ -1,6 +1,7 @@
 <?php
 /**
- * Settings page under WooCommerce > Camille: connection, who sees Camille, catalog sync.
+ * Settings page under WooCommerce > Camille: connection, products, catalog sync, who sees Camille,
+ * usage limits, billing.
  *
  * @package CamillePersonalShopper
  */
@@ -16,6 +17,15 @@ class Camille_PS_Admin {
 	const CAPABILITY = 'manage_woocommerce';
 	/** Transient (plus the user id) that brings a refused billing form back filled in. */
 	const BILLING_FORM = 'camille_ps_billing_form_';
+	/** Admin-ajax action of the sync progress panel. */
+	const PROGRESS_ACTION = 'camille_ps_sync_progress';
+
+	/**
+	 * Products the catalog can send, computed once per page view (estimate and counts).
+	 *
+	 * @var array|null|false False until computed.
+	 */
+	private static $index = false;
 
 	/**
 	 * Hooks the admin side.
@@ -24,9 +34,10 @@ class Camille_PS_Admin {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu' ), 60 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( CAMILLE_PS_FILE ), array( __CLASS__, 'action_links' ) );
-		foreach ( array( 'connect_start', 'connect_verify', 'connect_cancel', 'save_settings', 'save_billing', 'sync_start', 'disconnect' ) as $action ) {
+		foreach ( array( 'connect_start', 'connect_verify', 'connect_cancel', 'save_settings', 'save_limits', 'save_filters', 'save_billing', 'sync_start', 'disconnect' ) as $action ) {
 			add_action( 'admin_post_camille_ps_' . $action, array( __CLASS__, 'handle_' . $action ) );
 		}
+		add_action( 'wp_ajax_' . self::PROGRESS_ACTION, array( __CLASS__, 'ajax_sync_progress' ) );
 	}
 
 	/**
@@ -60,6 +71,122 @@ class Camille_PS_Admin {
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'wp-color-picker' );
 		wp_add_inline_script( 'wp-color-picker', 'jQuery(function($){$(".camille-ps-color").wpColorPicker();});' );
+		if ( ! Camille_PS_Options::connection() ) {
+			return;
+		}
+		wp_enqueue_script( 'camille-ps-admin', CAMILLE_PS_URL . 'assets/js/admin.js', array(), CAMILLE_PS_VERSION, true );
+		wp_add_inline_script( 'camille-ps-admin', 'window.CamillePsAdmin = ' . wp_json_encode( self::script_data() ) . ';', 'before' );
+	}
+
+	/**
+	 * Products the catalog can send (see Camille_PS_Catalog_Filter::product_index()).
+	 *
+	 * @return array|null
+	 */
+	private static function index() {
+		if ( false === self::$index ) {
+			self::$index = Camille_PS_Catalog_Filter::product_index();
+		}
+		return self::$index;
+	}
+
+	/**
+	 * Data and texts of the settings page script: live estimate of the selection, progress panel.
+	 *
+	 * @return array
+	 */
+	private static function script_data() {
+		$index = self::index();
+		return array(
+			'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
+			'action'     => self::PROGRESS_ACTION,
+			'nonce'      => wp_create_nonce( self::PROGRESS_ACTION ),
+			'pollMs'     => 5000,
+			'progress'   => self::progress_for_script(),
+			// [id, lowest price, highest price, category ids, left out by hand]; null for very large catalogs.
+			'products'   => $index,
+			'categories' => array_map(
+				static fn( $category ) => array( $category['id'], $category['parent'] ),
+				Camille_PS_Catalog_Filter::category_list()
+			),
+			'texts'      => array(
+				/* translators: 1: products Camille will know, 2: products that can be sent. */
+				'estimate'    => __( 'Camille will know %1$s of %2$s products.', 'camille-personal-shopper' ),
+				'stages'      => array(
+					'reading'  => __( 'I am browsing your catalog…', 'camille-personal-shopper' ),
+					'saving'   => __( 'I am saving your products…', 'camille-personal-shopper' ),
+					'studying' => __( 'I am studying your pieces…', 'camille-personal-shopper' ),
+					'ready'    => __( 'I have studied your pieces. I am ready!', 'camille-personal-shopper' ),
+					'updated'  => __( 'Your catalog is up to date.', 'camille-personal-shopper' ),
+					'failed'   => __( 'The sync stopped.', 'camille-personal-shopper' ),
+				),
+				'lines'       => array(
+					'reading' => array(
+						__( 'I read names, prices, sizes and colours of every product…', 'camille-personal-shopper' ),
+						__( 'I collect the photos of your products…', 'camille-personal-shopper' ),
+					),
+					'saving'  => array(
+						__( 'I put every colour of a product in my catalog as a separate piece…', 'camille-personal-shopper' ),
+						__( 'I check that every piece has a price and a photo…', 'camille-personal-shopper' ),
+					),
+					'studying' => array(
+						__( 'I look at the photo of every piece, one by one…', 'camille-personal-shopper' ),
+						__( 'I look at colours and shades to understand what goes well together…', 'camille-personal-shopper' ),
+						__( 'I study the fabrics: linen, wool, silk, denim…', 'camille-personal-shopper' ),
+						__( 'I look at cuts and lengths to suggest the right fit…', 'camille-personal-shopper' ),
+						__( 'I think about the right occasions: office, dinner, ceremony, weekend…', 'camille-personal-shopper' ),
+						__( 'I imagine the first outfits for your customers…', 'camille-personal-shopper' ),
+					),
+				),
+				/* translators: 1: products sent, 2: products to send. */
+				'readCount'   => __( '%1$s of %2$s products read', 'camille-personal-shopper' ),
+				/* translators: 1: pieces saved, 2: pieces to save. */
+				'saveCount'   => __( '%1$s of %2$s pieces saved', 'camille-personal-shopper' ),
+				/* translators: %s: minutes. */
+				'minutesLeft' => __( 'About %s minutes left', 'camille-personal-shopper' ),
+				'oneMinute'   => __( 'About a minute left', 'camille-personal-shopper' ),
+				'almostDone'  => __( 'Almost done…', 'camille-personal-shopper' ),
+				'busy'        => __( 'Pinci is busy: the import will continue by itself in a few minutes.', 'camille-personal-shopper' ),
+				'leavePage'   => __( 'You can leave this page: the sync continues in the background.', 'camille-personal-shopper' ),
+				'syncButton'  => __( 'Sync the catalog', 'camille-personal-shopper' ),
+				'stepNames'   => array(
+					__( 'Reading', 'camille-personal-shopper' ),
+					__( 'Saving', 'camille-personal-shopper' ),
+					__( 'Studying', 'camille-personal-shopper' ),
+				),
+			),
+		);
+	}
+
+	/**
+	 * The sync progress with its texts ready for the page.
+	 *
+	 * @return array
+	 */
+	private static function progress_for_script() {
+		$progress                = Camille_PS_Catalog_Sync::progress();
+		$progress['messageText'] = 'failed' === $progress['stage'] ? self::sync_error_text( $progress['message'] ) : '';
+		$items                   = (int) $progress['items'];
+		$left_out                = (int) max( $progress['rejectedCount'], count( $progress['rejected'] ) );
+		/* translators: %s: number of pieces. */
+		$progress['itemsText'] = sprintf( _n( '%s piece in Camille\'s catalog.', '%s pieces in Camille\'s catalog.', $items, 'camille-personal-shopper' ), number_format_i18n( $items ) );
+		/* translators: %d: number of items. */
+		$progress['leftOutText'] = $left_out ? sprintf( _n( '%d item left out', '%d items left out', $left_out, 'camille-personal-shopper' ), $left_out ) : '';
+		foreach ( $progress['rejected'] as $key => $item ) {
+			$progress['rejected'][ $key ]['reasonText'] = self::reason_text( $item['reason'] );
+		}
+		return $progress;
+	}
+
+	/**
+	 * Admin-ajax: where the sync is, for the progress panel.
+	 */
+	public static function ajax_sync_progress() {
+		if ( ! current_user_can( self::CAPABILITY ) || ! check_ajax_referer( self::PROGRESS_ACTION, 'nonce', false ) ) {
+			wp_send_json_error( null, 403 );
+		}
+		nocache_headers();
+		wp_send_json_success( self::progress_for_script() );
 	}
 
 	/**
@@ -123,9 +250,11 @@ class Camille_PS_Admin {
 
 	/**
 	 * Back to the settings page.
+	 *
+	 * @param string $anchor Section to scroll to, e.g. #camille-ps-limits.
 	 */
-	private static function back() {
-		wp_safe_redirect( self::page_url() );
+	private static function back( $anchor = '' ) {
+		wp_safe_redirect( self::page_url() . $anchor );
 		exit;
 	}
 
@@ -206,7 +335,7 @@ class Camille_PS_Admin {
 				// A new store starts paused on Pinci: follow the visibility setting (administrators only by default).
 				$settings = Camille_PS_Options::settings();
 				Camille_PS_API::signed( 'POST', '/v1/shop/active', array( 'isActive' => Camille_PS_Options::VISIBILITY_OFF !== $settings['visibility'] ) );
-				Camille_PS_API::refresh_status();
+				Camille_PS_API::refresh_status( true );
 				$message = __( 'Your shop is connected to Camille. Now send her your catalog.', 'camille-personal-shopper' );
 				if ( ! empty( $body['isWelcomeGranted'] ) ) {
 					$message .= ' ' . __( 'You received 300 free credits to get started.', 'camille-personal-shopper' );
@@ -274,6 +403,52 @@ class Camille_PS_Admin {
 	}
 
 	/**
+	 * Saves the usage limits on Camille's service, which applies them to every chat.
+	 */
+	public static function handle_save_limits() {
+		$post    = self::verified_post( 'save_limits' );
+		$payload = array(
+			'guestChatsPerDay'        => isset( $post['guest_chats_per_day'] ) ? absint( $post['guest_chats_per_day'] ) : 0,
+			'guestTryOnsEnabled'      => ! empty( $post['guest_try_ons_enabled'] ),
+			'tryOnsPerCustomerPerDay' => isset( $post['try_ons_per_customer_per_day'] ) ? absint( $post['try_ons_per_customer_per_day'] ) : 0,
+		);
+		$result  = Camille_PS_API::signed( 'POST', '/v1/shop/limits', $payload );
+		if ( ! is_wp_error( $result ) && 200 === $result['code'] && isset( $result['body']['shopperLimits'] ) && is_array( $result['body']['shopperLimits'] ) ) {
+			Camille_PS_API::remember_status( array( 'shopperLimits' => Camille_PS_API::clean_shopper_limits( $result['body']['shopperLimits'] ) ) );
+			self::notice( 'success', __( 'Usage limits saved. They apply from the next message in the chat.', 'camille-personal-shopper' ) );
+		} elseif ( ! is_wp_error( $result ) && 400 === $result['code'] ) {
+			self::notice( 'error', __( 'One of the limits is out of range. Check the values and try again.', 'camille-personal-shopper' ) );
+		} else {
+			self::notice( 'error', Camille_PS_API::error_message( $result ) );
+		}
+		self::back( '#camille-ps-limits' );
+	}
+
+	/**
+	 * Saves which products Camille suggests, and syncs the catalog when asked.
+	 */
+	public static function handle_save_filters() {
+		$post     = self::verified_post( 'save_filters' );
+		$included = isset( $post['included_categories'] ) && is_array( $post['included_categories'] ) ? array_map( 'absint', $post['included_categories'] ) : array();
+		$all      = wp_list_pluck( Camille_PS_Catalog_Filter::category_list(), 'id' );
+		$excluded = array_values( array_diff( array_map( 'intval', $all ), $included ) );
+		$min      = isset( $post['price_min'] ) && '' !== trim( (string) $post['price_min'] ) ? (float) wc_format_decimal( (string) $post['price_min'] ) : null;
+		$max      = isset( $post['price_max'] ) && '' !== trim( (string) $post['price_max'] ) ? (float) wc_format_decimal( (string) $post['price_max'] ) : null;
+		Camille_PS_Options::save_catalog_filters( $excluded, $min, $max );
+		if ( empty( $post['then_sync'] ) ) {
+			self::notice( 'success', __( 'Selection saved. Sync the catalog to update Camille.', 'camille-personal-shopper' ) );
+			self::back( '#camille-ps-products' );
+		}
+		$result = Camille_PS_Catalog_Sync::start();
+		if ( is_wp_error( $result ) ) {
+			self::notice( 'error', $result->get_error_message() );
+		} else {
+			self::notice( 'success', __( 'Selection saved. Camille is updating her catalog.', 'camille-personal-shopper' ) );
+		}
+		self::back( '#camille-ps-catalog' );
+	}
+
+	/**
 	 * Sends the billing details to Camille's service, which checks them. On errors the form comes back
 	 * filled in, with the wrong fields marked.
 	 */
@@ -314,7 +489,7 @@ class Camille_PS_Admin {
 		} else {
 			self::notice( 'success', __( 'Catalog sync started. It runs in the background: you can leave this page.', 'camille-personal-shopper' ) );
 		}
-		self::back();
+		self::back( '#camille-ps-catalog' );
 	}
 
 	/**
@@ -371,8 +546,10 @@ class Camille_PS_Admin {
 				$status = Camille_PS_API::cached_status();
 			}
 			self::render_status( $connection, $status );
+			self::render_products();
 			self::render_catalog();
 			self::render_settings();
+			self::render_limits( $status );
 			self::render_billing( $connection, $status );
 			self::render_disconnect();
 		}
@@ -500,23 +677,23 @@ class Camille_PS_Admin {
 	}
 
 	/**
-	 * Catalog sync button and report.
+	 * Catalog sync button and the progress panel (filled and kept up to date by assets/js/admin.js).
 	 */
 	private static function render_catalog() {
-		echo '<div class="camille-ps-card">';
+		echo '<div class="camille-ps-card" id="camille-ps-catalog">';
 		echo '<h2>' . esc_html__( 'Catalog', 'camille-personal-shopper' ) . '</h2>';
 		echo '<p>' . esc_html__( 'Camille only suggests products she knows. Sync again after adding products or changing prices, so she always shows what you sell.', 'camille-personal-shopper' ) . '</p>';
-		$local  = Camille_PS_Options::sync_state();
-		$report = Camille_PS_Catalog_Sync::remote_report();
-		if ( Camille_PS_Catalog_Sync::is_running() ) {
-			/* translators: %d: number of products. */
-			echo '<p class="camille-ps-badge is-info">' . esc_html( sprintf( __( 'Sending products to Camille: %d so far.', 'camille-personal-shopper' ), (int) ( $local['sent_products'] ?? 0 ) ) ) . '</p>';
-		} elseif ( isset( $local['phase'] ) && 'failed' === $local['phase'] ) {
-			echo '<p class="camille-ps-badge is-error">' . esc_html( self::sync_error_text( (string) ( $local['error'] ?? '' ) ) ) . '</p>';
-		}
-		if ( $report && ( ! isset( $local['phase'] ) || 'exporting' !== $local['phase'] ) ) {
-			self::render_report( $report );
-		}
+		echo '<div class="camille-ps-progress" hidden aria-live="polite">';
+		echo '<img class="camille-ps-avatar" src="' . esc_url( CAMILLE_PS_URL . 'assets/images/camille-avatar.jpg' ) . '" alt="" width="56" height="56">';
+		echo '<div class="camille-ps-progress-body">';
+		echo '<ol class="camille-ps-steps"></ol>';
+		echo '<p class="camille-ps-progress-title"></p>';
+		echo '<p class="camille-ps-progress-line"></p>';
+		echo '<div class="camille-ps-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><span></span></div>';
+		echo '<p class="camille-ps-progress-meta description"></p>';
+		echo '<div class="camille-ps-progress-extra"></div>';
+		echo '</div></div>';
+		echo '<noscript><p class="description">' . esc_html__( 'Reload the page to see how the sync is going.', 'camille-personal-shopper' ) . '</p></noscript>';
 		self::form(
 			'sync_start',
 			static function () {
@@ -527,42 +704,144 @@ class Camille_PS_Admin {
 	}
 
 	/**
-	 * Report of the last sync on Camille's side.
-	 *
-	 * @param array $report Report from the service.
+	 * Which products Camille may suggest: categories, price range, single products.
 	 */
-	private static function render_report( array $report ) {
-		$status = (string) ( $report['status'] ?? '' );
-		$rows   = isset( $report['rows'] ) && is_array( $report['rows'] ) ? $report['rows'] : array();
-		$sent   = (int) ( $rows['sent'] ?? 0 );
-		$total  = $sent + (int) ( $rows['pending'] ?? 0 );
-		if ( in_array( $status, array( 'queued', 'sending', 'finishing' ), true ) ) {
-			/* translators: 1: rows imported, 2: rows to import. */
-			echo '<p class="camille-ps-badge is-info">' . esc_html( sprintf( __( 'Camille is importing your catalog: %1$d of %2$d.', 'camille-personal-shopper' ), $sent, $total ) ) . '</p>';
-			if ( ! empty( $report['nextAttemptAt'] ) ) {
-				echo '<p class="description">' . esc_html__( 'Pinci is busy: the import will continue by itself in a few minutes.', 'camille-personal-shopper' ) . '</p>';
+	private static function render_products() {
+		$filters    = Camille_PS_Options::catalog_filters();
+		$categories = Camille_PS_Catalog_Filter::category_list();
+		$excluded   = array_flip( $filters['excluded_categories'] );
+		$index      = self::index();
+		$counts     = array();
+		$lowest     = null;
+		$highest    = null;
+		$by_hand    = 0;
+		$parents    = wp_list_pluck( $categories, 'parent', 'id' );
+		foreach ( (array) $index as $row ) {
+			// Each product counts once in its categories and in all their parents.
+			$seen = array();
+			foreach ( $row[3] as $term_id ) {
+				for ( $guard = 0; $term_id && ! isset( $seen[ $term_id ] ) && $guard < 20; ++$guard ) {
+					$seen[ $term_id ] = true;
+					$term_id          = (int) ( $parents[ $term_id ] ?? 0 );
+				}
 			}
-		} elseif ( 'done' === $status ) {
-			/* translators: %d: number of catalog items. */
-			echo '<p class="camille-ps-badge is-success">' . esc_html( sprintf( _n( 'Last sync completed: %d item in Camille\'s catalog.', 'Last sync completed: %d items in Camille\'s catalog.', $sent, 'camille-personal-shopper' ), $sent ) ) . '</p>';
-			echo '<p class="description">' . esc_html__( 'Each colour of a product is a separate item. Camille finishes studying new items in a few minutes.', 'camille-personal-shopper' ) . '</p>';
-		} elseif ( 'failed' === $status ) {
-			echo '<p class="camille-ps-badge is-error">' . esc_html( self::sync_error_text( (string) ( $report['error'] ?? '' ) ) ) . '</p>';
+			foreach ( array_keys( $seen ) as $term_id ) {
+				$counts[ $term_id ] = ( $counts[ $term_id ] ?? 0 ) + 1;
+			}
+			if ( null !== $row[1] ) {
+				$lowest = null === $lowest ? $row[1] : min( $lowest, $row[1] );
+			}
+			if ( null !== $row[2] ) {
+				$highest = null === $highest ? $row[2] : max( $highest, $row[2] );
+			}
+			$by_hand += $row[4];
 		}
-		$rejected = isset( $report['rejected'] ) && is_array( $report['rejected'] ) ? $report['rejected'] : array();
-		if ( ! $rejected ) {
+		echo '<div class="camille-ps-card" id="camille-ps-products">';
+		echo '<h2>' . esc_html__( 'Which products Camille suggests', 'camille-personal-shopper' ) . '</h2>';
+		echo '<p>' . esc_html__( 'Choose what Camille may suggest to your customers. Products left out are removed from Camille at the next sync.', 'camille-personal-shopper' ) . '</p>';
+		self::form(
+			'save_filters',
+			static function () use ( $filters, $categories, $excluded, $counts, $lowest, $highest, $by_hand, $index ) {
+				echo '<h3>' . esc_html__( 'Categories', 'camille-personal-shopper' ) . '</h3>';
+				if ( ! $categories ) {
+					echo '<p class="description">' . esc_html__( 'Your shop has no product categories.', 'camille-personal-shopper' ) . '</p>';
+				} else {
+					echo '<ul class="camille-ps-tree">';
+					foreach ( $categories as $category ) {
+						$is_on = ! isset( $excluded[ $category['id'] ] );
+						echo '<li style="--camille-ps-depth:' . (int) $category['depth'] . '"><label><input type="checkbox" name="included_categories[]" value="' . (int) $category['id'] . '" data-parent="' . (int) $category['parent'] . '" ' . checked( $is_on, true, false ) . '> ' . esc_html( $category['name'] ) . ' <span class="camille-ps-count">(' . esc_html( number_format_i18n( $counts[ $category['id'] ] ?? 0 ) ) . ')</span>';
+						if ( Camille_PS_Catalog_Filter::is_unsuitable_name( $category['name'] ) ) {
+							echo ' <span class="camille-ps-badge is-warning camille-ps-hint">' . esc_html__( 'Usually not suited to Camille', 'camille-personal-shopper' ) . '</span>';
+						}
+						echo '</label></li>';
+					}
+					echo '</ul>';
+					echo '<p class="description">' . esc_html__( 'Leaving out a category also leaves out its subcategories. A product in more than one category stays while at least one of them is selected. Camille works best with clothing, shoes and accessories: perfumes, home items, gift cards and similar products rarely help her build outfits.', 'camille-personal-shopper' ) . '</p>';
+				}
+				echo '<h3>' . esc_html__( 'Price range', 'camille-personal-shopper' ) . '</h3>';
+				$symbol = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
+				echo '<p class="camille-ps-price"><label>' . esc_html__( 'From', 'camille-personal-shopper' ) . ' <input type="number" name="price_min" min="0" step="0.01" class="small-text" value="' . esc_attr( null === $filters['price_min'] ? '' : wc_format_localized_decimal( $filters['price_min'] ) ) . '"> ' . esc_html( $symbol ) . '</label> ';
+				echo '<label>' . esc_html__( 'to', 'camille-personal-shopper' ) . ' <input type="number" name="price_max" min="0" step="0.01" class="small-text" value="' . esc_attr( null === $filters['price_max'] ? '' : wc_format_localized_decimal( $filters['price_max'] ) ) . '"> ' . esc_html( $symbol ) . '</label></p>';
+				$range_help = __( 'Leave a field empty for no limit. A product with several prices (variations) stays when at least one price is in the range.', 'camille-personal-shopper' );
+				if ( null !== $lowest && null !== $highest ) {
+					/* translators: 1: lowest price, 2: highest price. */
+					$range_help .= ' ' . sprintf( __( 'Prices in your shop go from %1$s to %2$s.', 'camille-personal-shopper' ), wp_strip_all_tags( wc_price( $lowest ) ), wp_strip_all_tags( wc_price( $highest ) ) );
+				}
+				echo '<p class="description">' . esc_html( $range_help ) . '</p>';
+				echo '<h3>' . esc_html__( 'Single products', 'camille-personal-shopper' ) . '</h3>';
+				echo '<p class="description">' . wp_kses(
+					sprintf(
+						/* translators: %s: link to the products list. */
+						__( 'To leave out single products, tick "Do not show this product to Camille" on the product page (General tab), or select them in %s and use the bulk action "Hide from Camille".', 'camille-personal-shopper' ),
+						'<a href="' . esc_url( admin_url( 'edit.php?post_type=product' ) ) . '">' . esc_html__( 'Products', 'camille-personal-shopper' ) . '</a>'
+					),
+					array( 'a' => array( 'href' => array() ) )
+				) . '</p>';
+				if ( $by_hand ) {
+					/* translators: %s: number of products. */
+					echo '<p>' . esc_html( sprintf( _n( '%s product left out by hand.', '%s products left out by hand.', $by_hand, 'camille-personal-shopper' ), number_format_i18n( $by_hand ) ) ) . '</p>';
+				}
+				if ( is_array( $index ) ) {
+					/* translators: 1: products Camille will know, 2: products that can be sent. */
+					echo '<p class="camille-ps-estimate"><strong>' . esc_html( sprintf( __( 'Camille will know %1$s of %2$s products.', 'camille-personal-shopper' ), number_format_i18n( Camille_PS_Catalog_Filter::count_allowed( $index ) ), number_format_i18n( count( $index ) ) ) ) . '</strong></p>';
+				}
+				echo '<p class="submit">';
+				submit_button( __( 'Save the selection', 'camille-personal-shopper' ), 'secondary', 'submit', false );
+				echo ' ';
+				submit_button( __( 'Save and sync the catalog', 'camille-personal-shopper' ), 'primary', 'then_sync', false );
+				echo '</p>';
+			}
+		);
+		echo '</div>';
+	}
+
+	/**
+	 * How much each visitor may use Camille. Saved on Camille's service, which enforces it.
+	 *
+	 * @param array $status Last known status.
+	 */
+	private static function render_limits( array $status ) {
+		$limits     = isset( $status['shopperLimits'] ) && is_array( $status['shopperLimits'] ) ? $status['shopperLimits'] : null;
+		$visibility = Camille_PS_Options::settings()['visibility'];
+		echo '<div class="camille-ps-card" id="camille-ps-limits">';
+		echo '<h2>' . esc_html__( 'Usage limits for your customers', 'camille-personal-shopper' ) . '</h2>';
+		echo '<p>' . esc_html__( 'Every virtual try-on uses credits. These limits keep a single visitor from using up your credits. Camille applies them herself and, when a limit is reached, explains it kindly in the chat.', 'camille-personal-shopper' ) . '</p>';
+		if ( Camille_PS_Options::VISIBILITY_ADMINS === $visibility ) {
+			echo '<p class="camille-ps-badge is-info">' . esc_html__( 'Camille is visible only to shop administrators now, and they have no limits. These limits apply once you show her to your customers.', 'camille-personal-shopper' ) . '</p>';
+		}
+		if ( '' === Camille_PS_Options::widget_key() && ! Camille_PS_API::ensure_widget_key() ) {
+			echo '<p class="camille-ps-badge is-warning">' . esc_html__( 'Camille cannot recognise logged-in customers yet, so for now she treats everyone as a visitor without an account. Reload this page in a minute; if this message stays, write to support@pinci.ai.', 'camille-personal-shopper' ) . '</p>';
+		}
+		if ( ! $limits ) {
+			echo '<p class="camille-ps-badge is-warning">' . esc_html__( 'The limits cannot be read right now. Please try again in a few minutes.', 'camille-personal-shopper' ) . '</p></div>';
 			return;
 		}
-		/* translators: %d: number of items. */
-		echo '<details class="camille-ps-rejected"><summary>' . esc_html( sprintf( _n( '%d item left out', '%d items left out', (int) ( $rows['rejected'] ?? count( $rejected ) ), 'camille-personal-shopper' ), (int) ( $rows['rejected'] ?? count( $rejected ) ) ) ) . '</summary><ul>';
-		foreach ( $rejected as $item ) {
-			$product_id = isset( $item['productId'] ) ? (int) $item['productId'] : 0;
-			$title      = $product_id ? get_the_title( $product_id ) : '';
-			$link       = $product_id ? get_edit_post_link( $product_id ) : '';
-			$label      = '' !== $title ? $title : '#' . $product_id;
-			echo '<li>' . ( $link ? '<a href="' . esc_url( $link ) . '">' . esc_html( $label ) . '</a>' : esc_html( $label ) ) . ' – ' . esc_html( self::reason_text( (string) ( $item['reason'] ?? '' ) ) ) . '</li>';
-		}
-		echo '</ul></details>';
+		self::form(
+			'save_limits',
+			static function () use ( $limits, $visibility ) {
+				$guests_hidden = Camille_PS_Options::VISIBILITY_EVERYONE !== $visibility;
+				echo '<table class="form-table" role="presentation"><tbody>';
+				echo '<tr><th scope="row" colspan="2" class="camille-ps-subhead">' . esc_html__( 'Visitors without an account', 'camille-personal-shopper' ) . '</th></tr>';
+				echo '<tr><th scope="row"><label for="camille-ps-guest-chats">' . esc_html__( 'Chats per day', 'camille-personal-shopper' ) . '</label></th><td>';
+				echo '<input type="number" id="camille-ps-guest-chats" name="guest_chats_per_day" min="0" max="' . (int) $limits['maxGuestChatsPerDay'] . '" step="1" class="small-text" value="' . (int) $limits['guestChatsPerDay'] . '">';
+				/* translators: %d: highest value allowed. */
+				echo '<p class="description">' . esc_html( sprintf( __( 'New chats a visitor without an account may start each day, counted from the first message they write (at most %d). With 0 Camille asks them to sign in or register before chatting.', 'camille-personal-shopper' ), (int) $limits['maxGuestChatsPerDay'] ) ) . '</p></td></tr>';
+				echo '<tr><th scope="row">' . esc_html__( 'Virtual try-ons', 'camille-personal-shopper' ) . '</th><td><label><input type="checkbox" name="guest_try_ons_enabled" value="1" ' . checked( $limits['guestTryOnsEnabled'], true, false ) . '> ' . esc_html__( 'Allow virtual try-ons to visitors without an account', 'camille-personal-shopper' ) . '</label>';
+				echo '<p class="description">' . esc_html__( 'When this is off, Camille advises them in the chat and invites them to sign in or register to try the clothes on. A good way to get more customers to create an account.', 'camille-personal-shopper' ) . '</p></td></tr>';
+				if ( $guests_hidden ) {
+					echo '<tr><th></th><td><p class="description">' . esc_html__( 'With your current choice in "Who sees Camille", visitors without an account do not see her: these two settings apply only if you show her to all visitors.', 'camille-personal-shopper' ) . '</p></td></tr>';
+				}
+				echo '<tr><th scope="row" colspan="2" class="camille-ps-subhead">' . esc_html__( 'Customers logged in to their account', 'camille-personal-shopper' ) . '</th></tr>';
+				echo '<tr><th scope="row"><label for="camille-ps-customer-tryons">' . esc_html__( 'Try-ons per day', 'camille-personal-shopper' ) . '</label></th><td>';
+				echo '<input type="number" id="camille-ps-customer-tryons" name="try_ons_per_customer_per_day" min="0" max="' . (int) $limits['maxTryOnsPerCustomerPerDay'] . '" step="1" class="small-text" value="' . (int) $limits['tryOnsPerCustomerPerDay'] . '">';
+				/* translators: %d: highest value allowed. */
+				echo '<p class="description">' . esc_html( sprintf( __( 'Virtual try-ons each customer may make in 24 hours, on any device (at most %d). Try-ons that fail are not counted. With 0 customers can chat but not try clothes on.', 'camille-personal-shopper' ), (int) $limits['maxTryOnsPerCustomerPerDay'] ) ) . '</p></td></tr>';
+				echo '</tbody></table>';
+				echo '<p class="description">' . esc_html__( 'Shop administrators and shop managers have no limits, so you can test Camille freely while logged in.', 'camille-personal-shopper' ) . '</p>';
+				submit_button( __( 'Save the limits', 'camille-personal-shopper' ) );
+			}
+		);
+		echo '</div>';
 	}
 
 	/**

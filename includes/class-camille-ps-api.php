@@ -95,9 +95,24 @@ class Camille_PS_API {
 	/**
 	 * Reads the shop status from the service and keeps it for the storefront.
 	 *
+	 * @param bool $force Ask again even if this request already asked.
 	 * @return array|WP_Error The status, or the error when the service could not answer.
 	 */
-	public static function refresh_status() {
+	public static function refresh_status( $force = false ) {
+		static $last = null;
+		if ( null !== $last && ! $force ) {
+			return $last;
+		}
+		$last = self::fetch_status();
+		return $last;
+	}
+
+	/**
+	 * One call to the status endpoint.
+	 *
+	 * @return array|WP_Error
+	 */
+	private static function fetch_status() {
 		$result = self::signed( 'GET', '/v1/shop/status' );
 		if ( is_wp_error( $result ) ) {
 			return $result;
@@ -112,15 +127,68 @@ class Camille_PS_API {
 			'lastCatalogSync' => isset( $result['body']['lastCatalogSync'] ) ? $result['body']['lastCatalogSync'] : null,
 			'creditsUrl'      => isset( $result['body']['creditsUrl'] ) ? esc_url_raw( (string) $result['body']['creditsUrl'] ) : '',
 			'hasBilling'      => ! empty( $result['body']['hasBilling'] ),
+			'classification'  => isset( $result['body']['classification'] ) && is_array( $result['body']['classification'] ) ? self::clean_classification( $result['body']['classification'] ) : null,
+			'shopperLimits'   => isset( $result['body']['shopperLimits'] ) && is_array( $result['body']['shopperLimits'] ) ? self::clean_shopper_limits( $result['body']['shopperLimits'] ) : null,
 		);
 		self::remember_status( $status );
+		self::ensure_widget_key();
 		return $status;
+	}
+
+	/**
+	 * How far Camille is in studying the products, as the service reports it.
+	 *
+	 * @param array $raw Answer field.
+	 * @return array{isRunning:bool,progress:float,remainingMinutes:int|null,finishedAt:string|null}
+	 */
+	private static function clean_classification( array $raw ) {
+		return array(
+			'isRunning'        => ! empty( $raw['isRunning'] ),
+			'progress'         => isset( $raw['progress'] ) && is_numeric( $raw['progress'] ) ? max( 0.0, min( 1.0, (float) $raw['progress'] ) ) : 0.0,
+			'remainingMinutes' => isset( $raw['remainingMinutes'] ) && is_numeric( $raw['remainingMinutes'] ) ? (int) $raw['remainingMinutes'] : null,
+			'finishedAt'       => isset( $raw['finishedAt'] ) && is_string( $raw['finishedAt'] ) ? sanitize_text_field( $raw['finishedAt'] ) : null,
+		);
+	}
+
+	/**
+	 * The per-shopper limits, as the service reports them.
+	 *
+	 * @param array $raw Answer field.
+	 * @return array{guestChatsPerDay:int,guestTryOnsEnabled:bool,tryOnsPerCustomerPerDay:int,maxGuestChatsPerDay:int,maxTryOnsPerCustomerPerDay:int}
+	 */
+	public static function clean_shopper_limits( array $raw ) {
+		$max = isset( $raw['max'] ) && is_array( $raw['max'] ) ? $raw['max'] : array();
+		return array(
+			'guestChatsPerDay'           => isset( $raw['guestChatsPerDay'] ) ? (int) $raw['guestChatsPerDay'] : 1,
+			'guestTryOnsEnabled'         => ! empty( $raw['guestTryOnsEnabled'] ),
+			'tryOnsPerCustomerPerDay'    => isset( $raw['tryOnsPerCustomerPerDay'] ) ? (int) $raw['tryOnsPerCustomerPerDay'] : 10,
+			'maxGuestChatsPerDay'        => isset( $max['guestChatsPerDay'] ) ? (int) $max['guestChatsPerDay'] : 100,
+			'maxTryOnsPerCustomerPerDay' => isset( $max['tryOnsPerCustomerPerDay'] ) ? (int) $max['tryOnsPerCustomerPerDay'] : 500,
+		);
+	}
+
+	/**
+	 * Fetches the visitor signing key once, so logged-in customers are recognised by Camille.
+	 * The storefront only reads the stored copy: without it every visitor counts as a guest.
+	 *
+	 * @return bool Whether the shop has the key.
+	 */
+	public static function ensure_widget_key() {
+		if ( '' !== Camille_PS_Options::widget_key() ) {
+			return true;
+		}
+		$result = self::signed( 'GET', '/v1/shop/widget-key' );
+		if ( is_wp_error( $result ) || 200 !== $result['code'] || ! isset( $result['body']['secret'] ) || ! is_string( $result['body']['secret'] ) ) {
+			return false;
+		}
+		Camille_PS_Options::save_widget_key( $result['body']['secret'] );
+		return '' !== Camille_PS_Options::widget_key();
 	}
 
 	/**
 	 * Last known status. The storefront reads only this: it never calls the service.
 	 *
-	 * @return array{isDisabled?:bool,isActive?:bool,credits?:mixed,lastCatalogSync?:mixed,creditsUrl?:string,hasBilling?:bool,checkedAt?:int}
+	 * @return array{isDisabled?:bool,isActive?:bool,credits?:mixed,lastCatalogSync?:mixed,creditsUrl?:string,hasBilling?:bool,classification?:array|null,shopperLimits?:array|null,checkedAt?:int}
 	 */
 	public static function cached_status() {
 		$stored = get_option( self::STATUS_CACHE, array() );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Everything the plugin stores, in four options (none autoloaded except the display settings).
+ * Everything the plugin stores, in a few options (none autoloaded except the display settings and the cached status).
  *
  * @package CamillePersonalShopper
  */
@@ -17,6 +17,8 @@ class Camille_PS_Options {
 	const SETTINGS   = 'camille_ps_settings';
 	const SYNC       = 'camille_ps_sync';
 	const BILLING    = 'camille_ps_billing';
+	const WIDGET_KEY = 'camille_ps_widget_key';
+	const FILTERS    = 'camille_ps_catalog_filters';
 
 	const VISIBILITY_OFF       = 'off';
 	const VISIBILITY_ADMINS    = 'admins';
@@ -121,6 +123,74 @@ class Camille_PS_Options {
 		delete_option( self::PENDING );
 		delete_option( self::SYNC );
 		delete_option( self::BILLING );
+		delete_option( self::WIDGET_KEY );
+	}
+
+	/**
+	 * Key that signs who the logged-in visitor is, so Camille can apply the per-customer limits.
+	 * Given by Camille's service once; kept encrypted, never autoloaded, never sent to the browser.
+	 *
+	 * @return string 64 hex characters, or '' when the shop does not have it yet.
+	 */
+	public static function widget_key() {
+		$stored = get_option( self::WIDGET_KEY, '' );
+		if ( ! is_string( $stored ) || '' === $stored ) {
+			return '';
+		}
+		$key = self::decrypt( $stored );
+		return 1 === preg_match( '/^[0-9a-f]{64}$/', $key ) ? $key : '';
+	}
+
+	/**
+	 * Saves the visitor signing key.
+	 *
+	 * @param string $key 64 hex characters.
+	 */
+	public static function save_widget_key( $key ) {
+		if ( 1 === preg_match( '/^[0-9a-f]{64}$/', (string) $key ) ) {
+			update_option( self::WIDGET_KEY, self::encrypt( (string) $key ), false );
+		}
+	}
+
+	/**
+	 * Which products Camille may suggest. Empty means the whole catalog.
+	 *
+	 * @return array{excluded_categories:int[],price_min:float|null,price_max:float|null}
+	 */
+	public static function catalog_filters() {
+		$stored = get_option( self::FILTERS, array() );
+		$stored = is_array( $stored ) ? $stored : array();
+		return array(
+			'excluded_categories' => isset( $stored['excluded_categories'] ) && is_array( $stored['excluded_categories'] ) ? array_values( array_unique( array_filter( array_map( 'absint', $stored['excluded_categories'] ) ) ) ) : array(),
+			'price_min'           => isset( $stored['price_min'] ) && is_numeric( $stored['price_min'] ) ? (float) $stored['price_min'] : null,
+			'price_max'           => isset( $stored['price_max'] ) && is_numeric( $stored['price_max'] ) ? (float) $stored['price_max'] : null,
+		);
+	}
+
+	/**
+	 * Cleans and saves the product selection.
+	 *
+	 * @param int[]      $excluded_categories Category ids left out.
+	 * @param float|null $price_min           Lowest price, null for no limit.
+	 * @param float|null $price_max           Highest price, null for no limit.
+	 * @return array The saved selection.
+	 */
+	public static function save_catalog_filters( array $excluded_categories, $price_min, $price_max ) {
+		$min = null !== $price_min && $price_min > 0 ? round( (float) $price_min, 2 ) : null;
+		$max = null !== $price_max && $price_max > 0 ? round( (float) $price_max, 2 ) : null;
+		if ( null !== $min && null !== $max && $min > $max ) {
+			list( $min, $max ) = array( $max, $min );
+		}
+		update_option(
+			self::FILTERS,
+			array(
+				'excluded_categories' => array_values( array_unique( array_filter( array_map( 'absint', $excluded_categories ) ) ) ),
+				'price_min'           => $min,
+				'price_max'           => $max,
+			),
+			false
+		);
+		return self::catalog_filters();
 	}
 
 	/**

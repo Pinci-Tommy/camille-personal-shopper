@@ -52,13 +52,16 @@ class Camille_PS_Catalog_Sync {
 			return new WP_Error( 'camille_ps_sync_start', Camille_PS_API::error_message( $result ) );
 		}
 		$run_id = sanitize_text_field( (string) $result['body']['runId'] );
+		$index  = Camille_PS_Catalog_Filter::product_index();
 		Camille_PS_Options::save_sync_state(
 			array(
-				'run_id'        => $run_id,
-				'phase'         => 'exporting',
-				'started_at'    => time(),
-				'sent_products' => 0,
-				'error'         => '',
+				'run_id'         => $run_id,
+				'phase'          => 'exporting',
+				'started_at'     => time(),
+				'sent_products'  => 0,
+				// Products the selection lets through: the progress bar of the first step.
+				'total_products' => null === $index ? 0 : Camille_PS_Catalog_Filter::count_allowed( $index ),
+				'error'          => '',
 			)
 		);
 		as_enqueue_async_action( self::HOOK_PAGE, array( $run_id, 1, 0 ), self::GROUP );
@@ -193,6 +196,107 @@ class Camille_PS_Catalog_Sync {
 		$state['phase'] = 'failed';
 		$state['error'] = sanitize_key( $error );
 		Camille_PS_Options::save_sync_state( $state );
+	}
+
+	/** After the import, how long Camille may take to open the study of the new items. */
+	const STUDY_START_GRACE = 90;
+
+	/**
+	 * Where the sync is, for the progress panel of the settings page:
+	 * reading (products sent from this shop) → saving (Camille imports them) → studying (Camille
+	 * looks at every new item) → done, or failed. "idle" when no sync ever ran.
+	 *
+	 * @return array{stage:string,done:int,total:int,progress:float,remainingMinutes:int|null,isBusy:bool,items:int,message:string,rejected:array,rejectedCount:int}
+	 */
+	public static function progress() {
+		$local = Camille_PS_Options::sync_state();
+		$out   = array(
+			'stage'            => 'idle',
+			'done'             => 0,
+			'total'            => 0,
+			'progress'         => 0.0,
+			'remainingMinutes' => null,
+			'isBusy'           => false,
+			'items'            => 0,
+			'message'          => '',
+			'rejected'         => array(),
+			'rejectedCount'    => 0,
+		);
+		$phase = isset( $local['phase'] ) ? (string) $local['phase'] : '';
+		if ( 'exporting' === $phase ) {
+			$out['stage'] = 'reading';
+			$out['done']  = (int) ( $local['sent_products'] ?? 0 );
+			$out['total'] = max( $out['done'], (int) ( $local['total_products'] ?? 0 ) );
+			return $out;
+		}
+		if ( 'failed' === $phase ) {
+			$out['stage']   = 'failed';
+			$out['message'] = (string) ( $local['error'] ?? '' );
+			return $out;
+		}
+		$report = self::remote_report();
+		if ( ! $report ) {
+			// Sent, but the service did not answer this time: still importing as far as we know.
+			$out['stage'] = 'sent' === $phase ? 'saving' : 'idle';
+			return $out;
+		}
+		$rows   = isset( $report['rows'] ) && is_array( $report['rows'] ) ? $report['rows'] : array();
+		$status = (string) ( $report['status'] ?? '' );
+		if ( in_array( $status, array( 'receiving', 'queued', 'sending', 'finishing' ), true ) ) {
+			$out['stage']  = 'saving';
+			$out['done']   = (int) ( $rows['sent'] ?? 0 );
+			$out['total']  = $out['done'] + (int) ( $rows['pending'] ?? 0 );
+			$out['isBusy'] = ! empty( $report['nextAttemptAt'] ) && strtotime( (string) $report['nextAttemptAt'] ) > time() + 30;
+			return $out;
+		}
+		if ( 'failed' === $status ) {
+			$out['stage']   = 'failed';
+			$out['message'] = (string) ( $report['error'] ?? '' );
+			return $out;
+		}
+		if ( 'done' !== $status ) {
+			return $out;
+		}
+		$out['items']         = (int) ( $rows['sent'] ?? 0 );
+		$out['rejectedCount'] = (int) ( $rows['rejected'] ?? 0 );
+		$out['rejected']      = self::rejected_list( isset( $report['rejected'] ) && is_array( $report['rejected'] ) ? $report['rejected'] : array() );
+		$out['stage']         = 'done';
+		$status_now           = Camille_PS_API::refresh_status();
+		$study                = is_array( $status_now ) && isset( $status_now['classification'] ) && is_array( $status_now['classification'] ) ? $status_now['classification'] : null;
+		if ( ! $study ) {
+			return $out;
+		}
+		$finished_import = ! empty( $report['finishedAt'] ) ? (int) strtotime( (string) $report['finishedAt'] ) : 0;
+		$study_finished  = ! empty( $study['finishedAt'] ) ? (int) strtotime( (string) $study['finishedAt'] ) : 0;
+		if ( ! empty( $study['isRunning'] ) ) {
+			$out['stage']            = 'studying';
+			$out['progress']         = (float) $study['progress'];
+			$out['remainingMinutes'] = $study['remainingMinutes'];
+		} elseif ( $finished_import && $study_finished < $finished_import - 60 && time() - $finished_import < self::STUDY_START_GRACE ) {
+			$out['stage'] = 'studying'; // The study opens a few seconds after the import.
+		}
+		return $out;
+	}
+
+	/**
+	 * Rejected items with the product name and its edit link.
+	 *
+	 * @param array $rejected From the report.
+	 * @return array<int,array{label:string,link:string,reason:string}>
+	 */
+	private static function rejected_list( array $rejected ) {
+		$list = array();
+		foreach ( $rejected as $item ) {
+			$product_id = isset( $item['productId'] ) ? (int) $item['productId'] : 0;
+			$title      = $product_id ? get_the_title( $product_id ) : '';
+			$link       = $product_id ? get_edit_post_link( $product_id, 'raw' ) : '';
+			$list[]     = array(
+				'label'  => '' !== $title ? wp_strip_all_tags( $title ) : '#' . $product_id,
+				'link'   => $link ? (string) $link : '',
+				'reason' => (string) ( $item['reason'] ?? '' ),
+			);
+		}
+		return $list;
 	}
 
 	/**

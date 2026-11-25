@@ -314,6 +314,13 @@
          "sign in" links go to the store's My account page (sfAccount, same host only). */
       if (sf.host) qs.set('sfHost', String(sf.host));
       if (sf.accountUrl) qs.set('sfAccount', String(sf.accountUrl));
+      /* Who the visitor is, signed by the shop (WordPress): Camille applies the per-customer limits
+         to logged-in customers and none to the shop managers. Guests carry nothing. */
+      var sh = cfg.shopper || {};
+      if (sh.customerId) qs.set('shopifyCustomerId', String(sh.customerId));
+      ['cid', 'tag', 'ts', 'sig', 'dts', 'dsig'].forEach(function (k) {
+        if (sh[k]) qs.set(k, String(sh[k]));
+      });
       return PINCI_BASE + '/demo/' + encodeURIComponent(storeId) + '?' + qs.toString();
     }
 
