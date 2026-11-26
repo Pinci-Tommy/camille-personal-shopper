@@ -61,7 +61,13 @@ class Camille_PS_Options {
 	 */
 	public static function save_settings( array $raw ) {
 		$current  = self::settings();
-		$color    = isset( $raw['primary_color'] ) ? sanitize_hex_color( (string) $raw['primary_color'] ) : null;
+		$color = isset( $raw['primary_color'] ) ? sanitize_hex_color( (string) $raw['primary_color'] ) : null;
+		// The visibility and the appearance are saved by two forms: one without the other keeps it.
+		if ( ! isset( $raw['position'] ) ) {
+			$current['visibility'] = isset( $raw['visibility'] ) && in_array( $raw['visibility'], self::visibility_values(), true ) ? $raw['visibility'] : $current['visibility'];
+			update_option( self::SETTINGS, $current, true );
+			return $current;
+		}
 		$settings = array(
 			'visibility'          => isset( $raw['visibility'] ) && in_array( $raw['visibility'], self::visibility_values(), true ) ? $raw['visibility'] : $current['visibility'],
 			'position'            => isset( $raw['position'] ) && 'bottom-left' === $raw['position'] ? 'bottom-left' : 'bottom-right',

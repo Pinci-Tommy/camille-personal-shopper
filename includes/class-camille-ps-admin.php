@@ -38,6 +38,7 @@ class Camille_PS_Admin {
 			add_action( 'admin_post_camille_ps_' . $action, array( __CLASS__, 'handle_' . $action ) );
 		}
 		add_action( 'wp_ajax_' . self::PROGRESS_ACTION, array( __CLASS__, 'ajax_sync_progress' ) );
+		add_filter( 'admin_body_class', array( __CLASS__, 'body_class' ) );
 	}
 
 	/**
@@ -211,6 +212,16 @@ class Camille_PS_Admin {
 	}
 
 	/**
+	 * Keeps a message for the next page view (for the other admin screens of the plugin).
+	 *
+	 * @param string $type    success, error, warning or info.
+	 * @param string $message Escaped text, may contain safe links.
+	 */
+	public static function add_notice( $type, $message ) {
+		self::notice( $type, $message );
+	}
+
+	/**
 	 * Shows and forgets the stored message.
 	 */
 	private static function render_notice() {
@@ -249,12 +260,13 @@ class Camille_PS_Admin {
 	}
 
 	/**
-	 * Back to the settings page.
+	 * Back to a section of the settings page.
 	 *
-	 * @param string $anchor Section to scroll to, e.g. #camille-ps-limits.
+	 * @param string $tab    Section, the first one when empty.
+	 * @param string $anchor Part of the section to scroll to, e.g. #camille-ps-products.
 	 */
-	private static function back( $anchor = '' ) {
-		wp_safe_redirect( self::page_url() . $anchor );
+	private static function back( $tab = '', $anchor = '' ) {
+		wp_safe_redirect( self::tab_url( '' === $tab ? self::TAB_CATALOG : $tab ) . $anchor );
 		exit;
 	}
 
@@ -387,6 +399,7 @@ class Camille_PS_Admin {
 	 */
 	public static function handle_save_settings() {
 		$post     = self::verified_post( 'save_settings' );
+		$tab      = isset( $post['position'] ) ? self::TAB_PERSONALIZE : self::TAB_VISIBILITY;
 		$settings = Camille_PS_Options::save_settings( is_array( $post ) ? $post : array() );
 		$is_on    = Camille_PS_Options::VISIBILITY_OFF !== $settings['visibility'];
 		$status   = Camille_PS_API::cached_status();
@@ -394,12 +407,12 @@ class Camille_PS_Admin {
 			$result = Camille_PS_API::signed( 'POST', '/v1/shop/active', array( 'isActive' => $is_on ) );
 			if ( is_wp_error( $result ) || 200 !== $result['code'] ) {
 				self::notice( 'warning', __( 'Settings saved, but Camille could not be switched on or off right now:', 'camille-personal-shopper' ) . ' ' . Camille_PS_API::error_message( $result ) );
-				self::back();
+				self::back( $tab );
 			}
 			Camille_PS_API::remember_status( array( 'isActive' => $is_on ) );
 		}
 		self::notice( 'success', __( 'Settings saved.', 'camille-personal-shopper' ) );
-		self::back();
+		self::back( $tab );
 	}
 
 	/**
@@ -421,7 +434,7 @@ class Camille_PS_Admin {
 		} else {
 			self::notice( 'error', Camille_PS_API::error_message( $result ) );
 		}
-		self::back( '#camille-ps-limits' );
+		self::back( self::TAB_LIMITS );
 	}
 
 	/** Uploaded photos above this size are refused before anything else. */
@@ -439,13 +452,13 @@ class Camille_PS_Admin {
 		$upload = self::read_avatar_upload();
 		if ( is_wp_error( $upload ) ) {
 			self::notice( 'error', $upload->get_error_message() );
-			self::back( '#camille-ps-persona' );
+			self::back( self::TAB_PERSONALIZE );
 		}
 		if ( null !== $upload ) {
 			$result = Camille_PS_API::signed( 'POST', '/v1/shop/persona/avatar', array( 'imageBase64' => $upload ), 60 );
 			if ( is_wp_error( $result ) || 200 !== $result['code'] ) {
 				self::notice( 'error', ! is_wp_error( $result ) && 400 === $result['code'] ? __( 'Camille could not use this photo. Use a JPEG, PNG or WebP image of up to 10 MB.', 'camille-personal-shopper' ) : Camille_PS_API::error_message( $result ) );
-				self::back( '#camille-ps-persona' );
+				self::back( self::TAB_PERSONALIZE );
 			}
 			$avatar = 'custom';
 		}
@@ -473,7 +486,7 @@ class Camille_PS_Admin {
 		} else {
 			self::notice( 'error', Camille_PS_API::error_message( $result ) );
 		}
-		self::back( '#camille-ps-persona' );
+		self::back( self::TAB_PERSONALIZE );
 	}
 
 	/**
@@ -534,7 +547,7 @@ class Camille_PS_Admin {
 		Camille_PS_Options::save_catalog_filters( $excluded, $min, $max );
 		if ( empty( $post['then_sync'] ) ) {
 			self::notice( 'success', __( 'Selection saved. Sync the catalog to update Camille.', 'camille-personal-shopper' ) );
-			self::back( '#camille-ps-products' );
+			self::back( self::TAB_CATALOG, '#camille-ps-products' );
 		}
 		$result = Camille_PS_Catalog_Sync::start();
 		if ( is_wp_error( $result ) ) {
@@ -542,7 +555,7 @@ class Camille_PS_Admin {
 		} else {
 			self::notice( 'success', __( 'Selection saved. Camille is updating her catalog.', 'camille-personal-shopper' ) );
 		}
-		self::back( '#camille-ps-catalog' );
+		self::back( self::TAB_CATALOG, '#camille-ps-catalog' );
 	}
 
 	/**
@@ -560,7 +573,7 @@ class Camille_PS_Admin {
 			Camille_PS_Options::save_billing( $result['body']['billing'] );
 			Camille_PS_API::remember_status( array( 'hasBilling' => true ) );
 			self::notice( 'success', __( 'Billing details saved.', 'camille-personal-shopper' ) );
-			self::back();
+			self::back( self::TAB_BILLING );
 		}
 		$errors = ! is_wp_error( $result ) && 400 === $result['code'] && isset( $result['body']['fields'] ) && is_array( $result['body']['fields'] ) ? $result['body']['fields'] : array();
 		set_transient(
@@ -572,7 +585,7 @@ class Camille_PS_Admin {
 			5 * MINUTE_IN_SECONDS
 		);
 		self::notice( 'error', $errors ? __( 'Some billing details are missing or not valid. Check the marked fields.', 'camille-personal-shopper' ) : Camille_PS_API::error_message( $result ) );
-		self::back();
+		self::back( self::TAB_BILLING );
 	}
 
 	/**
@@ -586,7 +599,7 @@ class Camille_PS_Admin {
 		} else {
 			self::notice( 'success', __( 'Catalog sync started. It runs in the background: you can leave this page.', 'camille-personal-shopper' ) );
 		}
-		self::back( '#camille-ps-catalog' );
+		self::back( self::TAB_CATALOG, '#camille-ps-catalog' );
 	}
 
 	/**
@@ -631,28 +644,183 @@ class Camille_PS_Admin {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
 			return;
 		}
-		echo '<div class="wrap camille-ps">';
-		echo '<h1>' . esc_html__( 'Camille, your AI personal shopper', 'camille-personal-shopper' ) . '</h1>';
-		self::render_notice();
 		$connection = Camille_PS_Options::connection();
-		if ( ! $connection ) {
-			self::render_connect();
-		} else {
+		$status     = array();
+		$warning    = '';
+		if ( $connection ) {
 			$status = Camille_PS_API::refresh_status();
 			if ( is_wp_error( $status ) ) {
-				echo '<div class="notice notice-warning inline"><p>' . esc_html( $status->get_error_message() ) . '</p></div>';
-				$status = Camille_PS_API::cached_status();
+				$warning = $status->get_error_message();
+				$status  = Camille_PS_API::cached_status();
 			}
-			self::render_status( $connection, $status );
-			self::render_products();
-			self::render_catalog();
-			self::render_persona();
-			self::render_settings();
-			self::render_limits( $status );
-			self::render_billing( $connection, $status );
-			self::render_disconnect();
 		}
-		echo '</div>';
+		echo '<div class="wrap camille-ps">';
+		self::render_header( $connection ? $status : null );
+		echo '<hr class="wp-header-end">';
+		self::render_notice();
+		if ( '' !== $warning ) {
+			echo '<div class="notice notice-warning inline"><p>' . esc_html( $warning ) . '</p></div>';
+		}
+		if ( ! $connection ) {
+			echo '<div class="camille-ps-connect">';
+			self::render_connect();
+			echo '</div></div>';
+			return;
+		}
+		$tab = self::current_tab();
+		echo '<div class="camille-ps-layout">';
+		self::render_nav( $tab );
+		echo '<div class="camille-ps-main">';
+		switch ( $tab ) {
+			case self::TAB_PERSONALIZE:
+				self::render_persona();
+				self::render_appearance();
+				break;
+			case self::TAB_VISIBILITY:
+				self::render_visibility();
+				break;
+			case self::TAB_LIMITS:
+				self::render_limits( $status );
+				break;
+			case self::TAB_BILLING:
+				self::render_billing( $connection, $status );
+				self::render_disconnect();
+				break;
+			case Camille_PS_Activity::TAB_CONVERSATIONS:
+				Camille_PS_Activity::render_conversations();
+				break;
+			case Camille_PS_Activity::TAB_TRY_ONS:
+				Camille_PS_Activity::render_try_ons();
+				break;
+			default:
+				self::render_status( $connection, $status );
+				self::render_catalog();
+				self::render_products();
+		}
+		echo '</div></div></div>';
+	}
+
+	/* ---------------------------------------------------------------- tabs */
+
+	const TAB_CATALOG     = 'catalog';
+	const TAB_PERSONALIZE = 'personalize';
+	const TAB_VISIBILITY  = 'visibility';
+	const TAB_LIMITS      = 'limits';
+	const TAB_BILLING     = 'billing';
+
+	/**
+	 * Sections of the page, grouped as in the side menu.
+	 *
+	 * @return array<string,array<string,string>> Group title => tab => label.
+	 */
+	private static function tabs() {
+		return array(
+			__( 'Settings', 'camille-personal-shopper' )       => array(
+				self::TAB_CATALOG     => __( 'Status and catalog', 'camille-personal-shopper' ),
+				self::TAB_PERSONALIZE => __( 'Personalisation', 'camille-personal-shopper' ),
+				self::TAB_VISIBILITY  => __( 'Visibility', 'camille-personal-shopper' ),
+				self::TAB_LIMITS      => __( 'Usage limits', 'camille-personal-shopper' ),
+				self::TAB_BILLING     => __( 'Billing', 'camille-personal-shopper' ),
+			),
+			__( 'Your customers', 'camille-personal-shopper' ) => array(
+				Camille_PS_Activity::TAB_CONVERSATIONS => __( 'Conversations', 'camille-personal-shopper' ),
+				Camille_PS_Activity::TAB_TRY_ONS       => __( 'Virtual try-ons', 'camille-personal-shopper' ),
+			),
+		);
+	}
+
+	/**
+	 * The open section, from the query string.
+	 *
+	 * @return string
+	 */
+	public static function current_tab() {
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- navigation.
+		foreach ( self::tabs() as $items ) {
+			if ( isset( $items[ $tab ] ) ) {
+				return $tab;
+			}
+		}
+		return self::TAB_CATALOG;
+	}
+
+	/**
+	 * URL of a section, with optional query arguments.
+	 *
+	 * @param string $tab  Section.
+	 * @param array  $args Query arguments.
+	 * @return string
+	 */
+	public static function tab_url( $tab, array $args = array() ) {
+		if ( self::TAB_CATALOG !== $tab ) {
+			$args = array_merge( array( 'tab' => $tab ), $args );
+		}
+		return $args ? add_query_arg( $args, self::page_url() ) : self::page_url();
+	}
+
+	/**
+	 * Camille's header: name, photo, whether she is on and the credits left.
+	 *
+	 * @param array|null $status Last known status, null when the shop is not connected.
+	 */
+	private static function render_header( $status ) {
+		$photo = is_array( $status ) && ! empty( $status['personaAvatarUrl'] ) && 0 === strpos( (string) $status['personaAvatarUrl'], 'https://' )
+			? (string) $status['personaAvatarUrl']
+			: CAMILLE_PS_URL . 'assets/images/camille-avatar.jpg';
+		echo '<header class="camille-ps-header">';
+		echo '<div class="camille-ps-brand"><img src="' . esc_url( $photo ) . '" alt="" width="48" height="48">';
+		echo '<h1><span class="camille-ps-wordmark">Camille</span><span class="camille-ps-kicker">' . esc_html__( 'AI personal shopper', 'camille-personal-shopper' ) . '</span></h1></div>';
+		if ( is_array( $status ) ) {
+			if ( ! empty( $status['isDisabled'] ) ) {
+				$pill = array( 'is-paused', __( 'Paused', 'camille-personal-shopper' ) );
+			} elseif ( ! empty( $status['isActive'] ) ) {
+				$pill = array( 'is-on', __( 'On', 'camille-personal-shopper' ) );
+			} else {
+				$pill = array( 'is-off', __( 'Off', 'camille-personal-shopper' ) );
+			}
+			echo '<div class="camille-ps-header-facts">';
+			echo '<a class="camille-ps-pill ' . esc_attr( $pill[0] ) . '" href="' . esc_url( self::tab_url( self::TAB_VISIBILITY ) ) . '">' . esc_html( $pill[1] ) . '</a>';
+			if ( isset( $status['credits'] ) && is_numeric( $status['credits'] ) ) {
+				echo '<div class="camille-ps-credits"><span class="camille-ps-number">' . esc_html( number_format_i18n( (float) $status['credits'] ) ) . '</span><span class="camille-ps-kicker">' . esc_html__( 'Credits left', 'camille-personal-shopper' ) . '</span></div>';
+			}
+			if ( ! empty( $status['creditsUrl'] ) ) {
+				echo '<a class="button camille-ps-button-quiet" href="' . esc_url( $status['creditsUrl'] ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Buy credits', 'camille-personal-shopper' ) . '</a>';
+			}
+			echo '</div>';
+		}
+		echo '</header>';
+	}
+
+	/**
+	 * Side menu of the sections (a row of tabs on small screens).
+	 *
+	 * @param string $current Open section.
+	 */
+	private static function render_nav( $current ) {
+		echo '<nav class="camille-ps-nav" aria-label="' . esc_attr__( 'Camille sections', 'camille-personal-shopper' ) . '">';
+		foreach ( self::tabs() as $group => $items ) {
+			echo '<p class="camille-ps-kicker">' . esc_html( $group ) . '</p><ul>';
+			foreach ( $items as $tab => $label ) {
+				$is_current = $tab === $current;
+				echo '<li><a href="' . esc_url( self::tab_url( $tab ) ) . '"' . ( $is_current ? ' class="is-current" aria-current="page"' : '' ) . '>' . esc_html( $label ) . '</a></li>';
+			}
+			echo '</ul>';
+		}
+		echo '</nav>';
+	}
+
+	/**
+	 * Adds a class to the body of the Camille page, for its background.
+	 *
+	 * @param string $classes Body classes.
+	 * @return string
+	 */
+	public static function body_class( $classes ) {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( $screen && false !== strpos( (string) $screen->id, self::PAGE ) ) {
+			$classes .= ' camille-ps-screen';
+		}
+		return $classes;
 	}
 
 	/**
@@ -730,7 +898,7 @@ class Camille_PS_Admin {
 		}
 		echo '</td></tr>';
 		if ( empty( $status['hasBilling'] ) ) {
-			echo '<tr><th></th><td><span class="camille-ps-badge is-warning">' . esc_html__( 'Before buying credits, enter your billing details so we can send you the invoice.', 'camille-personal-shopper' ) . '</span> <a href="#camille-ps-billing">' . esc_html__( 'Billing details', 'camille-personal-shopper' ) . '</a></td></tr>';
+			echo '<tr><th></th><td><span class="camille-ps-badge is-warning">' . esc_html__( 'Before buying credits, enter your billing details so we can send you the invoice.', 'camille-personal-shopper' ) . '</span> <a href="' . esc_url( self::tab_url( self::TAB_BILLING ) ) . '">' . esc_html__( 'Billing details', 'camille-personal-shopper' ) . '</a></td></tr>';
 		}
 		$last_sync = ! empty( $status['lastCatalogSync'] ) ? strtotime( (string) $status['lastCatalogSync'] ) : false;
 		echo '<tr><th>' . esc_html__( 'Last catalog sync', 'camille-personal-shopper' ) . '</th><td>' . ( $last_sync ? esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $last_sync ) ) : esc_html__( 'Never', 'camille-personal-shopper' ) ) . '</td></tr>';
@@ -819,7 +987,18 @@ class Camille_PS_Admin {
 		$gender  = isset( $persona['gender'] ) && 'male' === $persona['gender'] ? 'male' : 'female';
 		$current = isset( $persona['avatarPresetId'] ) ? (string) $persona['avatarPresetId'] : '';
 		$avatars = isset( $persona['avatars'] ) && is_array( $persona['avatars'] ) ? $persona['avatars'] : array();
-		Camille_PS_API::remember_status( array( 'personaName' => $name ) );
+		$photo = '';
+		foreach ( $avatars as $avatar ) {
+			if ( is_array( $avatar ) && isset( $avatar['id'], $avatar['imageUrl'] ) && $current === (string) $avatar['id'] ) {
+				$photo = (string) $avatar['imageUrl'];
+			}
+		}
+		Camille_PS_API::remember_status(
+			array(
+				'personaName'      => $name,
+				'personaAvatarUrl' => $photo,
+			)
+		);
 		self::form(
 			'save_persona',
 			static function () use ( $name, $gender, $current, $avatars ) {
@@ -996,9 +1175,9 @@ class Camille_PS_Admin {
 	}
 
 	/**
-	 * Who sees Camille and how she looks.
+	 * Who sees Camille.
 	 */
-	private static function render_settings() {
+	private static function render_visibility() {
 		$settings = Camille_PS_Options::settings();
 		$labels   = array(
 			Camille_PS_Options::VISIBILITY_OFF       => array( __( 'Off', 'camille-personal-shopper' ), __( 'Camille does not appear and does not use credits.', 'camille-personal-shopper' ) ),
@@ -1023,7 +1202,22 @@ class Camille_PS_Admin {
 					echo '</span></label>';
 				}
 				echo '</fieldset>';
-				echo '<h3>' . esc_html__( 'Appearance', 'camille-personal-shopper' ) . '</h3>';
+				submit_button( __( 'Save', 'camille-personal-shopper' ) );
+			}
+		);
+		echo '</div>';
+	}
+
+	/**
+	 * Where the chat button sits and its colour.
+	 */
+	private static function render_appearance() {
+		$settings = Camille_PS_Options::settings();
+		echo '<div class="camille-ps-card">';
+		echo '<h2>' . esc_html__( 'Appearance', 'camille-personal-shopper' ) . '</h2>';
+		self::form(
+			'save_settings',
+			static function () use ( $settings ) {
 				echo '<table class="form-table" role="presentation"><tbody>';
 				echo '<tr><th scope="row"><label for="camille-ps-position">' . esc_html__( 'Chat button', 'camille-personal-shopper' ) . '</label></th><td><select id="camille-ps-position" name="position">';
 				echo '<option value="bottom-right" ' . selected( $settings['position'], 'bottom-right', false ) . '>' . esc_html__( 'Bottom right', 'camille-personal-shopper' ) . '</option>';

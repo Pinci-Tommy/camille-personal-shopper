@@ -30,6 +30,7 @@ class Camille_PS_Plugin {
 			Camille_PS_Admin::init();
 			Camille_PS_Catalog_Filter::init();
 			Camille_PS_Customers::init();
+			Camille_PS_Activity::init();
 		}
 		add_action( self::STATUS_HOOK, array( __CLASS__, 'refresh_status' ) );
 		add_action( 'init', array( __CLASS__, 'schedule_status_check' ) );

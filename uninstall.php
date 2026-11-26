@@ -12,7 +12,7 @@ if ( ! defined( 'CAMILLE_PS_SERVICE_URL' ) ) {
 	define( 'CAMILLE_PS_SERVICE_URL', 'https://woo.pinci.ai' );
 }
 if ( ! defined( 'CAMILLE_PS_VERSION' ) ) {
-	define( 'CAMILLE_PS_VERSION', '0.3.0' );
+	define( 'CAMILLE_PS_VERSION', '0.4.0' );
 }
 require_once __DIR__ . '/includes/class-camille-ps-options.php';
 require_once __DIR__ . '/includes/class-camille-ps-api.php';

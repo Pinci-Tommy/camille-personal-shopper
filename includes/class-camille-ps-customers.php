@@ -31,6 +31,7 @@ class Camille_PS_Customers {
 		add_filter( 'bulk_actions-users', array( __CLASS__, 'bulk_actions' ) );
 		add_filter( 'handle_bulk_actions-users', array( __CLASS__, 'handle_bulk_action' ), 10, 3 );
 		add_action( 'admin_notices', array( __CLASS__, 'bulk_notice' ) );
+		add_action( 'admin_notices', array( __CLASS__, 'profile_notice' ) );
 		add_filter( 'manage_users_columns', array( __CLASS__, 'add_column' ) );
 		add_filter( 'manage_users_custom_column', array( __CLASS__, 'render_column' ), 10, 3 );
 		add_filter( 'views_users', array( __CLASS__, 'add_view' ) );
@@ -97,7 +98,46 @@ class Camille_PS_Customers {
 		wp_nonce_field( 'camille_ps_preview_' . $user->ID, 'camille_ps_preview_nonce' );
 		echo '<label><input type="checkbox" name="camille_ps_preview" value="yes" ' . checked( self::is_chosen( $user->ID ), true, false ) . '> ' . esc_html__( 'This customer can see Camille', 'camille-personal-shopper' ) . '</label>';
 		echo '<p class="description">' . esc_html__( 'Applies when Camille is visible to "Administrators and chosen customers" (WooCommerce > Camille).', 'camille-personal-shopper' ) . '</p>';
-		echo '</td></tr></table>';
+		echo '</td></tr>';
+		self::render_activity_rows( $user->ID );
+		echo '</table>';
+	}
+
+	/**
+	 * Chats and try-ons of the customer, and the try-on block, on the profile.
+	 *
+	 * @param int $user_id User being edited.
+	 */
+	private static function render_activity_rows( $user_id ) {
+		if ( ! Camille_PS_Options::connection() ) {
+			return;
+		}
+		$summary = Camille_PS_Activity::customer_summary( $user_id );
+		if ( null === $summary ) {
+			echo '<tr><th scope="row">' . esc_html__( 'Activity', 'camille-personal-shopper' ) . '</th><td><span class="description">' . esc_html__( 'The chats of this customer cannot be read right now.', 'camille-personal-shopper' ) . '</span></td></tr>';
+			return;
+		}
+		$chats   = sprintf(
+			/* translators: %s: number of chats. */
+			_n( '%s conversation', '%s conversations', $summary['conversations'], 'camille-personal-shopper' ),
+			number_format_i18n( $summary['conversations'] )
+		);
+		$try_ons = sprintf(
+			/* translators: %s: number of virtual try-ons. */
+			_n( '%s virtual try-on', '%s virtual try-ons', $summary['tryOns'], 'camille-personal-shopper' ),
+			number_format_i18n( $summary['tryOns'] )
+		);
+		echo '<tr><th scope="row">' . esc_html__( 'Activity', 'camille-personal-shopper' ) . '</th><td>';
+		echo $summary['conversations'] ? '<a href="' . esc_url( Camille_PS_Activity::tab_url( Camille_PS_Activity::TAB_CONVERSATIONS, array( 'customer' => $user_id ) ) ) . '">' . esc_html( $chats ) . '</a>' : esc_html( $chats );
+		echo ' · ';
+		echo $summary['tryOns'] ? '<a href="' . esc_url( Camille_PS_Activity::tab_url( Camille_PS_Activity::TAB_TRY_ONS, array( 'customer' => $user_id ) ) ) . '">' . esc_html( $try_ons ) . '</a>' : esc_html( $try_ons );
+		echo '<p class="description">' . esc_html__( 'Chats stay available for about 30 days.', 'camille-personal-shopper' ) . '</p>';
+		echo '</td></tr>';
+		echo '<tr><th scope="row">' . esc_html__( 'Virtual try-ons', 'camille-personal-shopper' ) . '</th><td>';
+		echo '<input type="hidden" name="camille_ps_block_was" value="' . ( $summary['isBlocked'] ? '1' : '0' ) . '">';
+		echo '<label><input type="checkbox" name="camille_ps_block" value="1" ' . checked( $summary['isBlocked'], true, false ) . '> ' . esc_html__( 'Block the virtual try-ons of this customer', 'camille-personal-shopper' ) . '</label>';
+		echo '<p class="description">' . esc_html__( 'For a customer who uses up your credits. The chat stays open.', 'camille-personal-shopper' ) . '</p>';
+		echo '</td></tr>';
 	}
 
 	/**
@@ -114,6 +154,30 @@ class Camille_PS_Customers {
 			return;
 		}
 		self::set_chosen( $user_id, isset( $_POST['camille_ps_preview'] ) && 'yes' === sanitize_key( wp_unslash( $_POST['camille_ps_preview'] ) ) );
+		if ( isset( $_POST['camille_ps_block_was'] ) ) {
+			$was_blocked = '1' === sanitize_key( wp_unslash( $_POST['camille_ps_block_was'] ) );
+			$is_blocked  = isset( $_POST['camille_ps_block'] ) && '1' === sanitize_key( wp_unslash( $_POST['camille_ps_block'] ) );
+			if ( $was_blocked !== $is_blocked ) {
+				$result = Camille_PS_Activity::set_try_on_blocked( $user_id, $is_blocked );
+				if ( true !== $result ) {
+					set_transient( 'camille_ps_profile_error_' . get_current_user_id(), $result, MINUTE_IN_SECONDS );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Error of the last profile save (the block could not be changed), shown once.
+	 */
+	public static function profile_notice() {
+		$key   = 'camille_ps_profile_error_' . get_current_user_id();
+		$error = get_transient( $key );
+		if ( ! is_string( $error ) || '' === $error ) {
+			return;
+		}
+		delete_transient( $key );
+		/* translators: %s: reason. */
+		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html( sprintf( __( 'Camille: the virtual try-ons of this customer could not be changed. %s', 'camille-personal-shopper' ), $error ) ) . '</p></div>';
 	}
 
 	/**
