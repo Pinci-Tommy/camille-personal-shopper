@@ -12,7 +12,7 @@ if ( ! defined( 'CAMILLE_PS_SERVICE_URL' ) ) {
 	define( 'CAMILLE_PS_SERVICE_URL', 'https://woo.pinci.ai' );
 }
 if ( ! defined( 'CAMILLE_PS_VERSION' ) ) {
-	define( 'CAMILLE_PS_VERSION', '0.4.1' );
+	define( 'CAMILLE_PS_VERSION', '0.5.0' );
 }
 require_once __DIR__ . '/includes/class-camille-ps-options.php';
 require_once __DIR__ . '/includes/class-camille-ps-api.php';
@@ -25,7 +25,11 @@ if ( Camille_PS_Options::connection() ) {
 if ( function_exists( 'as_unschedule_all_actions' ) ) {
 	as_unschedule_all_actions( 'camille_ps_export_page', array(), 'camille-personal-shopper' );
 	as_unschedule_all_actions( 'camille_ps_export_finish', array(), 'camille-personal-shopper' );
+	as_unschedule_all_actions( 'camille_ps_live_update', array(), 'camille-personal-shopper' );
+	as_unschedule_all_actions( 'camille_ps_nightly_sync', array(), 'camille-personal-shopper' );
 }
+delete_option( 'camille_ps_live_queue' );
+delete_transient( 'camille_ps_nightly_checked' );
 wp_clear_scheduled_hook( 'camille_ps_refresh_status' );
 
 // Products left out by hand (the only data the plugin writes on products).

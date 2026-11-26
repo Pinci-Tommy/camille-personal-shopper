@@ -65,6 +65,7 @@ class Camille_PS_Catalog_Sync {
 			)
 		);
 		as_enqueue_async_action( self::HOOK_PAGE, array( $run_id, 1, 0 ), self::GROUP );
+		Camille_PS_Live_Sync::schedule_nightly();
 		return true;
 	}
 

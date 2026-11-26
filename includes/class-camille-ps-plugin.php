@@ -25,6 +25,7 @@ class Camille_PS_Plugin {
 			return;
 		}
 		Camille_PS_Catalog_Sync::init();
+		Camille_PS_Live_Sync::init();
 		Camille_PS_Frontend::init();
 		Camille_PS_Privacy::init();
 		if ( is_admin() ) {
@@ -80,6 +81,9 @@ class Camille_PS_Plugin {
 		wp_clear_scheduled_hook( self::STATUS_HOOK );
 		if ( class_exists( 'Camille_PS_Catalog_Sync' ) ) {
 			Camille_PS_Catalog_Sync::cancel();
+		}
+		if ( class_exists( 'Camille_PS_Live_Sync' ) ) {
+			Camille_PS_Live_Sync::cancel();
 		}
 	}
 }

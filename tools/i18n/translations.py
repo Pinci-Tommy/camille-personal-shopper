@@ -198,11 +198,11 @@ T = {
 'currency not valid': ('valuta non valida', 'devise non valide', 'Währung ungültig', 'moneda no válida'),
 'data not valid': ('dati non validi', 'données non valides', 'Daten ungültig', 'datos no válidos'),
 'Catalog': ('Catalogo', 'Catalogue', 'Katalog', 'Catálogo'),
-'Camille only suggests products she knows. Sync again after adding products or changing prices, so she always shows what you sell.': (
- 'Camille propone solo i prodotti che conosce. Sincronizza di nuovo dopo aver aggiunto prodotti o cambiato prezzi, così mostra sempre quello che vendi.',
- 'Camille ne propose que les produits qu’elle connaît. Synchronisez à nouveau après avoir ajouté des produits ou modifié des prix, pour qu’elle montre toujours ce que vous vendez.',
- 'Camille schlägt nur Produkte vor, die sie kennt. Synchronisiere erneut, nachdem du Produkte hinzugefügt oder Preise geändert hast, damit sie immer zeigt, was du verkaufst.',
- 'Camille solo propone los productos que conoce. Vuelve a sincronizar después de añadir productos o cambiar precios, para que muestre siempre lo que vendes.'),
+'Camille only suggests products she knows. After the first sync she follows your shop by herself: a product you add, change, sell out or hide reaches her within a few minutes, and every night she checks the whole catalog.': (
+ 'Camille propone solo i prodotti che conosce. Dopo la prima sincronizzazione segue il negozio da sola. Un prodotto che aggiungi, modifichi, esaurisci o nascondi le arriva entro pochi minuti, e ogni notte ricontrolla tutto il catalogo.',
+ 'Camille ne propose que les produits qu’elle connaît. Après la première synchronisation, elle suit votre boutique toute seule. Un produit que vous ajoutez, modifiez, épuisez ou masquez lui parvient en quelques minutes, et chaque nuit elle revérifie tout le catalogue.',
+ 'Camille schlägt nur Produkte vor, die sie kennt. Nach der ersten Synchronisierung folgt sie deinem Shop von selbst. Ein Produkt, das du hinzufügst, änderst, ausverkaufst oder verbirgst, erreicht sie in wenigen Minuten, und jede Nacht prüft sie den ganzen Katalog.',
+ 'Camille solo propone los productos que conoce. Después de la primera sincronización sigue tu tienda por sí sola. Un producto que añades, cambias, agotas u ocultas le llega en pocos minutos, y cada noche revisa todo el catálogo.'),
 'Restart the sync': ('Riavvia la sincronizzazione', 'Relancer la synchronisation', 'Synchronisierung neu starten', 'Reiniciar la sincronización'),
 'Sync the catalog': ('Sincronizza il catalogo', 'Synchroniser le catalogue', 'Katalog synchronisieren', 'Sincronizar el catálogo'),
 'Pinci is busy: the import will continue by itself in a few minutes.': (
@@ -512,11 +512,11 @@ T = {
  'L’une des limites est hors de la plage autorisée. Vérifiez les valeurs et réessayez.',
  'Eines der Limits liegt außerhalb des erlaubten Bereichs. Prüfe die Werte und versuche es erneut.',
  'Uno de los límites está fuera del rango permitido. Comprueba los valores e inténtalo de nuevo.'),
-'Selection saved. Sync the catalog to update Camille.': (
- 'Selezione salvata. Sincronizza il catalogo per aggiornare Camille.',
- 'Sélection enregistrée. Synchronisez le catalogue pour mettre Camille à jour.',
- 'Auswahl gespeichert. Synchronisiere den Katalog, um Camille zu aktualisieren.',
- 'Selección guardada. Sincroniza el catálogo para actualizar a Camille.'),
+'Selection saved. Camille applies it at tonight’s sync, or sync the catalog now.': (
+ 'Selezione salvata. Camille la applica con la sincronizzazione di stanotte, oppure sincronizza il catalogo adesso.',
+ 'Sélection enregistrée. Camille l’applique lors de la synchronisation de cette nuit, ou synchronisez le catalogue maintenant.',
+ 'Auswahl gespeichert. Camille übernimmt sie bei der Synchronisierung heute Nacht, oder synchronisiere den Katalog jetzt.',
+ 'Selección guardada. Camille la aplica en la sincronización de esta noche, o sincroniza el catálogo ahora.'),
 'Selection saved. Camille is updating her catalog.': (
  'Selezione salvata. Camille sta aggiornando il suo catalogo.',
  'Sélection enregistrée. Camille met à jour son catalogue.',
@@ -528,11 +528,11 @@ T = {
  'Lade die Seite neu, um den Stand der Synchronisierung zu sehen.',
  'Recarga la página para ver cómo va la sincronización.'),
 'Which products Camille suggests': ('Quali prodotti propone Camille', 'Les produits que Camille propose', 'Welche Produkte Camille vorschlägt', 'Qué productos propone Camille'),
-'Choose what Camille may suggest to your customers. Products left out are removed from Camille at the next sync.': (
- 'Scegli cosa può proporre Camille ai tuoi clienti. I prodotti esclusi vengono tolti da Camille alla prossima sincronizzazione.',
- 'Choisissez ce que Camille peut proposer à vos clients. Les produits exclus sont retirés de Camille à la prochaine synchronisation.',
- 'Wähle, was Camille deiner Kundschaft vorschlagen darf. Ausgeschlossene Produkte werden bei der nächsten Synchronisierung aus Camille entfernt.',
- 'Elige qué puede proponer Camille a tus clientes. Los productos excluidos se retiran de Camille en la próxima sincronización.'),
+'Choose what Camille may suggest to your customers. Products left out are removed from Camille at the next sync, which runs by itself every night.': (
+ 'Scegli cosa può proporre Camille ai tuoi clienti. I prodotti esclusi vengono tolti da Camille alla prossima sincronizzazione, che parte da sola ogni notte.',
+ 'Choisissez ce que Camille peut proposer à vos clients. Les produits exclus sont retirés de Camille à la prochaine synchronisation, qui se lance toute seule chaque nuit.',
+ 'Wähle, was Camille deiner Kundschaft vorschlagen darf. Ausgeschlossene Produkte werden bei der nächsten Synchronisierung aus Camille entfernt, die jede Nacht von selbst läuft.',
+ 'Elige qué puede proponer Camille a tus clientes. Los productos excluidos se retiran de Camille en la próxima sincronización, que se inicia sola cada noche.'),
 'Categories': ('Categorie', 'Catégories', 'Kategorien', 'Categorías'),
 'Your shop has no product categories.': ('Il negozio non ha categorie di prodotti.', 'Votre boutique n’a pas de catégories de produits.', 'Dein Shop hat keine Produktkategorien.', 'Tu tienda no tiene categorías de productos.'),
 'Usually not suited to Camille': ('Di solito non adatta a Camille', 'Généralement peu adaptée à Camille', 'Meist nicht für Camille geeignet', 'Normalmente no adecuada para Camille'),
@@ -625,23 +625,23 @@ T = {
  'Für Administratoren und Shop-Manager gelten keine Limits, sodass du Camille angemeldet frei testen kannst.',
  'Los administradores y gestores de la tienda no tienen límites, así que puedes probar Camille libremente con la sesión iniciada.'),
 'Save the limits': ('Salva i limiti', 'Enregistrer les limites', 'Limits speichern', 'Guardar los límites'),
-'Do not show this product to Camille (it is removed at the next catalog sync)': (
- 'Non mostrare questo prodotto a Camille (viene tolto alla prossima sincronizzazione del catalogo)',
- 'Ne pas montrer ce produit à Camille (il est retiré à la prochaine synchronisation du catalogue)',
- 'Dieses Produkt Camille nicht zeigen (es wird bei der nächsten Katalogsynchronisierung entfernt)',
- 'No mostrar este producto a Camille (se retira en la próxima sincronización del catálogo)'),
+'Do not show this product to Camille (she forgets it within a few minutes)': (
+ 'Non mostrare questo prodotto a Camille (lo dimentica entro pochi minuti)',
+ 'Ne pas montrer ce produit à Camille (elle l’oublie en quelques minutes)',
+ 'Dieses Produkt Camille nicht zeigen (sie vergisst es in wenigen Minuten)',
+ 'No mostrar este producto a Camille (lo olvida en pocos minutos)'),
 'Hide from Camille': ('Nascondi a Camille', 'Masquer à Camille', 'Vor Camille verbergen', 'Ocultar a Camille'),
 'Show to Camille': ('Mostra a Camille', 'Montrer à Camille', 'Camille zeigen', 'Mostrar a Camille'),
-'%d product hidden from Camille. Sync the catalog to update her.': (
- ('%d prodotto nascosto a Camille. Sincronizza il catalogo per aggiornarla.', '%d prodotti nascosti a Camille. Sincronizza il catalogo per aggiornarla.'),
- ('%d produit masqué à Camille. Synchronisez le catalogue pour la mettre à jour.', '%d produits masqués à Camille. Synchronisez le catalogue pour la mettre à jour.'),
- ('%d Produkt vor Camille verborgen. Synchronisiere den Katalog, um sie zu aktualisieren.', '%d Produkte vor Camille verborgen. Synchronisiere den Katalog, um sie zu aktualisieren.'),
- ('%d producto oculto a Camille. Sincroniza el catálogo para actualizarla.', '%d productos ocultos a Camille. Sincroniza el catálogo para actualizarla.')),
-'%d product shown to Camille again. Sync the catalog to update her.': (
- ('%d prodotto di nuovo visibile a Camille. Sincronizza il catalogo per aggiornarla.', '%d prodotti di nuovo visibili a Camille. Sincronizza il catalogo per aggiornarla.'),
- ('%d produit de nouveau visible par Camille. Synchronisez le catalogue pour la mettre à jour.', '%d produits de nouveau visibles par Camille. Synchronisez le catalogue pour la mettre à jour.'),
- ('%d Produkt ist wieder für Camille sichtbar. Synchronisiere den Katalog, um sie zu aktualisieren.', '%d Produkte sind wieder für Camille sichtbar. Synchronisiere den Katalog, um sie zu aktualisieren.'),
- ('%d producto vuelve a ser visible para Camille. Sincroniza el catálogo para actualizarla.', '%d productos vuelven a ser visibles para Camille. Sincroniza el catálogo para actualizarla.')),
+'%d product hidden from Camille. Camille is updated within a few minutes.': (
+ ('%d prodotto nascosto a Camille. Camille si aggiorna entro pochi minuti.', '%d prodotti nascosti a Camille. Camille si aggiorna entro pochi minuti.'),
+ ('%d produit masqué à Camille. Camille est mise à jour en quelques minutes.', '%d produits masqués à Camille. Camille est mise à jour en quelques minutes.'),
+ ('%d Produkt vor Camille verborgen. Camille wird in wenigen Minuten aktualisiert.', '%d Produkte vor Camille verborgen. Camille wird in wenigen Minuten aktualisiert.'),
+ ('%d producto oculto a Camille. Camille se actualiza en pocos minutos.', '%d productos ocultos a Camille. Camille se actualiza en pocos minutos.')),
+'%d product shown to Camille again. Camille is updated within a few minutes.': (
+ ('%d prodotto di nuovo visibile a Camille. Camille si aggiorna entro pochi minuti.', '%d prodotti di nuovo visibili a Camille. Camille si aggiorna entro pochi minuti.'),
+ ('%d produit de nouveau visible par Camille. Camille est mise à jour en quelques minutes.', '%d produits de nouveau visibles par Camille. Camille est mise à jour en quelques minutes.'),
+ ('%d Produkt ist wieder für Camille sichtbar. Camille wird in wenigen Minuten aktualisiert.', '%d Produkte sind wieder für Camille sichtbar. Camille wird in wenigen Minuten aktualisiert.'),
+ ('%d producto vuelve a ser visible para Camille. Camille se actualiza en pocos minutos.', '%d productos vuelven a ser visibles para Camille. Camille se actualiza en pocos minutos.')),
 'Open Camille': ('Apri Camille', 'Ouvrir Camille', 'Camille öffnen', 'Abrir Camille'),
 'Hidden from Camille': ('Nascosto a Camille', 'Masqué à Camille', 'Vor Camille verborgen', 'Oculto a Camille'),
 # 0.3.0: personal shopper persona, chosen customers.

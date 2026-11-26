@@ -4,7 +4,7 @@ Tags: personal shopper, virtual try-on, fashion, chatbot, ai
 Requires at least: 6.2
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 0.4.1
+Stable tag: 0.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ Camille works with credits. A new shop gets 300 free credits; more credits are b
 This plugin connects your shop to **Pinci**, the service that runs Camille, provided by Instamark S.r.l. (Italy). Without it the plugin does nothing. Data is exchanged as follows:
 
 * **When you connect the shop** (WooCommerce > Camille), the plugin sends the email of your Pinci account, your site address, the site name and the admin language to `https://woo.pinci.ai`, which emails you a confirmation code.
-* **When you sync the catalog**, the plugin sends the published products you chose for Camille (WooCommerce > Camille) to `https://woo.pinci.ai`: name, description, categories, tags, brand, attributes, prices, stock status, product address and photo addresses. These are public data of your shop. No order, customer or personal data is sent.
+* **When the catalog is synced** (when you press the button, every night, and a few minutes after you change a product), the plugin sends the published products you chose for Camille (WooCommerce > Camille) to `https://woo.pinci.ai`: name, description, categories, tags, brand, attributes, prices, stock status, product address and photo addresses. These are public data of your shop. No order, customer or personal data is sent.
 * **When you save the billing details** (company name, VAT number, address, SDI code or PEC, invoice email), the plugin sends them to `https://woo.pinci.ai`. Instamark S.r.l. uses them only to invoice your credit purchases.
 * **When you customise the personal shopper**, the plugin sends the name, the gender and, if you upload one, the photo you chose to `https://woo.pinci.ai`.
 * **When you open the Conversations or Virtual try-ons tab, or a customer profile**, the plugin reads the chats and try-ons of your customers from `https://woo.pinci.ai`. Pinci knows a customer only by the WordPress user number: the names and emails you see come from your own site and are never sent.
@@ -61,7 +61,7 @@ Your shop keeps working as usual. Camille's button stays hidden or the chat show
 
 = Which products does Camille know? =
 
-Published simple and variable products that are visible in the catalog and not protected by a password. Sync again after adding products or changing prices.
+Published simple and variable products that are visible in the catalog and not protected by a password. After the first sync, new, changed, sold-out, hidden and deleted products reach Camille within a few minutes, and a full sync runs by itself every night around 3 (shop time). Sold-out products stay in Camille's catalog but she does not suggest them.
 
 = Can I change the text of the buttons? =
 
@@ -80,6 +80,11 @@ No. Credits and catalog stay on your Pinci account. Connect again with the same 
 Fonts shipped with the plugin: Manrope (The Manrope Project Authors) and Cormorant Garamond (The Cormorant Project Authors), both under the SIL Open Font License 1.1, see assets/fonts.
 
 == Changelog ==
+
+= 0.5.0 =
+* Camille follows the shop by herself: products added, changed, sold out, hidden, drafted or deleted reach her about a minute later, without a new sync.
+* A full catalog sync runs by itself every night around 3 (shop time) and catches the changes made outside WooCommerce's screens.
+* Sold-out products are no longer suggested to customers; they come back when restocked.
 
 = 0.4.1 =
 * Language button in the header of WooCommerce > Camille: each shop manager can show the plugin in Italian, English, French, German or Spanish, whatever the language of WordPress.

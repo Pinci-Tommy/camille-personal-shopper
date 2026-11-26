@@ -1,7 +1,7 @@
 <?php
 /**
  * Which products Camille may suggest: categories, a price range and single products left out by
- * the merchant. A product left out is not sent at the next sync, so Camille forgets it.
+ * the merchant. A product left out is removed from Camille a few minutes later and at every full sync.
  *
  * @package CamillePersonalShopper
  */
@@ -276,7 +276,7 @@ class Camille_PS_Catalog_Filter {
 			array(
 				'id'          => self::META,
 				'label'       => __( 'Camille', 'camille-personal-shopper' ),
-				'description' => __( 'Do not show this product to Camille (it is removed at the next catalog sync)', 'camille-personal-shopper' ),
+				'description' => __( 'Do not show this product to Camille (she forgets it within a few minutes)', 'camille-personal-shopper' ),
 				'cbvalue'     => 'yes',
 			)
 		);
@@ -333,6 +333,7 @@ class Camille_PS_Catalog_Filter {
 			}
 			++$changed;
 		}
+		Camille_PS_Live_Sync::remember_many( array_map( 'intval', (array) $post_ids ) );
 		return add_query_arg(
 			array(
 				'camille_ps_bulk'  => 'camille_ps_exclude' === $action ? 'hidden' : 'shown',
@@ -355,9 +356,9 @@ class Camille_PS_Catalog_Filter {
 		// phpcs:enable
 		$text = 'hidden' === $kind
 			/* translators: %d: number of products. */
-			? _n( '%d product hidden from Camille. Sync the catalog to update her.', '%d products hidden from Camille. Sync the catalog to update her.', $count, 'camille-personal-shopper' )
+			? _n( '%d product hidden from Camille. Camille is updated within a few minutes.', '%d products hidden from Camille. Camille is updated within a few minutes.', $count, 'camille-personal-shopper' )
 			/* translators: %d: number of products. */
-			: _n( '%d product shown to Camille again. Sync the catalog to update her.', '%d products shown to Camille again. Sync the catalog to update her.', $count, 'camille-personal-shopper' );
+			: _n( '%d product shown to Camille again. Camille is updated within a few minutes.', '%d products shown to Camille again. Camille is updated within a few minutes.', $count, 'camille-personal-shopper' );
 		echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( sprintf( $text, $count ) ) . ' <a href="' . esc_url( Camille_PS_Admin::page_url() . '#camille-ps-catalog' ) . '">' . esc_html__( 'Open Camille', 'camille-personal-shopper' ) . '</a></p></div>';
 	}
 

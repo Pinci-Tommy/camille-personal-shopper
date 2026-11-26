@@ -546,7 +546,7 @@ class Camille_PS_Admin {
 		$max      = isset( $post['price_max'] ) && '' !== trim( (string) $post['price_max'] ) ? (float) wc_format_decimal( (string) $post['price_max'] ) : null;
 		Camille_PS_Options::save_catalog_filters( $excluded, $min, $max );
 		if ( empty( $post['then_sync'] ) ) {
-			self::notice( 'success', __( 'Selection saved. Sync the catalog to update Camille.', 'camille-personal-shopper' ) );
+			self::notice( 'success', __( 'Selection saved. Camille applies it at tonight’s sync, or sync the catalog now.', 'camille-personal-shopper' ) );
 			self::back( self::TAB_CATALOG, '#camille-ps-products' );
 		}
 		$result = Camille_PS_Catalog_Sync::start();
@@ -608,6 +608,7 @@ class Camille_PS_Admin {
 	public static function handle_disconnect() {
 		self::verified_post( 'disconnect' );
 		Camille_PS_Catalog_Sync::cancel();
+		Camille_PS_Live_Sync::cancel();
 		$result = Camille_PS_API::signed( 'POST', '/v1/shop/disconnect' );
 		Camille_PS_Options::forget_connection();
 		delete_option( Camille_PS_API::STATUS_CACHE );
@@ -950,7 +951,7 @@ class Camille_PS_Admin {
 	private static function render_catalog() {
 		echo '<div class="camille-ps-card" id="camille-ps-catalog">';
 		echo '<h2>' . esc_html__( 'Catalog', 'camille-personal-shopper' ) . '</h2>';
-		echo '<p>' . esc_html__( 'Camille only suggests products she knows. Sync again after adding products or changing prices, so she always shows what you sell.', 'camille-personal-shopper' ) . '</p>';
+		echo '<p>' . esc_html__( 'Camille only suggests products she knows. After the first sync she follows your shop by herself: a product you add, change, sell out or hide reaches her within a few minutes, and every night she checks the whole catalog.', 'camille-personal-shopper' ) . '</p>';
 		echo '<div class="camille-ps-progress" hidden aria-live="polite">';
 		echo '<img class="camille-ps-avatar" src="' . esc_url( CAMILLE_PS_URL . 'assets/images/camille-avatar.jpg' ) . '" alt="" width="56" height="56">';
 		echo '<div class="camille-ps-progress-body">';
@@ -1069,7 +1070,7 @@ class Camille_PS_Admin {
 		}
 		echo '<div class="camille-ps-card" id="camille-ps-products">';
 		echo '<h2>' . esc_html__( 'Which products Camille suggests', 'camille-personal-shopper' ) . '</h2>';
-		echo '<p>' . esc_html__( 'Choose what Camille may suggest to your customers. Products left out are removed from Camille at the next sync.', 'camille-personal-shopper' ) . '</p>';
+		echo '<p>' . esc_html__( 'Choose what Camille may suggest to your customers. Products left out are removed from Camille at the next sync, which runs by itself every night.', 'camille-personal-shopper' ) . '</p>';
 		self::form(
 			'save_filters',
 			static function () use ( $filters, $categories, $excluded, $counts, $lowest, $highest, $by_hand, $index ) {
