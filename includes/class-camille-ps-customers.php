@@ -117,7 +117,7 @@ class Camille_PS_Customers {
 			echo '<tr><th scope="row">' . esc_html__( 'Activity', 'camille-personal-shopper' ) . '</th><td><span class="description">' . esc_html__( 'The chats of this customer cannot be read right now.', 'camille-personal-shopper' ) . '</span></td></tr>';
 			return;
 		}
-		$chats   = sprintf(
+		$chats = sprintf(
 			/* translators: %s: number of chats. */
 			_n( '%s conversation', '%s conversations', $summary['conversations'], 'camille-personal-shopper' ),
 			number_format_i18n( $summary['conversations'] )
@@ -297,8 +297,8 @@ class Camille_PS_Customers {
 		if ( ! $count ) {
 			return $views;
 		}
-		$is_current             = ! empty( $_GET[ self::VIEW ] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- list filter.
-		$views['camille_ps']    = '<a href="' . esc_url( self::list_url() ) . '"' . ( $is_current ? ' class="current" aria-current="page"' : '' ) . '>' . esc_html__( 'Camille', 'camille-personal-shopper' ) . ' <span class="count">(' . esc_html( number_format_i18n( $count ) ) . ')</span></a>';
+		$is_current          = ! empty( $_GET[ self::VIEW ] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- list filter.
+		$views['camille_ps'] = '<a href="' . esc_url( self::list_url() ) . '"' . ( $is_current ? ' class="current" aria-current="page"' : '' ) . '>' . esc_html__( 'Camille', 'camille-personal-shopper' ) . ' <span class="count">(' . esc_html( number_format_i18n( $count ) ) . ')</span></a>';
 		return $views;
 	}
 

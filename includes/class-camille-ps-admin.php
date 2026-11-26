@@ -122,11 +122,11 @@ class Camille_PS_Admin {
 					'failed'   => __( 'The sync stopped.', 'camille-personal-shopper' ),
 				),
 				'lines'       => array(
-					'reading' => array(
+					'reading'  => array(
 						__( 'I read names, prices, sizes and colours of every product…', 'camille-personal-shopper' ),
 						__( 'I collect the photos of your products…', 'camille-personal-shopper' ),
 					),
-					'saving'  => array(
+					'saving'   => array(
 						__( 'I put every colour of a product in my catalog as a separate piece…', 'camille-personal-shopper' ),
 						__( 'I check that every piece has a price and a photo…', 'camille-personal-shopper' ),
 					),
@@ -348,6 +348,7 @@ class Camille_PS_Admin {
 				$settings = Camille_PS_Options::settings();
 				Camille_PS_API::signed( 'POST', '/v1/shop/active', array( 'isActive' => Camille_PS_Options::VISIBILITY_OFF !== $settings['visibility'] ) );
 				Camille_PS_API::refresh_status( true );
+				Camille_PS_Persona::refresh();
 				$message = __( 'Your shop is connected to Camille. Now send her your catalog.', 'camille-personal-shopper' );
 				if ( ! empty( $body['isWelcomeGranted'] ) ) {
 					$message .= ' ' . __( 'You received 300 free credits to get started.', 'camille-personal-shopper' );
@@ -473,6 +474,7 @@ class Camille_PS_Admin {
 		);
 		if ( ! is_wp_error( $result ) && 200 === $result['code'] && isset( $result['body']['persona']['name'] ) ) {
 			Camille_PS_API::remember_status( array( 'personaName' => sanitize_text_field( (string) $result['body']['persona']['name'] ) ) );
+			Camille_PS_Persona::refresh();
 			self::notice( 'success', __( 'Personal shopper saved. Your customers see the new name and photo from their next visit.', 'camille-personal-shopper' ) );
 		} elseif ( ! is_wp_error( $result ) && 400 === $result['code'] ) {
 			$detail = isset( $result['body']['detail'] ) ? (string) $result['body']['detail'] : '';
@@ -610,6 +612,7 @@ class Camille_PS_Admin {
 		Camille_PS_Catalog_Sync::cancel();
 		Camille_PS_Live_Sync::cancel();
 		$result = Camille_PS_API::signed( 'POST', '/v1/shop/disconnect' );
+		Camille_PS_Persona::forget();
 		Camille_PS_Options::forget_connection();
 		delete_option( Camille_PS_API::STATUS_CACHE );
 		if ( is_wp_error( $result ) || 200 !== $result['code'] ) {
@@ -716,7 +719,7 @@ class Camille_PS_Admin {
 	 */
 	private static function tabs() {
 		return array(
-			__( 'Settings', 'camille-personal-shopper' )       => array(
+			__( 'Settings', 'camille-personal-shopper' ) => array(
 				self::TAB_CATALOG     => __( 'Status and catalog', 'camille-personal-shopper' ),
 				self::TAB_PERSONALIZE => __( 'Personalisation', 'camille-personal-shopper' ),
 				self::TAB_VISIBILITY  => __( 'Visibility', 'camille-personal-shopper' ),
@@ -984,23 +987,19 @@ class Camille_PS_Admin {
 			echo '<p class="camille-ps-badge is-warning">' . esc_html__( 'The personal shopper settings cannot be read right now. Please try again in a few minutes.', 'camille-personal-shopper' ) . '</p></div>';
 			return;
 		}
-		$persona = $result['body']['persona'];
-		$name    = isset( $persona['name'] ) ? (string) $persona['name'] : 'Camille';
-		$gender  = isset( $persona['gender'] ) && 'male' === $persona['gender'] ? 'male' : 'female';
-		$current = isset( $persona['avatarPresetId'] ) ? (string) $persona['avatarPresetId'] : '';
-		$avatars = isset( $persona['avatars'] ) && is_array( $persona['avatars'] ) ? $persona['avatars'] : array();
-		$photo = '';
-		foreach ( $avatars as $avatar ) {
-			if ( is_array( $avatar ) && isset( $avatar['id'], $avatar['imageUrl'] ) && $current === (string) $avatar['id'] ) {
-				$photo = (string) $avatar['imageUrl'];
-			}
-		}
+		$persona = Camille_PS_Persona::read_answer( $result['body']['persona'] );
+		$name    = $persona['name'];
+		$gender  = $persona['gender'];
+		$current = $persona['current'];
+		$avatars = $persona['avatars'];
 		Camille_PS_API::remember_status(
 			array(
 				'personaName'      => $name,
-				'personaAvatarUrl' => $photo,
+				'personaAvatarUrl' => $persona['photo'],
 			)
 		);
+		// Keeps the copy shown on the shop in step with what Pinci has (downloads only a new photo).
+		Camille_PS_Persona::remember( $name, $persona['photo'] );
 		self::form(
 			'save_persona',
 			static function () use ( $name, $gender, $current, $avatars ) {

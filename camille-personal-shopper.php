@@ -3,7 +3,7 @@
  * Plugin Name:       Camille – AI Personal Shopper for WooCommerce
  * Plugin URI:        https://camille-ai.com
  * Description:       Camille is an AI personal shopper for fashion stores: she advises your customers in chat, suggests outfits from your catalog and shows them on a virtual model.
- * Version:           0.5.0
+ * Version:           0.5.1
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -14,14 +14,14 @@
  * Text Domain:       camille-personal-shopper
  * Domain Path:       /languages
  * WC requires at least: 7.0
- * WC tested up to:   9.4
+ * WC tested up to:   11.3
  *
  * @package CamillePersonalShopper
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'CAMILLE_PS_VERSION', '0.5.0' );
+define( 'CAMILLE_PS_VERSION', '0.5.1' );
 define( 'CAMILLE_PS_FILE', __FILE__ );
 define( 'CAMILLE_PS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CAMILLE_PS_URL', plugin_dir_url( __FILE__ ) );
@@ -44,6 +44,7 @@ if ( ! defined( 'CAMILLE_PS_API_URL' ) ) {
 
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-options.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-api.php';
+require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-persona.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-catalog-filter.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-customers.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-activity.php';

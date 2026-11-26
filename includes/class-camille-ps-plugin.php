@@ -26,6 +26,7 @@ class Camille_PS_Plugin {
 		}
 		Camille_PS_Catalog_Sync::init();
 		Camille_PS_Live_Sync::init();
+		Camille_PS_Persona::init();
 		Camille_PS_Frontend::init();
 		Camille_PS_Privacy::init();
 		if ( is_admin() ) {
@@ -71,6 +72,7 @@ class Camille_PS_Plugin {
 	public static function refresh_status() {
 		if ( Camille_PS_Options::connection() ) {
 			Camille_PS_API::refresh_status();
+			Camille_PS_Persona::refresh();
 		}
 	}
 
@@ -79,6 +81,7 @@ class Camille_PS_Plugin {
 	 */
 	public static function deactivate() {
 		wp_clear_scheduled_hook( self::STATUS_HOOK );
+		wp_clear_scheduled_hook( Camille_PS_Persona::HOOK_COPY );
 		if ( class_exists( 'Camille_PS_Catalog_Sync' ) ) {
 			Camille_PS_Catalog_Sync::cancel();
 		}

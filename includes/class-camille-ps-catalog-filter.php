@@ -26,11 +26,50 @@ class Camille_PS_Catalog_Filter {
 	 * @var string[]
 	 */
 	private static $unsuitable_words = array(
-		'profum*', 'fragranz*', 'parfum*', 'perfum*', 'duft*', 'cosmet*', 'kosmetik*', 'beauty', 'make-up', 'makeup', 'trucco', 'skincare', 'maquillaje',
-		'casa', 'home', 'maison', 'hogar', 'wohnen', 'arredo', 'candel*', 'candles?', 'bougies?', 'kerzen?', 'velas?',
-		'gift ?cards?', 'carta regalo', 'carte cadeau', 'tarjeta regalo', 'buon[oi] regalo', 'vouchers?', 'gutschein*',
-		'intimo', 'lingerie', 'underwear', 'unterwäsche', 'ropa interior',
-		'bambin*', 'kids', 'enfants?', 'kinder*', 'niñ[oa]s?', 'infant*', 'neonat*', 'baby',
+		'profum*',
+		'fragranz*',
+		'parfum*',
+		'perfum*',
+		'duft*',
+		'cosmet*',
+		'kosmetik*',
+		'beauty',
+		'make-up',
+		'makeup',
+		'trucco',
+		'skincare',
+		'maquillaje',
+		'casa',
+		'home',
+		'maison',
+		'hogar',
+		'wohnen',
+		'arredo',
+		'candel*',
+		'candles?',
+		'bougies?',
+		'kerzen?',
+		'velas?',
+		'gift ?cards?',
+		'carta regalo',
+		'carte cadeau',
+		'tarjeta regalo',
+		'buon[oi] regalo',
+		'vouchers?',
+		'gutschein*',
+		'intimo',
+		'lingerie',
+		'underwear',
+		'unterwäsche',
+		'ropa interior',
+		'bambin*',
+		'kids',
+		'enfants?',
+		'kinder*',
+		'niñ[oa]s?',
+		'infant*',
+		'neonat*',
+		'baby',
 	);
 
 	/**
@@ -203,14 +242,16 @@ class Camille_PS_Catalog_Filter {
 		}
 		$index = array();
 		foreach ( array_chunk( array_map( 'intval', $ids ), 1000 ) as $chunk ) {
-			$in       = implode( ',', $chunk );
-			$password = $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE ID IN ($in) AND post_password <> ''" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery -- integer ids only.
-			$prices   = $wpdb->get_results( "SELECT product_id, min_price, max_price FROM {$wpdb->wc_product_meta_lookup} WHERE product_id IN ($in)", OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery -- integer ids only.
-			$terms    = $wpdb->get_results( "SELECT tr.object_id, tt.term_id, tt.taxonomy FROM {$wpdb->term_relationships} tr INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id WHERE tt.taxonomy IN ('product_cat','product_visibility') AND tr.object_id IN ($in)" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery -- integer ids only.
-			$manual   = $wpdb->get_col( $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = 'yes' AND post_id IN ($in)", self::META ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery -- integer ids only.
-			$skip     = array_fill_keys( array_map( 'intval', $password ), true );
-			$cats     = array();
-			$flags    = array();
+			$holders = implode( ',', array_fill( 0, count( $chunk ), '%d' ) );
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.DirectDatabaseQuery -- one %d placeholder per id, built just above; read-only lookups for the settings page.
+			$password = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE ID IN ($holders) AND post_password <> ''", $chunk ) );
+			$prices   = $wpdb->get_results( $wpdb->prepare( "SELECT product_id, min_price, max_price FROM {$wpdb->wc_product_meta_lookup} WHERE product_id IN ($holders)", $chunk ), OBJECT_K );
+			$terms    = $wpdb->get_results( $wpdb->prepare( "SELECT tr.object_id, tt.term_id, tt.taxonomy FROM {$wpdb->term_relationships} tr INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id WHERE tt.taxonomy IN ('product_cat','product_visibility') AND tr.object_id IN ($holders)", $chunk ) );
+			$manual   = $wpdb->get_col( $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = 'yes' AND post_id IN ($holders)", array_merge( array( self::META ), $chunk ) ) );
+			// phpcs:enable
+			$skip  = array_fill_keys( array_map( 'intval', $password ), true );
+			$cats  = array();
+			$flags = array();
 			foreach ( $terms as $row ) {
 				$object = (int) $row->object_id;
 				if ( 'product_cat' === $row->taxonomy ) {

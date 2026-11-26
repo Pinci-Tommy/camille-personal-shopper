@@ -12,10 +12,11 @@ if ( ! defined( 'CAMILLE_PS_SERVICE_URL' ) ) {
 	define( 'CAMILLE_PS_SERVICE_URL', 'https://woo.pinci.ai' );
 }
 if ( ! defined( 'CAMILLE_PS_VERSION' ) ) {
-	define( 'CAMILLE_PS_VERSION', '0.5.0' );
+	define( 'CAMILLE_PS_VERSION', '0.5.1' );
 }
 require_once __DIR__ . '/includes/class-camille-ps-options.php';
 require_once __DIR__ . '/includes/class-camille-ps-api.php';
+require_once __DIR__ . '/includes/class-camille-ps-persona.php';
 
 // Best effort: Camille switches off for the shop and the secret stops working.
 if ( Camille_PS_Options::connection() ) {
@@ -31,6 +32,17 @@ if ( function_exists( 'as_unschedule_all_actions' ) ) {
 delete_option( 'camille_ps_live_queue' );
 delete_transient( 'camille_ps_nightly_checked' );
 wp_clear_scheduled_hook( 'camille_ps_refresh_status' );
+
+// Local copy of the personal shopper's photo, in uploads/camille-personal-shopper.
+Camille_PS_Persona::forget();
+$camille_ps_uploads = wp_upload_dir( null, false );
+if ( empty( $camille_ps_uploads['error'] ) ) {
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	if ( WP_Filesystem() ) {
+		global $wp_filesystem;
+		$wp_filesystem->rmdir( trailingslashit( $camille_ps_uploads['basedir'] ) . Camille_PS_Persona::FOLDER, true );
+	}
+}
 
 // Products left out by hand (the only data the plugin writes on products).
 delete_post_meta_by_key( '_camille_ps_excluded' );

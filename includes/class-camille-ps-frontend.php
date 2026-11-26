@@ -108,6 +108,9 @@ class Camille_PS_Frontend {
 			 * @param string $selector Selector, '' to detect the header automatically.
 			 */
 			'headerCssSelector' => (string) apply_filters( 'camille_ps_header_selector', '' ),
+			// Local copies: the browser reaches Pinci only when the visitor opens the chat.
+			'agentName'         => Camille_PS_Persona::name(),
+			'agentAvatarUrl'    => Camille_PS_Persona::avatar_url(),
 			'storefront'        => array(
 				'language'   => $language,
 				'country'    => WC()->countries ? WC()->countries->get_base_country() : '',
@@ -214,9 +217,8 @@ class Camille_PS_Frontend {
 		if ( ! self::is_visible() ) {
 			return '';
 		}
-		$mode  = 'chat' === $mode ? 'generic' : 'tryon';
-		$status  = Camille_PS_API::cached_status();
-		$persona = ! empty( $status['personaName'] ) ? (string) $status['personaName'] : 'Camille';
+		$mode    = 'chat' === $mode ? 'generic' : 'tryon';
+		$persona = Camille_PS_Persona::name();
 		/* translators: %s: name of the personal shopper (Camille unless the shop renamed her). */
 		$label = '' !== trim( $label ) ? $label : sprintf( 'tryon' === $mode ? __( 'Try with %s', 'camille-personal-shopper' ) : __( 'Ask %s', 'camille-personal-shopper' ), $persona );
 		return '<button type="button" class="camille-ps-open wp-element-button" data-camille-mode="' . esc_attr( $mode ) . '">' . esc_html( $label ) . '</button>';

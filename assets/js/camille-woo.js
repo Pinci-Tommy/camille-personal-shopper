@@ -4,7 +4,8 @@
  * Copy of the MODE A part of Pinci-Backend/extensions/camille-widget/assets/camille.js
  * (git blob bec5da93585d60d43857e2117cf6e6f80f85ccc9, 2026-11-24), adapted to WordPress:
  * settings come from window.CamilleWooConfig printed by PHP, who sees Camille is decided in PHP,
- * product photos come from PHP, WooCommerce add-to-cart and theme header selectors.
+ * product photos come from PHP, WooCommerce add-to-cart and theme header selectors. The name and photo of
+ * the personal shopper are local copies kept by PHP: Pinci is reached only when the chat opens.
  * camille.js itself is never changed for WooCommerce; port fixes from it by hand.
  *
  * License: GPLv2 or later.
@@ -19,28 +20,6 @@
 
   function camilleWooApiBaseUrl(c) {
     return String(c.apiUrl || 'https://api.pinci.ai').replace(/\/$/, '');
-  }
-
-  function camilleWooStoreInfoAvatar(d) {
-    if (!d || typeof d !== 'object') {
-      return '';
-    }
-    var u = d.agentAvatarUrl;
-    if ((u == null || u === '') && d.agentConfig && d.agentConfig.avatarUrl != null) {
-      u = d.agentConfig.avatarUrl;
-    }
-    return (u == null || u === false) ? '' : String(u).trim();
-  }
-
-  function camilleWooStoreInfoName(d) {
-    if (!d || typeof d !== 'object') {
-      return '';
-    }
-    var n = d.agentName;
-    if ((n == null || n === '') && d.agentConfig && d.agentConfig.name) {
-      n = d.agentConfig.name;
-    }
-    return n == null ? '' : String(n).trim();
   }
 
   /** Button and panel texts. The chat itself is translated by Pinci. */
@@ -127,31 +106,12 @@
     return Object.assign({}, common, byLang[l] || byLang.en);
   }
 
-  /** Name and photo of Camille set by the merchant on Pinci; the button falls back to defaults. */
+  /**
+   * Name and photo of the personal shopper come from the plugin, which keeps a copy on the shop:
+   * nothing is asked to Pinci until the visitor opens the chat.
+   */
   function camilleWooStart() {
-    var url = camilleWooApiBaseUrl(cfg) + '/api/widget/store-info/' + encodeURIComponent(String(cfg.storeId));
-    fetch(url, { method: 'GET', credentials: 'omit', cache: 'no-store' })
-      .then(function (r) {
-        if (!r.ok) {
-          throw new Error('store-info ' + r.status);
-        }
-        return r.json();
-      })
-      .then(function (d) {
-        var extra = {};
-        var avatar = camilleWooStoreInfoAvatar(d);
-        if (avatar) {
-          extra.agentAvatarUrl = avatar;
-        }
-        var name = camilleWooStoreInfoName(d);
-        if (name) {
-          extra.agentName = name;
-        }
-        initCamilleWoo(Object.assign({}, cfg, extra));
-      })
-      .catch(function () {
-        initCamilleWoo(cfg);
-      });
+    initCamilleWoo(cfg);
   }
 
   if (document.readyState === 'loading') {

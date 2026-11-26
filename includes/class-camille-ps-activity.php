@@ -359,7 +359,13 @@ class Camille_PS_Activity {
 			echo ' <span class="camille-ps-muted">' . esc_html( self::when( isset( $message['timestamp'] ) ? $message['timestamp'] : null ) ) . '</span></div>';
 			$text = isset( $message['content'] ) && is_string( $message['content'] ) ? $message['content'] : '';
 			if ( '' !== trim( $text ) ) {
-				echo '<div class="camille-ps-message-text">' . wp_kses( self::message_html( $text ), array( 'strong' => array(), 'br' => array() ) ) . '</div>';
+				echo '<div class="camille-ps-message-text">' . wp_kses(
+					self::message_html( $text ),
+					array(
+						'strong' => array(),
+						'br'     => array(),
+					)
+				) . '</div>';
 			}
 			$pictures = array();
 			foreach ( isset( $message['attachments'] ) && is_array( $message['attachments'] ) ? $message['attachments'] : array() as $attachment ) {
