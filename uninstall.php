@@ -12,7 +12,7 @@ if ( ! defined( 'CAMILLE_PS_SERVICE_URL' ) ) {
 	define( 'CAMILLE_PS_SERVICE_URL', 'https://woo.pinci.ai' );
 }
 if ( ! defined( 'CAMILLE_PS_VERSION' ) ) {
-	define( 'CAMILLE_PS_VERSION', '0.4.0' );
+	define( 'CAMILLE_PS_VERSION', '0.4.1' );
 }
 require_once __DIR__ . '/includes/class-camille-ps-options.php';
 require_once __DIR__ . '/includes/class-camille-ps-api.php';
@@ -31,6 +31,7 @@ wp_clear_scheduled_hook( 'camille_ps_refresh_status' );
 // Products left out by hand (the only data the plugin writes on products).
 delete_post_meta_by_key( '_camille_ps_excluded' );
 delete_metadata( 'user', 0, 'camille_ps_preview', '', true );
+delete_metadata( 'user', 0, 'camille_ps_admin_language', '', true );
 
 foreach ( array( Camille_PS_Options::CONNECTION, Camille_PS_Options::PENDING, Camille_PS_Options::SETTINGS, Camille_PS_Options::SYNC, Camille_PS_Options::BILLING, Camille_PS_Options::WIDGET_KEY, Camille_PS_Options::FILTERS, Camille_PS_API::STATUS_CACHE ) as $camille_ps_option ) {
 	delete_option( $camille_ps_option );

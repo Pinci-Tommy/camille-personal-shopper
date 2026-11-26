@@ -95,7 +95,59 @@ body.camille-ps-screen #wpfooter { color: #5e574d; }
 	color: var(--cps-ink);
 }
 .camille-ps .camille-ps-brand .camille-ps-kicker { margin-top: 4px; }
-.camille-ps .camille-ps-header-facts { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.camille-ps .camille-ps-header-facts { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-left: auto; }
+
+/* Language of the plugin: a quiet button with the list under it. */
+.camille-ps .camille-ps-language { position: relative; }
+.camille-ps .camille-ps-language summary {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 10px;
+	border: 1px solid var(--cps-line);
+	border-radius: 999px;
+	background: var(--cps-white);
+	color: var(--cps-ink);
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: .06em;
+	cursor: pointer;
+	list-style: none;
+}
+.camille-ps .camille-ps-language summary::-webkit-details-marker { display: none; }
+.camille-ps .camille-ps-language summary:hover,
+.camille-ps .camille-ps-language[open] summary { border-color: var(--cps-ink); }
+.camille-ps .camille-ps-language summary:focus-visible { outline: 2px solid var(--cps-accent); outline-offset: 2px; }
+.camille-ps .camille-ps-language form {
+	position: absolute;
+	right: 0;
+	top: calc(100% + 6px);
+	z-index: 20;
+	min-width: 200px;
+	padding: 12px 6px 6px;
+	background: var(--cps-white);
+	border: 1px solid var(--cps-line);
+	border-radius: 10px;
+	box-shadow: 0 10px 30px rgba(21, 18, 14, .12);
+}
+.camille-ps .camille-ps-language .camille-ps-kicker { padding: 0 10px 6px; }
+.camille-ps .camille-ps-language button {
+	display: block;
+	width: 100%;
+	padding: 8px 10px;
+	border: 0;
+	border-radius: 6px;
+	background: none;
+	color: var(--cps-ink);
+	font: inherit;
+	font-size: 13px;
+	text-align: left;
+	cursor: pointer;
+}
+.camille-ps .camille-ps-language button:hover,
+.camille-ps .camille-ps-language button:focus-visible { background: var(--cps-ivory); outline: none; }
+.camille-ps .camille-ps-language button[aria-current="true"] { color: var(--cps-accent); font-weight: 700; }
+.camille-ps .camille-ps-language button[aria-current="true"]::after { content: " \2713"; }
 .camille-ps .camille-ps-pill {
 	display: inline-flex;
 	align-items: center;
@@ -570,4 +622,10 @@ body.camille-ps-screen #wpfooter { color: #5e574d; }
 	.camille-ps .camille-ps-facts th { border-bottom: 0; padding-bottom: 2px; }
 	.camille-ps .camille-ps-facts td { padding-top: 0; overflow-wrap: anywhere; }
 	.camille-ps .camille-ps-facts th:empty { display: none; }
+}
+
+/* On phones the language button sits in the top corner, beside Camille's name. */
+@media screen and (max-width: 782px) {
+	.camille-ps .camille-ps-header { position: relative; padding-right: 72px; }
+	.camille-ps .camille-ps-language { position: absolute; top: 24px; right: 0; }
 }

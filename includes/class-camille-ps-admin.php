@@ -788,6 +788,7 @@ class Camille_PS_Admin {
 			}
 			echo '</div>';
 		}
+		Camille_PS_Language::render_switcher();
 		echo '</header>';
 	}
 

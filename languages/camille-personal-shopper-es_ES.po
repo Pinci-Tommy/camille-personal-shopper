@@ -13,13 +13,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: camille-personal-shopper\n"
 
+#: includes/class-camille-ps-language.php:123 includes/class-camille-ps-activity.php:425 includes/class-camille-ps-admin.php:256
+msgid "You are not allowed to change these settings."
+msgstr "No tienes permiso para cambiar estos ajustes."
+
+#: includes/class-camille-ps-language.php:143
+msgid "Plugin language"
+msgstr "Idioma del plugin"
+
+#: includes/class-camille-ps-language.php:152
+msgid "Same as WordPress"
+msgstr "Igual que WordPress"
+
 #: includes/class-camille-ps-catalog-sync.php:47
 msgid "WooCommerce background tasks (Action Scheduler) are not available. Update WooCommerce and try again."
-msgstr "Las tareas en segundo plano de WooCommerce (Action Scheduler) no están disponibles. Actualice WooCommerce e inténtelo de nuevo."
+msgstr "Las tareas en segundo plano de WooCommerce (Action Scheduler) no están disponibles. Actualiza WooCommerce e inténtalo de nuevo."
 
 #: includes/class-camille-ps-activity.php:133
 msgid "Too many customers are blocked already. Unblock someone first."
-msgstr "Ya hay demasiados clientes bloqueados. Desbloquee primero a alguno."
+msgstr "Ya hay demasiados clientes bloqueados. Desbloquea primero a alguno."
 
 #: includes/class-camille-ps-activity.php:164
 msgid "Guest"
@@ -50,11 +62,11 @@ msgstr "Mostrar todo"
 
 #: includes/class-camille-ps-activity.php:259
 msgid "The chats of your customers with your personal shopper, newest first. They stay available for about 30 days."
-msgstr "Los chats de sus clientes con su personal shopper, de los más recientes a los más antiguos. Permanecen disponibles unos 30 días."
+msgstr "Los chats de tus clientes con tu personal shopper, de los más recientes a los más antiguos. Permanecen disponibles unos 30 días."
 
 #: includes/class-camille-ps-activity.php:267
 msgid "No conversations yet. When your customers chat with your personal shopper, the chats appear here."
-msgstr "Todavía no hay conversaciones. Cuando sus clientes chateen con su personal shopper, los chats aparecerán aquí."
+msgstr "Todavía no hay conversaciones. Cuando tus clientes chateen con tu personal shopper, los chats aparecerán aquí."
 
 #: includes/class-camille-ps-activity.php:271
 msgid "Date"
@@ -69,7 +81,7 @@ msgid "Messages"
 msgstr "Mensajes"
 
 #. translators: %d: highest value allowed.
-#: includes/class-camille-ps-activity.php:274 includes/class-camille-ps-activity.php:338 includes/class-camille-ps-customers.php:136 includes/class-camille-ps-admin.php:727 includes/class-camille-ps-admin.php:1159
+#: includes/class-camille-ps-activity.php:274 includes/class-camille-ps-activity.php:338 includes/class-camille-ps-customers.php:136 includes/class-camille-ps-admin.php:727 includes/class-camille-ps-admin.php:1160
 msgid "Virtual try-ons"
 msgstr "Pruebas virtuales"
 
@@ -131,11 +143,7 @@ msgstr "Bloquear las pruebas para este cliente"
 
 #: includes/class-camille-ps-activity.php:415 includes/class-camille-ps-customers.php:139
 msgid "For a customer who uses up your credits. The chat stays open."
-msgstr "Para un cliente que agota sus créditos. El chat sigue abierto."
-
-#: includes/class-camille-ps-activity.php:425 includes/class-camille-ps-admin.php:256
-msgid "You are not allowed to change these settings."
-msgstr "No tiene permiso para cambiar estos ajustes."
+msgstr "Para un cliente que agota tus créditos. El chat sigue abierto."
 
 #: includes/class-camille-ps-activity.php:432
 msgid "Unknown customer."
@@ -151,15 +159,15 @@ msgstr "Pruebas virtuales permitidas de nuevo para este cliente."
 
 #: includes/class-camille-ps-activity.php:453
 msgid "The virtual try-ons your personal shopper made for your customers, newest first."
-msgstr "Las pruebas virtuales que su personal shopper ha hecho para sus clientes, de las más recientes a las más antiguas."
+msgstr "Las pruebas virtuales que tu personal shopper ha hecho para tus clientes, de las más recientes a las más antiguas."
 
 #: includes/class-camille-ps-activity.php:461
 msgid "No virtual try-ons yet."
 msgstr "Todavía no hay pruebas virtuales."
 
-#: includes/class-camille-ps-plugin.php:51
+#: includes/class-camille-ps-plugin.php:53
 msgid "Camille – AI Personal Shopper needs WooCommerce. Install and activate WooCommerce to use it."
-msgstr "Camille – AI Personal Shopper necesita WooCommerce. Instale y active WooCommerce para usarlo."
+msgstr "Camille – AI Personal Shopper necesita WooCommerce. Instala y activa WooCommerce para usarlo."
 
 #. translators: %s: name of the personal shopper (Camille unless the shop renamed her).
 #: includes/class-camille-ps-frontend.php:221
@@ -173,7 +181,7 @@ msgstr "Probar con %s"
 msgid "Ask %s"
 msgstr "Preguntar a %s"
 
-#: includes/class-camille-ps-customers.php:96 includes/class-camille-ps-customers.php:266 includes/class-camille-ps-customers.php:301 includes/class-camille-ps-admin.php:48 includes/class-camille-ps-admin.php:48 includes/class-camille-ps-admin.php:893 includes/class-camille-ps-catalog-filter.php:278
+#: includes/class-camille-ps-customers.php:96 includes/class-camille-ps-customers.php:266 includes/class-camille-ps-customers.php:301 includes/class-camille-ps-admin.php:48 includes/class-camille-ps-admin.php:48 includes/class-camille-ps-admin.php:894 includes/class-camille-ps-catalog-filter.php:278
 msgid "Camille"
 msgstr "Camille"
 
@@ -260,30 +268,30 @@ msgid "Settings"
 msgstr "Ajustes"
 
 #. translators: 1: products Camille will know, 2: products that can be sent.
-#: includes/class-camille-ps-admin.php:115 includes/class-camille-ps-admin.php:1116
+#: includes/class-camille-ps-admin.php:115 includes/class-camille-ps-admin.php:1117
 #, php-format
 msgid "Camille will know %1$s of %2$s products."
 msgstr "Camille conocerá %1$s de %2$s productos."
 
 #: includes/class-camille-ps-admin.php:117
 msgid "I am browsing your catalog…"
-msgstr "Estoy hojeando su catálogo…"
+msgstr "Estoy hojeando tu catálogo…"
 
 #: includes/class-camille-ps-admin.php:118
 msgid "I am saving your products…"
-msgstr "Estoy guardando sus productos…"
+msgstr "Estoy guardando tus productos…"
 
 #: includes/class-camille-ps-admin.php:119
 msgid "I am studying your pieces…"
-msgstr "Estoy estudiando sus prendas…"
+msgstr "Estoy estudiando tus prendas…"
 
 #: includes/class-camille-ps-admin.php:120
 msgid "I have studied your pieces. I am ready!"
-msgstr "He estudiado sus prendas. ¡Estoy lista!"
+msgstr "He estudiado tus prendas. ¡Estoy lista!"
 
 #: includes/class-camille-ps-admin.php:121
 msgid "Your catalog is up to date."
-msgstr "Su catálogo está actualizado."
+msgstr "Tu catálogo está actualizado."
 
 #: includes/class-camille-ps-admin.php:122
 msgid "The sync stopped."
@@ -295,7 +303,7 @@ msgstr "Leo nombres, precios, tallas y colores de cada producto…"
 
 #: includes/class-camille-ps-admin.php:127
 msgid "I collect the photos of your products…"
-msgstr "Reúno las fotos de sus productos…"
+msgstr "Reúno las fotos de tus productos…"
 
 #: includes/class-camille-ps-admin.php:130
 msgid "I put every colour of a product in my catalog as a separate piece…"
@@ -327,7 +335,7 @@ msgstr "Pienso en las ocasiones adecuadas: oficina, cena, ceremonia, fin de sema
 
 #: includes/class-camille-ps-admin.php:139
 msgid "I imagine the first outfits for your customers…"
-msgstr "Imagino los primeros conjuntos para sus clientes…"
+msgstr "Imagino los primeros conjuntos para tus clientes…"
 
 #. translators: 1: products sent, 2: products to send.
 #: includes/class-camille-ps-admin.php:143
@@ -362,9 +370,9 @@ msgstr "Pinci está ocupado: la importación continuará sola en unos minutos."
 
 #: includes/class-camille-ps-admin.php:151
 msgid "You can leave this page: the sync continues in the background."
-msgstr "Puede salir de esta página: la sincronización continúa en segundo plano."
+msgstr "Puedes salir de esta página: la sincronización continúa en segundo plano."
 
-#: includes/class-camille-ps-admin.php:152 includes/class-camille-ps-admin.php:967
+#: includes/class-camille-ps-admin.php:152 includes/class-camille-ps-admin.php:968
 msgid "Sync the catalog"
 msgstr "Sincronizar el catálogo"
 
@@ -398,7 +406,7 @@ msgstr[1] "%d artículos excluidos"
 
 #: includes/class-camille-ps-admin.php:282
 msgid "Please enter a valid email address."
-msgstr "Introduzca una dirección de correo electrónico válida."
+msgstr "Introduce una dirección de correo electrónico válida."
 
 #. translators: %s: email address.
 #: includes/class-camille-ps-admin.php:297
@@ -408,11 +416,11 @@ msgstr "Hemos enviado un código de 6 cifras a %s. Es válido durante 15 minutos
 
 #: includes/class-camille-ps-admin.php:299
 msgid "Camille needs your shop to be served over HTTPS. Enable HTTPS and try again."
-msgstr "Camille necesita que su tienda funcione con HTTPS. Active HTTPS e inténtelo de nuevo."
+msgstr "Camille necesita que tu tienda funcione con HTTPS. Activa HTTPS e inténtalo de nuevo."
 
 #: includes/class-camille-ps-admin.php:314
 msgid "The code has expired. Please ask for a new one."
-msgstr "El código ha caducado. Solicite uno nuevo."
+msgstr "El código ha caducado. Solicita uno nuevo."
 
 #: includes/class-camille-ps-admin.php:318
 msgid "The code has 6 digits."
@@ -420,11 +428,11 @@ msgstr "El código tiene 6 cifras."
 
 #: includes/class-camille-ps-admin.php:351
 msgid "Your shop is connected to Camille. Now send her your catalog."
-msgstr "Su tienda está conectada a Camille. Ahora envíele su catálogo."
+msgstr "Tu tienda está conectada a Camille. Ahora envíale tu catálogo."
 
 #: includes/class-camille-ps-admin.php:353
 msgid "You received 300 free credits to get started."
-msgstr "Ha recibido 300 créditos gratuitos para empezar."
+msgstr "Has recibido 300 créditos gratuitos para empezar."
 
 #. translators: %d: tries left.
 #: includes/class-camille-ps-admin.php:359
@@ -438,32 +446,32 @@ msgstr[1] "Código incorrecto. Quedan %d intentos."
 #: includes/class-camille-ps-admin.php:364
 #, php-format
 msgid "There is no Pinci account with this email. %s, then connect the shop again."
-msgstr "No existe ninguna cuenta de Pinci con este correo. %s y después vuelva a conectar la tienda."
+msgstr "No existe ninguna cuenta de Pinci con este correo. %s y después vuelve a conectar la tienda."
 
 #. translators: %s: sign-up link.
 #: includes/class-camille-ps-admin.php:364
 msgid "Create your account"
-msgstr "Cree su cuenta"
+msgstr "Crea tu cuenta"
 
 #: includes/class-camille-ps-admin.php:368
 msgid "Your Pinci account is not verified yet. Open the confirmation email Pinci sent you, then connect the shop again."
-msgstr "Su cuenta de Pinci aún no está verificada. Abra el correo de confirmación que le envió Pinci y después vuelva a conectar la tienda."
+msgstr "Tu cuenta de Pinci aún no está verificada. Abre el correo de confirmación que te envió Pinci y después vuelve a conectar la tienda."
 
 #: includes/class-camille-ps-admin.php:372
 msgid "This email belongs to a Shopify store on Pinci. Use another Pinci account for your WooCommerce shop."
-msgstr "Este correo pertenece a una tienda Shopify en Pinci. Use otra cuenta de Pinci para su tienda WooCommerce."
+msgstr "Este correo pertenece a una tienda Shopify en Pinci. Usa otra cuenta de Pinci para tu tienda WooCommerce."
 
 #: includes/class-camille-ps-admin.php:376
 msgid "This website is already connected to another Pinci account. Contact support@pinci.ai."
-msgstr "Este sitio ya está conectado a otra cuenta de Pinci. Escriba a support@pinci.ai."
+msgstr "Este sitio ya está conectado a otra cuenta de Pinci. Escribe a support@pinci.ai."
 
 #: includes/class-camille-ps-admin.php:380
 msgid "This Pinci account is blocked. Contact support@pinci.ai."
-msgstr "Esta cuenta de Pinci está bloqueada. Escriba a support@pinci.ai."
+msgstr "Esta cuenta de Pinci está bloqueada. Escribe a support@pinci.ai."
 
 #: includes/class-camille-ps-admin.php:384
 msgid "The code has expired or was tried too many times. Please ask for a new one."
-msgstr "El código ha caducado o se ha intentado demasiadas veces. Solicite uno nuevo."
+msgstr "El código ha caducado o se ha intentado demasiadas veces. Solicita uno nuevo."
 
 #: includes/class-camille-ps-admin.php:409
 msgid "Settings saved, but Camille could not be switched on or off right now:"
@@ -479,15 +487,15 @@ msgstr "Límites de uso guardados. Se aplican desde el próximo mensaje del chat
 
 #: includes/class-camille-ps-admin.php:433
 msgid "One of the limits is out of range. Check the values and try again."
-msgstr "Uno de los límites está fuera del rango permitido. Compruebe los valores e inténtelo de nuevo."
+msgstr "Uno de los límites está fuera del rango permitido. Comprueba los valores e inténtalo de nuevo."
 
 #: includes/class-camille-ps-admin.php:460 includes/class-camille-ps-admin.php:509
 msgid "Camille could not use this photo. Use a JPEG, PNG or WebP image of up to 10 MB."
-msgstr "Camille no ha podido usar esta foto. Use una imagen JPEG, PNG o WebP de hasta 10 MB."
+msgstr "Camille no ha podido usar esta foto. Usa una imagen JPEG, PNG o WebP de hasta 10 MB."
 
 #: includes/class-camille-ps-admin.php:476
 msgid "Personal shopper saved. Your customers see the new name and photo from their next visit."
-msgstr "Personal shopper guardado. Sus clientes verán el nuevo nombre y la nueva foto desde su próxima visita."
+msgstr "Personal shopper guardado. Tus clientes verán el nuevo nombre y la nueva foto desde su próxima visita."
 
 #: includes/class-camille-ps-admin.php:480
 msgid "The name must have 2 to 30 characters and contain only letters, spaces, apostrophes, dots and hyphens."
@@ -495,15 +503,15 @@ msgstr "El nombre debe tener de 2 a 30 caracteres y contener solo letras, espaci
 
 #: includes/class-camille-ps-admin.php:482
 msgid "Choose a photo that matches the gender, or your own photo."
-msgstr "Elija una foto que corresponda al género, o su propia foto."
+msgstr "Elige una foto que corresponda al género, o tu propia foto."
 
 #: includes/class-camille-ps-admin.php:484
 msgid "Choose a photo from the gallery or upload your own."
-msgstr "Elija una foto de la galería o suba la suya."
+msgstr "Elige una foto de la galería o sube la tuya."
 
 #: includes/class-camille-ps-admin.php:549
 msgid "Selection saved. Sync the catalog to update Camille."
-msgstr "Selección guardada. Sincronice el catálogo para actualizar a Camille."
+msgstr "Selección guardada. Sincroniza el catálogo para actualizar a Camille."
 
 #: includes/class-camille-ps-admin.php:556
 msgid "Selection saved. Camille is updating her catalog."
@@ -515,15 +523,15 @@ msgstr "Datos de facturación guardados."
 
 #: includes/class-camille-ps-admin.php:587
 msgid "Some billing details are missing or not valid. Check the marked fields."
-msgstr "Faltan algunos datos de facturación o no son válidos. Revise los campos marcados."
+msgstr "Faltan algunos datos de facturación o no son válidos. Revisa los campos marcados."
 
 #: includes/class-camille-ps-admin.php:600
 msgid "Catalog sync started. It runs in the background: you can leave this page."
-msgstr "Sincronización del catálogo iniciada. Continúa en segundo plano: puede salir de esta página."
+msgstr "Sincronización del catálogo iniciada. Continúa en segundo plano: puedes salir de esta página."
 
 #: includes/class-camille-ps-admin.php:615
 msgid "The shop was disconnected here, but Camille could not be told. Write to support@pinci.ai to close it on Pinci too."
-msgstr "La tienda se ha desconectado aquí, pero no se ha podido avisar a Camille. Escriba a support@pinci.ai para cerrarla también en Pinci."
+msgstr "La tienda se ha desconectado aquí, pero no se ha podido avisar a Camille. Escribe a support@pinci.ai para cerrarla también en Pinci."
 
 #: includes/class-camille-ps-admin.php:617
 msgid "The shop is disconnected. Camille no longer appears on it."
@@ -551,7 +559,7 @@ msgstr "Facturación"
 
 #: includes/class-camille-ps-admin.php:725
 msgid "Your customers"
-msgstr "Sus clientes"
+msgstr "Tus clientes"
 
 #: includes/class-camille-ps-admin.php:726
 msgid "Conversations"
@@ -565,553 +573,553 @@ msgstr "Personal shopper IA"
 msgid "Paused"
 msgstr "En pausa"
 
-#: includes/class-camille-ps-admin.php:777 includes/class-camille-ps-admin.php:893
+#: includes/class-camille-ps-admin.php:777 includes/class-camille-ps-admin.php:894
 msgid "On"
 msgstr "Activada"
 
-#: includes/class-camille-ps-admin.php:779 includes/class-camille-ps-admin.php:893 includes/class-camille-ps-admin.php:1183
+#: includes/class-camille-ps-admin.php:779 includes/class-camille-ps-admin.php:894 includes/class-camille-ps-admin.php:1184
 msgid "Off"
 msgstr "Desactivada"
 
-#: includes/class-camille-ps-admin.php:784 includes/class-camille-ps-admin.php:895
+#: includes/class-camille-ps-admin.php:784 includes/class-camille-ps-admin.php:896
 msgid "Credits left"
 msgstr "Créditos restantes"
 
-#: includes/class-camille-ps-admin.php:787 includes/class-camille-ps-admin.php:897
+#: includes/class-camille-ps-admin.php:787 includes/class-camille-ps-admin.php:898
 msgid "Buy credits"
 msgstr "Comprar créditos"
 
-#: includes/class-camille-ps-admin.php:800
+#: includes/class-camille-ps-admin.php:801
 msgid "Camille sections"
 msgstr "Secciones de Camille"
 
-#: includes/class-camille-ps-admin.php:832
+#: includes/class-camille-ps-admin.php:833
 msgid "Connect your shop"
-msgstr "Conecte su tienda"
+msgstr "Conecta tu tienda"
 
-#: includes/class-camille-ps-admin.php:834
+#: includes/class-camille-ps-admin.php:835
 msgid "Camille works with a Pinci account. Enter the email of your account: we will send you a code to confirm it is yours."
-msgstr "Camille funciona con una cuenta de Pinci. Introduzca el correo de su cuenta: le enviaremos un código para confirmar que es suya."
+msgstr "Camille funciona con una cuenta de Pinci. Introduce el correo de tu cuenta: te enviaremos un código para confirmar que es tuya."
 
-#: includes/class-camille-ps-admin.php:838
+#: includes/class-camille-ps-admin.php:839
 msgid "Pinci account email"
 msgstr "Correo de la cuenta de Pinci"
 
-#: includes/class-camille-ps-admin.php:840
+#: includes/class-camille-ps-admin.php:841
 msgid "Send the code"
 msgstr "Enviar el código"
 
 #. translators: %s: sign-up link.
-#: includes/class-camille-ps-admin.php:846
+#: includes/class-camille-ps-admin.php:847
 #, php-format
 msgid "No account yet? %s, it is free and includes 300 credits to try Camille."
-msgstr "¿Aún no tiene cuenta? %s, es gratis e incluye 300 créditos para probar Camille."
+msgstr "¿Aún no tienes cuenta? %s, es gratis e incluye 300 créditos para probar Camille."
 
 #. translators: %s: sign-up link.
-#: includes/class-camille-ps-admin.php:847
+#: includes/class-camille-ps-admin.php:848
 msgid "Create one on pinci.ai"
-msgstr "Cree una en pinci.ai"
+msgstr "Crea una en pinci.ai"
 
 #. translators: %s: email address.
-#: includes/class-camille-ps-admin.php:859
+#: includes/class-camille-ps-admin.php:860
 #, php-format
 msgid "Enter the 6-digit code sent to %s."
-msgstr "Introduzca el código de 6 cifras enviado a %s."
+msgstr "Introduce el código de 6 cifras enviado a %s."
 
-#: includes/class-camille-ps-admin.php:863
+#: includes/class-camille-ps-admin.php:864
 msgid "Code"
 msgstr "Código"
 
-#: includes/class-camille-ps-admin.php:865
+#: includes/class-camille-ps-admin.php:866
 msgid "Connect the shop"
 msgstr "Conectar la tienda"
 
-#: includes/class-camille-ps-admin.php:871
+#: includes/class-camille-ps-admin.php:872
 msgid "Use another email or send a new code"
 msgstr "Usar otro correo o enviar un código nuevo"
 
-#: includes/class-camille-ps-admin.php:887
+#: includes/class-camille-ps-admin.php:888
 msgid "Status"
 msgstr "Estado"
 
-#: includes/class-camille-ps-admin.php:889
+#: includes/class-camille-ps-admin.php:890
 msgid "Camille is temporarily paused by Pinci. Your shop keeps working normally."
-msgstr "Pinci ha pausado temporalmente a Camille. Su tienda sigue funcionando con normalidad."
+msgstr "Pinci ha pausado temporalmente a Camille. Tu tienda sigue funcionando con normalidad."
 
-#: includes/class-camille-ps-admin.php:892
+#: includes/class-camille-ps-admin.php:893
 msgid "Pinci account"
 msgstr "Cuenta de Pinci"
 
-#: includes/class-camille-ps-admin.php:901
+#: includes/class-camille-ps-admin.php:902
 msgid "Before buying credits, enter your billing details so we can send you the invoice."
-msgstr "Antes de comprar créditos, introduzca sus datos de facturación para que podamos enviarle la factura."
+msgstr "Antes de comprar créditos, introduce tus datos de facturación para que podamos enviarte la factura."
 
-#: includes/class-camille-ps-admin.php:901 includes/class-camille-ps-admin.php:1315
+#: includes/class-camille-ps-admin.php:902 includes/class-camille-ps-admin.php:1316
 msgid "Billing details"
 msgstr "Datos de facturación"
 
-#: includes/class-camille-ps-admin.php:904
+#: includes/class-camille-ps-admin.php:905
 msgid "Last catalog sync"
 msgstr "Última sincronización del catálogo"
 
-#: includes/class-camille-ps-admin.php:904
+#: includes/class-camille-ps-admin.php:905
 msgid "Never"
 msgstr "Nunca"
 
-#: includes/class-camille-ps-admin.php:917 includes/class-camille-ps-admin.php:918
+#: includes/class-camille-ps-admin.php:918 includes/class-camille-ps-admin.php:919
 msgid "Your catalog is over the 5,000 product limit."
-msgstr "Su catálogo supera el límite de 5.000 productos."
-
-#: includes/class-camille-ps-admin.php:919
-msgid "No product could be sent: check that your products have a price and a photo."
-msgstr "No se ha podido enviar ningún producto: compruebe que sus productos tienen precio y foto."
+msgstr "Tu catálogo supera el límite de 5.000 productos."
 
 #: includes/class-camille-ps-admin.php:920
-msgid "Pinci was not reachable for a long time. Start the sync again."
-msgstr "Pinci no ha estado disponible durante mucho tiempo. Vuelva a iniciar la sincronización."
+msgid "No product could be sent: check that your products have a price and a photo."
+msgstr "No se ha podido enviar ningún producto: comprueba que tus productos tienen precio y foto."
 
 #: includes/class-camille-ps-admin.php:921
-msgid "Camille was not reachable for a long time. Start the sync again."
-msgstr "Camille no ha estado disponible durante mucho tiempo. Vuelva a iniciar la sincronización."
+msgid "Pinci was not reachable for a long time. Start the sync again."
+msgstr "Pinci no ha estado disponible durante mucho tiempo. Vuelve a iniciar la sincronización."
 
 #: includes/class-camille-ps-admin.php:922
-msgid "Camille does not find this shop any more. Disconnect and connect it again."
-msgstr "Camille ya no encuentra esta tienda. Desconéctela y vuelva a conectarla."
+msgid "Camille was not reachable for a long time. Start the sync again."
+msgstr "Camille no ha estado disponible durante mucho tiempo. Vuelve a iniciar la sincronización."
 
 #: includes/class-camille-ps-admin.php:923
-msgid "The sync stopped halfway. Start it again."
-msgstr "La sincronización se ha detenido a medias. Vuelva a iniciarla."
+msgid "Camille does not find this shop any more. Disconnect and connect it again."
+msgstr "Camille ya no encuentra esta tienda. Desconéctala y vuelve a conectarla."
 
 #: includes/class-camille-ps-admin.php:924
+msgid "The sync stopped halfway. Start it again."
+msgstr "La sincronización se ha detenido a medias. Vuelve a iniciarla."
+
+#: includes/class-camille-ps-admin.php:925
 msgid "A newer sync replaced this one."
 msgstr "Una sincronización más reciente ha sustituido a esta."
 
-#: includes/class-camille-ps-admin.php:926
+#: includes/class-camille-ps-admin.php:927
 msgid "The sync stopped because of an error. Start it again; if it happens again write to support@pinci.ai."
-msgstr "La sincronización se ha detenido por un error. Vuelva a iniciarla; si vuelve a ocurrir, escriba a support@pinci.ai."
+msgstr "La sincronización se ha detenido por un error. Vuelve a iniciarla; si vuelve a ocurrir, escribe a support@pinci.ai."
 
-#: includes/class-camille-ps-admin.php:937
+#: includes/class-camille-ps-admin.php:938
 msgid "no name"
 msgstr "sin nombre"
 
-#: includes/class-camille-ps-admin.php:938
+#: includes/class-camille-ps-admin.php:939
 msgid "no price"
 msgstr "sin precio"
 
-#: includes/class-camille-ps-admin.php:939
+#: includes/class-camille-ps-admin.php:940
 msgid "no photo"
 msgstr "sin foto"
 
-#: includes/class-camille-ps-admin.php:940
+#: includes/class-camille-ps-admin.php:941
 msgid "product address not valid"
 msgstr "dirección del producto no válida"
 
-#: includes/class-camille-ps-admin.php:941
+#: includes/class-camille-ps-admin.php:942
 msgid "currency not valid"
 msgstr "moneda no válida"
 
-#: includes/class-camille-ps-admin.php:943
+#: includes/class-camille-ps-admin.php:944
 msgid "data not valid"
 msgstr "datos no válidos"
 
-#: includes/class-camille-ps-admin.php:951
+#: includes/class-camille-ps-admin.php:952
 msgid "Catalog"
 msgstr "Catálogo"
 
-#: includes/class-camille-ps-admin.php:952
+#: includes/class-camille-ps-admin.php:953
 msgid "Camille only suggests products she knows. Sync again after adding products or changing prices, so she always shows what you sell."
-msgstr "Camille solo propone los productos que conoce. Vuelva a sincronizar después de añadir productos o cambiar precios, para que muestre siempre lo que vende."
+msgstr "Camille solo propone los productos que conoce. Vuelve a sincronizar después de añadir productos o cambiar precios, para que muestre siempre lo que vendes."
 
-#: includes/class-camille-ps-admin.php:963
+#: includes/class-camille-ps-admin.php:964
 msgid "Reload the page to see how the sync is going."
-msgstr "Recargue la página para ver cómo va la sincronización."
+msgstr "Recarga la página para ver cómo va la sincronización."
 
-#: includes/class-camille-ps-admin.php:967
+#: includes/class-camille-ps-admin.php:968
 msgid "Restart the sync"
 msgstr "Reiniciar la sincronización"
 
-#: includes/class-camille-ps-admin.php:978
+#: includes/class-camille-ps-admin.php:979
 msgid "Customise Camille"
 msgstr "Personalizar Camille"
 
-#: includes/class-camille-ps-admin.php:979
+#: includes/class-camille-ps-admin.php:980
 msgid "Give your personal shopper the name and the face that suit your shop. Customers see them in the chat and on the chat button."
-msgstr "Dé a su personal shopper el nombre y el rostro que mejor encajan con su tienda. Sus clientes los ven en el chat y en el botón del chat."
+msgstr "Da a tu personal shopper el nombre y el rostro que mejor encajan con tu tienda. Tus clientes los ven en el chat y en el botón del chat."
 
-#: includes/class-camille-ps-admin.php:982
+#: includes/class-camille-ps-admin.php:983
 msgid "The personal shopper settings cannot be read right now. Please try again in a few minutes."
-msgstr "Ahora no se pueden leer los ajustes del personal shopper. Inténtelo de nuevo en unos minutos."
+msgstr "Ahora no se pueden leer los ajustes del personal shopper. Inténtalo de nuevo en unos minutos."
 
-#: includes/class-camille-ps-admin.php:1006
+#: includes/class-camille-ps-admin.php:1007
 msgid "Name"
 msgstr "Nombre"
 
-#: includes/class-camille-ps-admin.php:1007
+#: includes/class-camille-ps-admin.php:1008
 msgid "Gender"
 msgstr "Género"
 
-#: includes/class-camille-ps-admin.php:1008
+#: includes/class-camille-ps-admin.php:1009
 msgid "Woman"
 msgstr "Mujer"
 
-#: includes/class-camille-ps-admin.php:1009
+#: includes/class-camille-ps-admin.php:1010
 msgid "Man"
 msgstr "Hombre"
 
-#: includes/class-camille-ps-admin.php:1011
+#: includes/class-camille-ps-admin.php:1012
 msgid "Photo"
 msgstr "Foto"
 
-#: includes/class-camille-ps-admin.php:1020
+#: includes/class-camille-ps-admin.php:1021
 msgid "Your photo"
-msgstr "Su foto"
-
-#: includes/class-camille-ps-admin.php:1025
-msgid "Or upload your own photo"
-msgstr "O suba su propia foto"
+msgstr "Tu foto"
 
 #: includes/class-camille-ps-admin.php:1026
-msgid "JPEG, PNG or WebP, up to 10 MB. It is cut to a square from the centre: choose a portrait with the face in the middle. Use only photos you have the rights to."
-msgstr "JPEG, PNG o WebP, hasta 10 MB. Se recorta en un cuadrado desde el centro: elija un retrato con la cara en el medio. Use solo fotos de las que tenga los derechos."
+msgid "Or upload your own photo"
+msgstr "O sube tu propia foto"
 
-#: includes/class-camille-ps-admin.php:1028
+#: includes/class-camille-ps-admin.php:1027
+msgid "JPEG, PNG or WebP, up to 10 MB. It is cut to a square from the centre: choose a portrait with the face in the middle. Use only photos you have the rights to."
+msgstr "JPEG, PNG o WebP, hasta 10 MB. Se recorta en un cuadrado desde el centro: elige un retrato con la cara en el medio. Usa solo fotos de las que tengas los derechos."
+
+#: includes/class-camille-ps-admin.php:1029
 msgid "Save the personal shopper"
 msgstr "Guardar el personal shopper"
 
-#: includes/class-camille-ps-admin.php:1070
+#: includes/class-camille-ps-admin.php:1071
 msgid "Which products Camille suggests"
 msgstr "Qué productos propone Camille"
 
-#: includes/class-camille-ps-admin.php:1071
+#: includes/class-camille-ps-admin.php:1072
 msgid "Choose what Camille may suggest to your customers. Products left out are removed from Camille at the next sync."
-msgstr "Elija qué puede proponer Camille a sus clientes. Los productos excluidos se retiran de Camille en la próxima sincronización."
+msgstr "Elige qué puede proponer Camille a tus clientes. Los productos excluidos se retiran de Camille en la próxima sincronización."
 
-#: includes/class-camille-ps-admin.php:1075
+#: includes/class-camille-ps-admin.php:1076
 msgid "Categories"
 msgstr "Categorías"
 
-#: includes/class-camille-ps-admin.php:1077
+#: includes/class-camille-ps-admin.php:1078
 msgid "Your shop has no product categories."
-msgstr "Su tienda no tiene categorías de productos."
+msgstr "Tu tienda no tiene categorías de productos."
 
-#: includes/class-camille-ps-admin.php:1084
+#: includes/class-camille-ps-admin.php:1085
 msgid "Usually not suited to Camille"
 msgstr "Normalmente no adecuada para Camille"
 
-#: includes/class-camille-ps-admin.php:1089
+#: includes/class-camille-ps-admin.php:1090
 msgid "Leaving out a category also leaves out its subcategories. A product in more than one category stays while at least one of them is selected. Camille works best with clothing, shoes and accessories: perfumes, home items, gift cards and similar products rarely help her build outfits."
 msgstr "Al excluir una categoría también se excluyen sus subcategorías. Un producto que está en varias categorías se mantiene mientras al menos una esté seleccionada. Camille funciona mejor con ropa, calzado y accesorios: perfumes, artículos para el hogar, tarjetas regalo y productos similares rara vez la ayudan a crear conjuntos."
 
-#: includes/class-camille-ps-admin.php:1091
+#: includes/class-camille-ps-admin.php:1092
 msgid "Price range"
 msgstr "Rango de precios"
 
-#: includes/class-camille-ps-admin.php:1093
+#: includes/class-camille-ps-admin.php:1094
 msgid "From"
 msgstr "Desde"
 
-#: includes/class-camille-ps-admin.php:1094
+#: includes/class-camille-ps-admin.php:1095
 msgid "to"
 msgstr "hasta"
 
-#: includes/class-camille-ps-admin.php:1095
+#: includes/class-camille-ps-admin.php:1096
 msgid "Leave a field empty for no limit. A product with several prices (variations) stays when at least one price is in the range."
-msgstr "Deje un campo vacío para no poner límite. Un producto con varios precios (variaciones) se mantiene si al menos un precio está en el rango."
+msgstr "Deja un campo vacío para no poner límite. Un producto con varios precios (variaciones) se mantiene si al menos un precio está en el rango."
 
 #. translators: 1: lowest price, 2: highest price.
-#: includes/class-camille-ps-admin.php:1098
+#: includes/class-camille-ps-admin.php:1099
 #, php-format
 msgid "Prices in your shop go from %1$s to %2$s."
-msgstr "Los precios de su tienda van de %1$s a %2$s."
+msgstr "Los precios de tu tienda van de %1$s a %2$s."
 
-#: includes/class-camille-ps-admin.php:1101
+#: includes/class-camille-ps-admin.php:1102
 msgid "Single products"
 msgstr "Productos individuales"
 
 #. translators: %s: link to the products list.
-#: includes/class-camille-ps-admin.php:1105
+#: includes/class-camille-ps-admin.php:1106
 #, php-format
 msgid "To leave out single products, tick \"Do not show this product to Camille\" on the product page (General tab), or select them in %s and use the bulk action \"Hide from Camille\"."
-msgstr "Para excluir productos individuales, marque «No mostrar este producto a Camille» en la página del producto (pestaña General), o selecciónelos en %s y use la acción en lote «Ocultar a Camille»."
+msgstr "Para excluir productos individuales, marca «No mostrar este producto a Camille» en la página del producto (pestaña General), o selecciónalos en %s y usa la acción en lote «Ocultar a Camille»."
 
 #. translators: %s: link to the products list.
-#: includes/class-camille-ps-admin.php:1106
+#: includes/class-camille-ps-admin.php:1107
 msgid "Products"
 msgstr "Productos"
 
 #. translators: %s: number of products.
-#: includes/class-camille-ps-admin.php:1112
+#: includes/class-camille-ps-admin.php:1113
 #, php-format
 msgid "%s product left out by hand."
 msgid_plural "%s products left out by hand."
 msgstr[0] "%s producto excluido manualmente."
 msgstr[1] "%s productos excluidos manualmente."
 
-#: includes/class-camille-ps-admin.php:1119
+#: includes/class-camille-ps-admin.php:1120
 msgid "Save the selection"
 msgstr "Guardar la selección"
 
-#: includes/class-camille-ps-admin.php:1121
+#: includes/class-camille-ps-admin.php:1122
 msgid "Save and sync the catalog"
 msgstr "Guardar y sincronizar el catálogo"
 
-#: includes/class-camille-ps-admin.php:1137
-msgid "Usage limits for your customers"
-msgstr "Límites de uso para sus clientes"
-
 #: includes/class-camille-ps-admin.php:1138
+msgid "Usage limits for your customers"
+msgstr "Límites de uso para tus clientes"
+
+#: includes/class-camille-ps-admin.php:1139
 msgid "Every virtual try-on uses credits. These limits keep a single visitor from using up your credits. Camille applies them herself and, when a limit is reached, explains it kindly in the chat."
-msgstr "Cada prueba virtual usa créditos. Estos límites evitan que un solo visitante agote sus créditos. Camille los aplica ella misma y, cuando se alcanza un límite, lo explica amablemente en el chat."
+msgstr "Cada prueba virtual usa créditos. Estos límites evitan que un solo visitante agote tus créditos. Camille los aplica ella misma y, cuando se alcanza un límite, lo explica amablemente en el chat."
 
-#: includes/class-camille-ps-admin.php:1140
+#: includes/class-camille-ps-admin.php:1141
 msgid "Camille is visible only to shop administrators now, and they have no limits. These limits apply once you show her to your customers."
-msgstr "Ahora Camille solo es visible para los administradores de la tienda, que no tienen límites. Estos límites se aplican cuando la muestre a sus clientes."
+msgstr "Ahora Camille solo es visible para los administradores de la tienda, que no tienen límites. Estos límites se aplican cuando la muestres a tus clientes."
 
-#: includes/class-camille-ps-admin.php:1143
+#: includes/class-camille-ps-admin.php:1144
 msgid "Camille cannot recognise logged-in customers yet, so for now she treats everyone as a visitor without an account. Reload this page in a minute; if this message stays, write to support@pinci.ai."
-msgstr "Camille aún no puede reconocer a los clientes que han iniciado sesión, así que por ahora trata a todos como visitantes sin cuenta. Recargue esta página dentro de un minuto; si el mensaje sigue, escriba a support@pinci.ai."
+msgstr "Camille aún no puede reconocer a los clientes que han iniciado sesión, así que por ahora trata a todos como visitantes sin cuenta. Recarga esta página dentro de un minuto; si el mensaje sigue, escribe a support@pinci.ai."
 
-#: includes/class-camille-ps-admin.php:1146
+#: includes/class-camille-ps-admin.php:1147
 msgid "The limits cannot be read right now. Please try again in a few minutes."
-msgstr "Ahora no se pueden leer los límites. Inténtelo de nuevo en unos minutos."
+msgstr "Ahora no se pueden leer los límites. Inténtalo de nuevo en unos minutos."
 
-#: includes/class-camille-ps-admin.php:1154
+#: includes/class-camille-ps-admin.php:1155
 msgid "Visitors without an account"
 msgstr "Visitantes sin cuenta"
 
-#: includes/class-camille-ps-admin.php:1155
+#: includes/class-camille-ps-admin.php:1156
 msgid "Chats per day"
 msgstr "Chats al día"
 
 #. translators: %d: highest value allowed.
-#: includes/class-camille-ps-admin.php:1158
+#: includes/class-camille-ps-admin.php:1159
 #, php-format
 msgid "New chats a visitor without an account may start each day, counted from the first message they write (at most %d). With 0 Camille asks them to sign in or register before chatting."
 msgstr "Chats nuevos que un visitante sin cuenta puede iniciar cada día, contados desde el primer mensaje que escribe (como máximo %d). Con 0, Camille le pide que inicie sesión o se registre antes de chatear."
 
-#: includes/class-camille-ps-admin.php:1159
+#: includes/class-camille-ps-admin.php:1160
 msgid "Allow virtual try-ons to visitors without an account"
 msgstr "Permitir pruebas virtuales a los visitantes sin cuenta"
 
-#: includes/class-camille-ps-admin.php:1160
+#: includes/class-camille-ps-admin.php:1161
 msgid "When this is off, Camille advises them in the chat and invites them to sign in or register to try the clothes on. A good way to get more customers to create an account."
 msgstr "Si está desactivado, Camille les aconseja en el chat y les invita a iniciar sesión o registrarse para probarse las prendas. Una buena forma de conseguir que más clientes creen una cuenta."
 
-#: includes/class-camille-ps-admin.php:1162
+#: includes/class-camille-ps-admin.php:1163
 msgid "With your current choice in \"Who sees Camille\", visitors without an account do not see her: these two settings apply only if you show her to all visitors."
-msgstr "Con su elección actual en «Quién ve a Camille», los visitantes sin cuenta no la ven: estos dos ajustes solo se aplican si la muestra a todos los visitantes."
+msgstr "Con tu elección actual en «Quién ve a Camille», los visitantes sin cuenta no la ven: estos dos ajustes solo se aplican si la muestras a todos los visitantes."
 
-#: includes/class-camille-ps-admin.php:1164
+#: includes/class-camille-ps-admin.php:1165
 msgid "Customers logged in to their account"
 msgstr "Clientes con sesión iniciada"
 
-#: includes/class-camille-ps-admin.php:1165
+#: includes/class-camille-ps-admin.php:1166
 msgid "Try-ons per day"
 msgstr "Pruebas al día"
 
 #. translators: %d: highest value allowed.
-#: includes/class-camille-ps-admin.php:1168
+#: includes/class-camille-ps-admin.php:1169
 #, php-format
 msgid "Virtual try-ons each customer may make in 24 hours, on any device (at most %d). Try-ons that fail are not counted. With 0 customers can chat but not try clothes on."
 msgstr "Pruebas virtuales que cada cliente puede hacer en 24 horas, desde cualquier dispositivo (como máximo %d). Las pruebas fallidas no se cuentan. Con 0 los clientes pueden chatear pero no probarse prendas."
 
-#: includes/class-camille-ps-admin.php:1170
-msgid "Shop administrators and shop managers have no limits, so you can test Camille freely while logged in."
-msgstr "Los administradores y gestores de la tienda no tienen límites, así que puede probar Camille libremente con la sesión iniciada."
-
 #: includes/class-camille-ps-admin.php:1171
+msgid "Shop administrators and shop managers have no limits, so you can test Camille freely while logged in."
+msgstr "Los administradores y gestores de la tienda no tienen límites, así que puedes probar Camille libremente con la sesión iniciada."
+
+#: includes/class-camille-ps-admin.php:1172
 msgid "Save the limits"
 msgstr "Guardar los límites"
 
-#: includes/class-camille-ps-admin.php:1183
+#: includes/class-camille-ps-admin.php:1184
 msgid "Camille does not appear and does not use credits."
 msgstr "Camille no aparece y no consume créditos."
 
-#: includes/class-camille-ps-admin.php:1184
+#: includes/class-camille-ps-admin.php:1185
 msgid "Only shop administrators"
 msgstr "Solo administradores de la tienda"
 
-#: includes/class-camille-ps-admin.php:1184
-msgid "To try Camille while logged in to WordPress, before your customers see her."
-msgstr "Para probar a Camille con la sesión de WordPress iniciada, antes de que la vean sus clientes."
-
 #: includes/class-camille-ps-admin.php:1185
+msgid "To try Camille while logged in to WordPress, before your customers see her."
+msgstr "Para probar a Camille con la sesión de WordPress iniciada, antes de que la vean tus clientes."
+
+#: includes/class-camille-ps-admin.php:1186
 msgid "Administrators and chosen customers"
 msgstr "Administradores y clientes elegidos"
 
-#: includes/class-camille-ps-admin.php:1185
-msgid "Only the customers you choose, once logged in: tick \"This customer can see Camille\" on their profile, or select them in Users and use the bulk action \"Show Camille\"."
-msgstr "Solo los clientes que usted elija, con la sesión iniciada: marque «Este cliente puede ver a Camille» en su perfil, o selecciónelos en Usuarios y use la acción en lote «Mostrar Camille»."
-
 #: includes/class-camille-ps-admin.php:1186
+msgid "Only the customers you choose, once logged in: tick \"This customer can see Camille\" on their profile, or select them in Users and use the bulk action \"Show Camille\"."
+msgstr "Solo los clientes que tú elijas, con la sesión iniciada: marca «Este cliente puede ver a Camille» en su perfil, o selecciónalos en Usuarios y usa la acción en lote «Mostrar Camille»."
+
+#: includes/class-camille-ps-admin.php:1187
 msgid "Only logged-in customers"
 msgstr "Solo clientes con sesión iniciada"
 
-#: includes/class-camille-ps-admin.php:1186
-msgid "Customers with an account on your shop, once logged in."
-msgstr "Los clientes con una cuenta en su tienda, una vez iniciada la sesión."
-
 #: includes/class-camille-ps-admin.php:1187
+msgid "Customers with an account on your shop, once logged in."
+msgstr "Los clientes con una cuenta en tu tienda, una vez iniciada la sesión."
+
+#: includes/class-camille-ps-admin.php:1188
 msgid "All visitors"
 msgstr "Todos los visitantes"
 
-#: includes/class-camille-ps-admin.php:1187
+#: includes/class-camille-ps-admin.php:1188
 msgid "Everyone who visits your shop."
-msgstr "Cualquier persona que visite su tienda."
+msgstr "Cualquier persona que visite tu tienda."
 
-#: includes/class-camille-ps-admin.php:1190
+#: includes/class-camille-ps-admin.php:1191
 msgid "Who sees Camille"
 msgstr "Quién ve a Camille"
 
 #. translators: %s: number of customers.
-#: includes/class-camille-ps-admin.php:1200
+#: includes/class-camille-ps-admin.php:1201
 #, php-format
 msgid "%s customer chosen"
 msgid_plural "%s customers chosen"
 msgstr[0] "%s cliente elegido"
 msgstr[1] "%s clientes elegidos"
 
-#: includes/class-camille-ps-admin.php:1205 includes/class-camille-ps-admin.php:1239
+#: includes/class-camille-ps-admin.php:1206 includes/class-camille-ps-admin.php:1240
 msgid "Save"
 msgstr "Guardar"
 
-#: includes/class-camille-ps-admin.php:1217
+#: includes/class-camille-ps-admin.php:1218
 msgid "Appearance"
 msgstr "Apariencia"
 
-#: includes/class-camille-ps-admin.php:1222
+#: includes/class-camille-ps-admin.php:1223
 msgid "Chat button"
 msgstr "Botón del chat"
 
-#: includes/class-camille-ps-admin.php:1223
+#: includes/class-camille-ps-admin.php:1224
 msgid "Bottom right"
 msgstr "Abajo a la derecha"
 
-#: includes/class-camille-ps-admin.php:1224
+#: includes/class-camille-ps-admin.php:1225
 msgid "Bottom left"
 msgstr "Abajo a la izquierda"
 
-#: includes/class-camille-ps-admin.php:1225
+#: includes/class-camille-ps-admin.php:1226
 msgid "Height of the chat button"
 msgstr "Altura del botón del chat"
 
-#: includes/class-camille-ps-admin.php:1226
+#: includes/class-camille-ps-admin.php:1227
 msgid "At the bottom of the screen"
 msgstr "En la parte inferior de la pantalla"
 
-#: includes/class-camille-ps-admin.php:1227
+#: includes/class-camille-ps-admin.php:1228
 msgid "Below the site header"
 msgstr "Debajo de la cabecera del sitio"
 
-#: includes/class-camille-ps-admin.php:1229
+#: includes/class-camille-ps-admin.php:1230
 msgid "Colour"
 msgstr "Color"
 
-#: includes/class-camille-ps-admin.php:1230
+#: includes/class-camille-ps-admin.php:1231
 msgid "Product pages"
 msgstr "Páginas de producto"
 
-#: includes/class-camille-ps-admin.php:1230
+#: includes/class-camille-ps-admin.php:1231
 msgid "Show the \"Try with Camille\" button below \"Add to cart\""
 msgstr "Mostrar el botón «Probar con Camille» debajo de «Añadir al carrito»"
 
-#: includes/class-camille-ps-admin.php:1233
+#: includes/class-camille-ps-admin.php:1234
 msgid "You can also place a Camille button anywhere with the <strong>Camille button</strong> block or the shortcode <code>[camille_button]</code>."
-msgstr "También puede colocar un botón de Camille donde quiera con el bloque <strong>Botón de Camille</strong> o el shortcode <code>[camille_button]</code>."
+msgstr "También puedes colocar un botón de Camille donde quieras con el bloque <strong>Botón de Camille</strong> o el shortcode <code>[camille_button]</code>."
 
-#: includes/class-camille-ps-admin.php:1252
+#: includes/class-camille-ps-admin.php:1253
 msgid "Company name"
 msgstr "Razón social"
 
-#: includes/class-camille-ps-admin.php:1253
+#: includes/class-camille-ps-admin.php:1254
 msgid "VAT number"
 msgstr "NIF-IVA"
 
-#: includes/class-camille-ps-admin.php:1254
+#: includes/class-camille-ps-admin.php:1255
 msgid "Tax code"
 msgstr "Código fiscal"
 
-#: includes/class-camille-ps-admin.php:1254
+#: includes/class-camille-ps-admin.php:1255
 msgid "Italy only, if different from the VAT number."
 msgstr "Solo para Italia, si es distinto del NIF-IVA."
 
-#: includes/class-camille-ps-admin.php:1255
+#: includes/class-camille-ps-admin.php:1256
 msgid "Address"
 msgstr "Dirección"
 
-#: includes/class-camille-ps-admin.php:1256
+#: includes/class-camille-ps-admin.php:1257
 msgid "Postcode"
 msgstr "Código postal"
 
-#: includes/class-camille-ps-admin.php:1257
+#: includes/class-camille-ps-admin.php:1258
 msgid "City"
 msgstr "Ciudad"
 
-#: includes/class-camille-ps-admin.php:1258
+#: includes/class-camille-ps-admin.php:1259
 msgid "Province"
 msgstr "Provincia"
 
-#: includes/class-camille-ps-admin.php:1258
+#: includes/class-camille-ps-admin.php:1259
 msgid "For Italy, the two letters (for example BS)."
 msgstr "Para Italia, las dos letras (por ejemplo BS)."
 
-#: includes/class-camille-ps-admin.php:1259
+#: includes/class-camille-ps-admin.php:1260
 msgid "Country"
 msgstr "País"
 
-#: includes/class-camille-ps-admin.php:1260
+#: includes/class-camille-ps-admin.php:1261
 msgid "SDI recipient code"
 msgstr "Código de destinatario SDI"
 
-#: includes/class-camille-ps-admin.php:1260
-msgid "Italy only: 7 characters. If you do not have one, enter your PEC below."
-msgstr "Solo para Italia: 7 caracteres. Si no lo tiene, introduzca su PEC más abajo."
-
 #: includes/class-camille-ps-admin.php:1261
+msgid "Italy only: 7 characters. If you do not have one, enter your PEC below."
+msgstr "Solo para Italia: 7 caracteres. Si no lo tienes, introduce tu PEC más abajo."
+
+#: includes/class-camille-ps-admin.php:1262
 msgid "PEC"
 msgstr "PEC"
 
-#: includes/class-camille-ps-admin.php:1261
+#: includes/class-camille-ps-admin.php:1262
 msgid "Italy only: certified email address for electronic invoices."
 msgstr "Solo para Italia: dirección de correo certificado para las facturas electrónicas."
 
-#: includes/class-camille-ps-admin.php:1262
+#: includes/class-camille-ps-admin.php:1263
 msgid "Email for invoices"
 msgstr "Correo para las facturas"
 
-#: includes/class-camille-ps-admin.php:1275
+#: includes/class-camille-ps-admin.php:1276
 msgid "Enter the SDI code or the PEC."
-msgstr "Introduzca el código SDI o la PEC."
+msgstr "Introduce el código SDI o la PEC."
 
-#: includes/class-camille-ps-admin.php:1277
+#: includes/class-camille-ps-admin.php:1278
 msgid "Required."
 msgstr "Obligatorio."
 
-#: includes/class-camille-ps-admin.php:1277
+#: includes/class-camille-ps-admin.php:1278
 msgid "Not valid, please check it."
-msgstr "No válido, revíselo."
+msgstr "No válido, revísalo."
 
-#: includes/class-camille-ps-admin.php:1316
+#: includes/class-camille-ps-admin.php:1317
 msgid "Credits are invoiced by Instamark S.r.l., the company behind Camille. We use these details only for the invoices of your purchases."
-msgstr "Los créditos los factura Instamark S.r.l., la empresa que desarrolla Camille. Usamos estos datos solo para las facturas de sus compras."
+msgstr "Los créditos los factura Instamark S.r.l., la empresa que desarrolla Camille. Usamos estos datos solo para las facturas de tus compras."
 
-#: includes/class-camille-ps-admin.php:1345
+#: includes/class-camille-ps-admin.php:1346
 msgid "Save billing details"
 msgstr "Guardar los datos de facturación"
 
-#: includes/class-camille-ps-admin.php:1356
+#: includes/class-camille-ps-admin.php:1357
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: includes/class-camille-ps-admin.php:1357
+#: includes/class-camille-ps-admin.php:1358
 msgid "Camille disappears from your shop. Your Pinci account, credits and catalog stay: connect again with the same email to pick up where you left off."
-msgstr "Camille desaparece de su tienda. Su cuenta de Pinci, sus créditos y su catálogo se conservan: vuelva a conectarse con el mismo correo para continuar donde lo dejó."
+msgstr "Camille desaparece de tu tienda. Tu cuenta de Pinci, tus créditos y tu catálogo se conservan: vuelve a conectarte con el mismo correo para continuar donde lo dejaste."
 
-#: includes/class-camille-ps-admin.php:1362
+#: includes/class-camille-ps-admin.php:1363
 msgid "Disconnect the shop"
 msgstr "Desconectar la tienda"
 
-#: includes/class-camille-ps-admin.php:1366
+#: includes/class-camille-ps-admin.php:1367
 msgid "Disconnect the shop from Camille?"
 msgstr "¿Desconectar la tienda de Camille?"
 
@@ -1132,16 +1140,16 @@ msgstr "Mostrar a Camille"
 #, php-format
 msgid "%d product hidden from Camille. Sync the catalog to update her."
 msgid_plural "%d products hidden from Camille. Sync the catalog to update her."
-msgstr[0] "%d producto oculto a Camille. Sincronice el catálogo para actualizarla."
-msgstr[1] "%d productos ocultos a Camille. Sincronice el catálogo para actualizarla."
+msgstr[0] "%d producto oculto a Camille. Sincroniza el catálogo para actualizarla."
+msgstr[1] "%d productos ocultos a Camille. Sincroniza el catálogo para actualizarla."
 
 #. translators: %d: number of products.
 #: includes/class-camille-ps-catalog-filter.php:360
 #, php-format
 msgid "%d product shown to Camille again. Sync the catalog to update her."
 msgid_plural "%d products shown to Camille again. Sync the catalog to update her."
-msgstr[0] "%d producto vuelve a ser visible para Camille. Sincronice el catálogo para actualizarla."
-msgstr[1] "%d productos vuelven a ser visibles para Camille. Sincronice el catálogo para actualizarla."
+msgstr[0] "%d producto vuelve a ser visible para Camille. Sincroniza el catálogo para actualizarla."
+msgstr[1] "%d productos vuelven a ser visibles para Camille. Sincroniza el catálogo para actualizarla."
 
 #. translators: %d: number of products.
 #: includes/class-camille-ps-catalog-filter.php:361
@@ -1158,23 +1166,23 @@ msgstr "La tienda no está conectada a Camille."
 
 #: includes/class-camille-ps-api.php:215
 msgid "Camille could not be reached. Please try again in a few minutes."
-msgstr "No se ha podido contactar con Camille. Inténtelo de nuevo en unos minutos."
+msgstr "No se ha podido contactar con Camille. Inténtalo de nuevo en unos minutos."
 
 #: includes/class-camille-ps-api.php:218
 msgid "Camille is temporarily paused. Your shop keeps working normally."
-msgstr "Camille está pausada temporalmente. Su tienda sigue funcionando con normalidad."
+msgstr "Camille está pausada temporalmente. Tu tienda sigue funcionando con normalidad."
 
 #: includes/class-camille-ps-api.php:221
 msgid "Camille is not available right now. Please try again in a few minutes."
-msgstr "Camille no está disponible en este momento. Inténtelo de nuevo en unos minutos."
+msgstr "Camille no está disponible en este momento. Inténtalo de nuevo en unos minutos."
 
 #: includes/class-camille-ps-api.php:224
 msgid "Camille did not recognise this shop. Disconnect and connect it again."
-msgstr "Camille no ha reconocido esta tienda. Desconéctela y vuelva a conectarla."
+msgstr "Camille no ha reconocido esta tienda. Desconéctala y vuelve a conectarla."
 
 #: includes/class-camille-ps-api.php:227
 msgid "Too many attempts. Please wait a few minutes and try again."
-msgstr "Demasiados intentos. Espere unos minutos e inténtelo de nuevo."
+msgstr "Demasiados intentos. Espera unos minutos e inténtalo de nuevo."
 
 #. translators: %d: HTTP status code.
 #: includes/class-camille-ps-api.php:230
@@ -1184,7 +1192,7 @@ msgstr "Respuesta inesperada de Camille (código %d)."
 
 #: includes/class-camille-ps-privacy.php:32
 msgid "Camille is provided by Pinci (Instamark S.r.l.). The text below is a suggestion: adapt it to your shop."
-msgstr "Camille la ofrece Pinci (Instamark S.r.l.). El texto de abajo es una sugerencia: adáptelo a su tienda."
+msgstr "Camille la ofrece Pinci (Instamark S.r.l.). El texto de abajo es una sugerencia: adáptalo a tu tienda."
 
 #: includes/class-camille-ps-privacy.php:33
 msgid "Suggested text:"
@@ -1192,7 +1200,7 @@ msgstr "Texto sugerido:"
 
 #: includes/class-camille-ps-privacy.php:34
 msgid "This shop offers Camille, an AI personal shopper provided by Pinci (Instamark S.r.l., Italy). When you open the chat, it is loaded from pinci.ai and what you write, the photos you choose to upload for the virtual try-on and the products you look at are processed by Pinci to answer you and to show the products on a virtual model. The chat does not receive your name, email or orders from this shop. If you are logged in to your account, it receives only the number of the account, so that the usage limits of this shop follow you on every device."
-msgstr "Esta tienda ofrece Camille, una personal shopper con IA proporcionada por Pinci (Instamark S.r.l., Italia). Cuando abre el chat, se carga desde pinci.ai; lo que escribe, las fotos que decide subir para la prueba virtual y los productos que mira los trata Pinci para responderle y mostrar los productos en un modelo virtual. El chat no recibe de esta tienda su nombre, su correo ni sus pedidos. Si ha iniciado sesión en su cuenta, recibe solo el número de la cuenta, para que los límites de uso de esta tienda le acompañen en todos sus dispositivos."
+msgstr "Esta tienda ofrece Camille, una personal shopper con IA proporcionada por Pinci (Instamark S.r.l., Italia). Cuando abres el chat, se carga desde pinci.ai; lo que escribes, las fotos que decides subir para la prueba virtual y los productos que miras los trata Pinci para responderte y mostrar los productos en un modelo virtual. El chat no recibe de esta tienda tu nombre, tu correo ni tus pedidos. Si has iniciado sesión en tu cuenta, recibe solo el número de la cuenta, para que los límites de uso de esta tienda te acompañen en todos tus dispositivos."
 
 #. translators: %s: link to the Pinci privacy policy.
 #: includes/class-camille-ps-privacy.php:38
@@ -1248,7 +1256,7 @@ msgstr "Texto"
 
 #: blocks/camille-button/index.js:27
 msgid "Leave empty for the default text in the language of the page."
-msgstr "Déjelo vacío para usar el texto predeterminado en el idioma de la página."
+msgstr "Déjalo vacío para usar el texto predeterminado en el idioma de la página."
 
 #: blocks/camille-button/index.js:34
 msgid "What it opens"
@@ -1270,7 +1278,7 @@ msgstr "Camille – AI Personal Shopper para WooCommerce"
 #. Description of the plugin
 #: camille-personal-shopper.php
 msgid "Camille is an AI personal shopper for fashion stores: she advises your customers in chat, suggests outfits from your catalog and shows them on a virtual model."
-msgstr "Camille es una personal shopper con IA para tiendas de moda: aconseja a sus clientes en el chat, propone outfits de su catálogo y los muestra en un modelo virtual."
+msgstr "Camille es una personal shopper con IA para tiendas de moda: aconseja a tus clientes en el chat, propone outfits de tu catálogo y los muestra en un modelo virtual."
 
 #. Author of the plugin
 #: camille-personal-shopper.php

@@ -18,6 +18,7 @@ class Camille_PS_Plugin {
 	 * Runs on plugins_loaded.
 	 */
 	public static function boot() {
+		Camille_PS_Language::init();
 		add_action( 'init', array( __CLASS__, 'load_textdomain' ) );
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			add_action( 'admin_notices', array( __CLASS__, 'missing_woocommerce_notice' ) );
@@ -41,6 +42,7 @@ class Camille_PS_Plugin {
 	 */
 	public static function load_textdomain() {
 		load_plugin_textdomain( 'camille-personal-shopper', false, dirname( plugin_basename( CAMILLE_PS_FILE ) ) . '/languages' );
+		Camille_PS_Language::reload();
 	}
 
 	/**

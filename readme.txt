@@ -4,7 +4,7 @@ Tags: personal shopper, virtual try-on, fashion, chatbot, ai
 Requires at least: 6.2
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 0.4.0
+Stable tag: 0.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,10 @@ No. Credits and catalog stay on your Pinci account. Connect again with the same 
 Fonts shipped with the plugin: Manrope (The Manrope Project Authors) and Cormorant Garamond (The Cormorant Project Authors), both under the SIL Open Font License 1.1, see assets/fonts.
 
 == Changelog ==
+
+= 0.4.1 =
+* Language button in the header of WooCommerce > Camille: each shop manager can show the plugin in Italian, English, French, German or Spanish, whatever the language of WordPress.
+* The plugin texts in Italian, German and Spanish now use the informal form, as the chat does.
 
 = 0.4.0 =
 * New Conversations and Virtual try-ons tabs in WooCommerce > Camille: the chats of your customers with the photos and try-ons, linked to the WordPress customer who made them.
