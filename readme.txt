@@ -1,6 +1,6 @@
-=== Camille – AI Personal Shopper for WooCommerce ===
+=== Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce ===
 Contributors: instamark
-Tags: personal shopper, virtual try-on, fashion, chatbot, ai
+Tags: ai shopping assistant, virtual try-on, ai chatbot, fashion, product recommendations
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -8,7 +8,7 @@ Stable tag: 0.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-An AI personal shopper for fashion stores: Camille advises your customers, builds outfits from your catalog and shows them on a virtual model.
+An AI personal shopper for fashion stores. Camille advises your customers, builds outfits from your catalog and shows them with virtual try-on.
 
 == Description ==
 

@@ -352,11 +352,11 @@ T = {
  'Camille con este producto (en páginas de producto)'),
 'The chat with Camille': ('La chat con Camille', 'La discussion avec Camille', 'Den Chat mit Camille', 'El chat con Camille'),
 # Kept in English: WordPress.org accepts the WooCommerce trademark only as "for WooCommerce".
-'Camille – AI Personal Shopper for WooCommerce': (
- 'Camille – AI Personal Shopper for WooCommerce',
- 'Camille – AI Personal Shopper for WooCommerce',
- 'Camille – AI Personal Shopper for WooCommerce',
- 'Camille – AI Personal Shopper for WooCommerce'),
+'Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce': (
+ 'Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce',
+ 'Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce',
+ 'Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce',
+ 'Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce'),
 'Camille is an AI personal shopper for fashion stores: she advises your customers in chat, suggests outfits from your catalog and shows them on a virtual model.': (
  'Camille è una personal shopper AI per negozi di moda. Consiglia i clienti in chat, propone outfit dal catalogo e li mostra su un modello virtuale.',
  'Camille est une personal shopper IA pour les boutiques de mode : elle conseille vos clients en discussion, propose des tenues issues de votre catalogue et les montre sur un modèle virtuel.',

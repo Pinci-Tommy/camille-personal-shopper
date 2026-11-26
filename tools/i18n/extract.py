@@ -53,7 +53,7 @@ for dirpath, _, files in os.walk(root):
             for kw in data.get('keywords', []):
                 add(kw, None, rel, 'block keyword', False)
 # plugin header
-add('Camille – AI Personal Shopper for WooCommerce', None, 'camille-personal-shopper.php', 'Plugin Name of the plugin', False)
+add('Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce', None, 'camille-personal-shopper.php', 'Plugin Name of the plugin', False)
 add('Camille is an AI personal shopper for fashion stores: she advises your customers in chat, suggests outfits from your catalog and shows them on a virtual model.', None, 'camille-personal-shopper.php', 'Description of the plugin', False)
 add('Instamark S.r.l.', None, 'camille-personal-shopper.php', 'Author of the plugin', False)
 

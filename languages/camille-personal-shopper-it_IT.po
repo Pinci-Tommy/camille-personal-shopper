@@ -1272,8 +1272,8 @@ msgstr "La chat con Camille"
 
 #. Plugin Name of the plugin
 #: camille-personal-shopper.php
-msgid "Camille – AI Personal Shopper for WooCommerce"
-msgstr "Camille – AI Personal Shopper for WooCommerce"
+msgid "Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce"
+msgstr "Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce"
 
 #. Description of the plugin
 #: camille-personal-shopper.php

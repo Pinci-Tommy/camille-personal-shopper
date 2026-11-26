@@ -1272,7 +1272,7 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: camille-personal-shopper.php
-msgid "Camille – AI Personal Shopper for WooCommerce"
+msgid "Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce"
 msgstr ""
 
 #. Description of the plugin
