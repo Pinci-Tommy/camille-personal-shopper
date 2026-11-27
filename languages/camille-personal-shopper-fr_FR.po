@@ -566,8 +566,8 @@ msgid "Conversations"
 msgstr "Conversations"
 
 #: includes/class-camille-ps-admin.php:776
-msgid "AI personal shopper"
-msgstr "Personal shopper IA"
+msgid "AI fashion shopping assistant"
+msgstr "Assistante d’achat IA pour la mode"
 
 #: includes/class-camille-ps-admin.php:779
 msgid "Paused"
@@ -1199,8 +1199,8 @@ msgid "Suggested text:"
 msgstr "Texte suggéré :"
 
 #: includes/class-camille-ps-privacy.php:34
-msgid "This shop offers Camille, an AI personal shopper provided by Pinci (Instamark S.r.l., Italy). When you open the chat, it is loaded from pinci.ai and what you write, the photos you choose to upload for the virtual try-on and the products you look at are processed by Pinci to answer you and to show the products on a virtual model. The chat does not receive your name, email or orders from this shop. If you are logged in to your account, it receives only the number of the account, so that the usage limits of this shop follow you on every device."
-msgstr "Cette boutique propose Camille, une personal shopper IA fournie par Pinci (Instamark S.r.l., Italie). Lorsque vous ouvrez la discussion, elle est chargée depuis pinci.ai ; ce que vous écrivez, les photos que vous choisissez d’envoyer pour l’essayage virtuel et les produits que vous consultez sont traités par Pinci pour vous répondre et montrer les produits sur un modèle virtuel. La discussion ne reçoit de cette boutique ni votre nom, ni votre adresse e-mail, ni vos commandes. Si vous êtes connecté à votre compte, elle reçoit uniquement le numéro du compte, afin que les limites d’utilisation de cette boutique vous suivent sur tous vos appareils."
+msgid "This shop offers Camille, an AI personal shopper provided by Pinci (Instamark S.r.l., Italy). When you open the chat, it is loaded from pinci.ai and what you write, the photos you choose to upload for the virtual try-on and the products you look at are processed by Pinci to answer you and to show the products on your photo. The chat does not receive your name, email or orders from this shop. If you are logged in to your account, it receives only the number of the account, so that the usage limits of this shop follow you on every device."
+msgstr "Cette boutique propose Camille, une personal shopper IA fournie par Pinci (Instamark S.r.l., Italie). Lorsque vous ouvrez la discussion, elle est chargée depuis pinci.ai ; ce que vous écrivez, les photos que vous choisissez d’envoyer pour l’essayage virtuel et les produits que vous consultez sont traités par Pinci pour vous répondre et montrer les produits sur votre photo. La discussion ne reçoit de cette boutique ni votre nom, ni votre adresse e-mail, ni vos commandes. Si vous êtes connecté à votre compte, elle reçoit uniquement le numéro du compte, afin que les limites d’utilisation de cette boutique vous suivent sur tous vos appareils."
 
 #. translators: %s: link to the Pinci privacy policy.
 #: includes/class-camille-ps-privacy.php:38
@@ -1277,8 +1277,8 @@ msgstr "Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommer
 
 #. Description of the plugin
 #: camille-personal-shopper.php
-msgid "Camille is an AI personal shopper for fashion stores: she advises your customers in chat, suggests outfits from your catalog and shows them on a virtual model."
-msgstr "Camille est une personal shopper IA pour les boutiques de mode : elle conseille vos clients en discussion, propose des tenues issues de votre catalogue et les montre sur un modèle virtuel."
+msgid "Camille is an AI fashion shopping assistant. She advises your customers in chat, suggests outfits from your catalog and shows them on the customer's own photo."
+msgstr "Camille est une assistante d’achat IA pour la mode. Elle conseille vos clients en discussion, propose des tenues issues de votre catalogue et les montre sur la photo du client."
 
 #. Author of the plugin
 #: camille-personal-shopper.php

@@ -566,7 +566,7 @@ msgid "Conversations"
 msgstr ""
 
 #: includes/class-camille-ps-admin.php:776
-msgid "AI personal shopper"
+msgid "AI fashion shopping assistant"
 msgstr ""
 
 #: includes/class-camille-ps-admin.php:779
@@ -1199,7 +1199,7 @@ msgid "Suggested text:"
 msgstr ""
 
 #: includes/class-camille-ps-privacy.php:34
-msgid "This shop offers Camille, an AI personal shopper provided by Pinci (Instamark S.r.l., Italy). When you open the chat, it is loaded from pinci.ai and what you write, the photos you choose to upload for the virtual try-on and the products you look at are processed by Pinci to answer you and to show the products on a virtual model. The chat does not receive your name, email or orders from this shop. If you are logged in to your account, it receives only the number of the account, so that the usage limits of this shop follow you on every device."
+msgid "This shop offers Camille, an AI personal shopper provided by Pinci (Instamark S.r.l., Italy). When you open the chat, it is loaded from pinci.ai and what you write, the photos you choose to upload for the virtual try-on and the products you look at are processed by Pinci to answer you and to show the products on your photo. The chat does not receive your name, email or orders from this shop. If you are logged in to your account, it receives only the number of the account, so that the usage limits of this shop follow you on every device."
 msgstr ""
 
 #. translators: %s: link to the Pinci privacy policy.
@@ -1277,7 +1277,7 @@ msgstr ""
 
 #. Description of the plugin
 #: camille-personal-shopper.php
-msgid "Camille is an AI personal shopper for fashion stores: she advises your customers in chat, suggests outfits from your catalog and shows them on a virtual model."
+msgid "Camille is an AI fashion shopping assistant. She advises your customers in chat, suggests outfits from your catalog and shows them on the customer's own photo."
 msgstr ""
 
 #. Author of the plugin

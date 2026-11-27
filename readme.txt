@@ -1,5 +1,5 @@
 === Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce ===
-Contributors: instamark
+Contributors: instamarksrl
 Tags: ai shopping assistant, virtual try-on, ai chatbot, fashion, product recommendations
 Requires at least: 6.2
 Tested up to: 7.1
@@ -8,19 +8,38 @@ Stable tag: 0.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-An AI personal shopper for fashion stores. Camille advises your customers, builds outfits from your catalog and shows them with virtual try-on.
+An AI fashion shopping assistant. Camille builds outfits from your catalog and shows them on your customer's own photo with virtual try-on.
 
 == Description ==
 
-Camille is a personal shopper for your WooCommerce fashion store. Your customers ask her for advice in a chat window, as they would ask a sales assistant: what to wear for an occasion, what goes with a product, which cuts and colours flatter them. Camille answers with products from your catalog only, and can show them on a virtual model.
+Camille is an AI fashion shopping assistant for your WooCommerce store. She lives in a chat window on your shop and helps your customers the way a good sales assistant does in a boutique. She asks what they are looking for, suggests products from your catalog, puts together complete outfits and, with virtual try-on, shows how they look on the customer's own photo.
 
-* A chat button on every page of your shop, and a "Try with Camille" button on product pages.
-* You choose who sees Camille: nobody, only you (shop administrators), only logged-in customers, or every visitor.
-* Your catalog is sent to Camille in the background, 50 products at a time, without slowing your shop down. Each colour of a product becomes a separate item, with its own photos and price.
+Camille only suggests what you sell. She works from your own catalog, follows your prices and stock, and never recommends sold-out products.
+
+= For your customers =
+
+* Advice in a chat. What to wear for an occasion, what goes with a product, which cuts and colours flatter them.
+* Complete outfits built from your catalog, with a link to every product.
+* Virtual try-on. The customer sends a photo of themselves and sees a single garment or a whole outfit on it.
+* A "Try with Camille" button on product pages, to start from the product they are looking at.
+
+= For you =
+
+* Choose who sees Camille: nobody, only you (shop administrators), chosen customers, logged-in customers or every visitor. Start by trying her yourself.
+* Choose which products she suggests, by category, price range or single product.
+* Give her a name, a gender and a face, from a gallery of portraits or with your own photo.
+* Set usage limits for visitors and customers, so credits go to real shoppers.
+* Read the conversations and try-ons of your customers in WooCommerce > Camille and on each customer profile.
 * A "Camille button" block and a `[camille_button]` shortcode to place a button anywhere.
 * Admin screens in English, Italian, French, German and Spanish.
 
-Camille works with credits. A new shop gets 300 free credits; more credits are bought in packs on pinci.ai. There is no subscription.
+= Light on your shop =
+
+The chat button is a small script loaded after the rest of the page, and the chat loads only when a visitor opens it. Your catalog reaches Camille in the background, 50 products at a time. Changes arrive within minutes, and a full sync runs every night. Each colour of a product becomes a separate item, with its own photos and price.
+
+= Pricing =
+
+Camille works with credits. A new shop gets 300 free credits, and more credits are bought in packs on pinci.ai. There is no subscription.
 
 = External service =
 
@@ -74,6 +93,16 @@ Yes. With "All visitors" cached pages include the chat button. With "Only admini
 = I disconnected the shop. Are my credits lost? =
 
 No. Credits and catalog stay on your Pinci account. Connect again with the same email to pick up where you left off.
+
+== Screenshots ==
+
+1. Camille in the chat on a product page, suggesting an outfit from the shop's catalog.
+2. A virtual try-on. The customer sees a whole outfit on their own photo (the person shown here is an AI-generated image).
+3. Camille on a phone.
+4. Status, credits and catalog sync in WooCommerce > Camille.
+5. Choose the name, gender and portrait of your personal shopper.
+6. Choose who sees Camille and set usage limits.
+7. The chats and try-ons of your customers.
 
 == Credits ==
 

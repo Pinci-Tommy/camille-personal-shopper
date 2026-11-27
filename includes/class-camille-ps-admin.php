@@ -773,7 +773,7 @@ class Camille_PS_Admin {
 			: CAMILLE_PS_URL . 'assets/images/camille-avatar.jpg';
 		echo '<header class="camille-ps-header">';
 		echo '<div class="camille-ps-brand"><img src="' . esc_url( $photo ) . '" alt="" width="48" height="48">';
-		echo '<h1><span class="camille-ps-wordmark">Camille</span><span class="camille-ps-kicker">' . esc_html__( 'AI personal shopper', 'camille-personal-shopper' ) . '</span></h1></div>';
+		echo '<h1><span class="camille-ps-wordmark">Camille</span><span class="camille-ps-kicker">' . esc_html__( 'AI fashion shopping assistant', 'camille-personal-shopper' ) . '</span></h1></div>';
 		if ( is_array( $status ) ) {
 			if ( ! empty( $status['isDisabled'] ) ) {
 				$pill = array( 'is-paused', __( 'Paused', 'camille-personal-shopper' ) );

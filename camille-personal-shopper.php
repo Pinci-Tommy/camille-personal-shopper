@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce
  * Plugin URI:        https://camille-ai.com
- * Description:       Camille is an AI personal shopper for fashion stores: she advises your customers in chat, suggests outfits from your catalog and shows them on a virtual model.
+ * Description:       Camille is an AI fashion shopping assistant. She advises your customers in chat, suggests outfits from your catalog and shows them on the customer's own photo.
  * Version:           0.5.1
  * Requires at least: 6.2
  * Requires PHP:      7.4

@@ -31,7 +31,7 @@ class Camille_PS_Privacy {
 		}
 		$text  = '<p class="privacy-policy-tutorial">' . esc_html__( 'Camille is provided by Pinci (Instamark S.r.l.). The text below is a suggestion: adapt it to your shop.', 'camille-personal-shopper' ) . '</p>';
 		$text .= '<p><strong class="privacy-policy-tutorial">' . esc_html__( 'Suggested text:', 'camille-personal-shopper' ) . ' </strong>';
-		$text .= esc_html__( 'This shop offers Camille, an AI personal shopper provided by Pinci (Instamark S.r.l., Italy). When you open the chat, it is loaded from pinci.ai and what you write, the photos you choose to upload for the virtual try-on and the products you look at are processed by Pinci to answer you and to show the products on a virtual model. The chat does not receive your name, email or orders from this shop. If you are logged in to your account, it receives only the number of the account, so that the usage limits of this shop follow you on every device.', 'camille-personal-shopper' ) . '</p>';
+		$text .= esc_html__( 'This shop offers Camille, an AI personal shopper provided by Pinci (Instamark S.r.l., Italy). When you open the chat, it is loaded from pinci.ai and what you write, the photos you choose to upload for the virtual try-on and the products you look at are processed by Pinci to answer you and to show the products on your photo. The chat does not receive your name, email or orders from this shop. If you are logged in to your account, it receives only the number of the account, so that the usage limits of this shop follow you on every device.', 'camille-personal-shopper' ) . '</p>';
 		$text .= '<p>' . wp_kses(
 			sprintf(
 				/* translators: %s: link to the Pinci privacy policy. */

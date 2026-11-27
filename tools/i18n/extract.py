@@ -54,7 +54,7 @@ for dirpath, _, files in os.walk(root):
                 add(kw, None, rel, 'block keyword', False)
 # plugin header
 add('Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce', None, 'camille-personal-shopper.php', 'Plugin Name of the plugin', False)
-add('Camille is an AI personal shopper for fashion stores: she advises your customers in chat, suggests outfits from your catalog and shows them on a virtual model.', None, 'camille-personal-shopper.php', 'Description of the plugin', False)
+add('Camille is an AI fashion shopping assistant. She advises your customers in chat, suggests outfits from your catalog and shows them on the customer\'s own photo.', None, 'camille-personal-shopper.php', 'Description of the plugin', False)
 add('Instamark S.r.l.', None, 'camille-personal-shopper.php', 'Author of the plugin', False)
 
 out = [{'msgid': k[0], 'plural': k[1], **{kk: (sorted(v) if isinstance(v, set) else v) for kk, v in e.items()}} for k, e in entries.items()]
