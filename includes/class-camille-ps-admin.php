@@ -176,6 +176,19 @@ class Camille_PS_Admin {
 		foreach ( $progress['rejected'] as $key => $item ) {
 			$progress['rejected'][ $key ]['reasonText'] = self::reason_text( $item['reason'] );
 		}
+		$photos                    = Camille_PS_Photo_Copies::progress();
+		$progress['photosPending'] = null !== $photos;
+		$progress['photosText']    = '';
+		if ( $photos && $photos['isListing'] ) {
+			$progress['photosText'] = __( 'I am getting your product photos ready for the virtual try-ons…', 'camille-personal-shopper' );
+		} elseif ( $photos ) {
+			$progress['photosText'] = sprintf(
+				/* translators: 1: products whose photos are ready, 2: products with photos to prepare. */
+				__( 'I have the photos of %1$s products out of %2$s. I study each product as soon as its photos are ready, and once I have them all, virtual try-ons work on your whole catalog.', 'camille-personal-shopper' ),
+				number_format_i18n( $photos['done'] ),
+				number_format_i18n( $photos['total'] )
+			);
+		}
 		return $progress;
 	}
 

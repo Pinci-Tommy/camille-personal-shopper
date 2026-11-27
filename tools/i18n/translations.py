@@ -838,4 +838,14 @@ T = {
 'Camille sections': ('Sezioni di Camille', 'Sections de Camille', 'Bereiche von Camille', 'Secciones de Camille'),
 'Plugin language': ('Lingua del plugin', 'Langue de l’extension', 'Sprache des Plugins', 'Idioma del plugin'),
 'Same as WordPress': ('Come WordPress', 'Comme WordPress', 'Wie WordPress', 'Igual que WordPress'),
+"I am getting your product photos ready for the virtual try-ons…": (
+ 'Preparo le foto dei tuoi prodotti per le prove virtuali…',
+ 'Je prépare les photos de vos produits pour les essayages virtuels…',
+ 'Ich bereite die Fotos deiner Produkte für die virtuellen Anproben vor…',
+ 'Estoy preparando las fotos de tus productos para las pruebas virtuales…'),
+"I have the photos of %1$s products out of %2$s. I study each product as soon as its photos are ready, and once I have them all, virtual try-ons work on your whole catalog.": (
+ 'Ho le foto di %1$s prodotti su %2$s. Studio ogni prodotto appena le sue foto sono pronte e, quando le avrò tutte, le prove virtuali funzioneranno su tutto il catalogo.',
+ 'J’ai les photos de %1$s produits sur %2$s. J’étudie chaque produit dès que ses photos sont prêtes et, quand je les aurai toutes, les essayages virtuels fonctionneront sur tout votre catalogue.',
+ 'Ich habe die Fotos von %1$s von %2$s Produkten. Ich studiere jedes Produkt, sobald seine Fotos bereit sind, und wenn ich alle habe, funktionieren die virtuellen Anproben in deinem ganzen Katalog.',
+ 'Tengo las fotos de %1$s de %2$s productos. Estudio cada producto en cuanto sus fotos están listas y, cuando las tenga todas, las pruebas virtuales funcionarán en todo tu catálogo.'),
 }

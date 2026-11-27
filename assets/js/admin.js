@@ -240,6 +240,12 @@
   function renderExtra(progress) {
     var box = el('.camille-ps-progress-extra');
     box.innerHTML = '';
+    if (progress.photosText && progress.stage !== 'failed') {
+      var photos = document.createElement('p');
+      photos.className = 'camille-ps-badge is-info';
+      photos.textContent = progress.photosText;
+      box.appendChild(photos);
+    }
     if (progress.stage === 'failed' && progress.messageText) {
       var error = document.createElement('p');
       error.className = 'camille-ps-badge is-error';
@@ -364,9 +370,13 @@
   }
 
   function schedule(progress) {
-    if (ACTIVE[progress.stage] !== undefined && !document.hidden) {
+    var isActive = ACTIVE[progress.stage] !== undefined;
+    if (!isActive && progress.photosPending && !document.hidden) {
+      /* The photos are copied in the background: a slower look, until the copy is over. */
+      setTimeout(poll, data.pollMs * 4);
+    } else if (isActive && !document.hidden) {
       setTimeout(poll, data.pollMs);
-    } else if (ACTIVE[progress.stage] !== undefined) {
+    } else if (isActive || progress.photosPending) {
       document.addEventListener('visibilitychange', function resume() {
         if (!document.hidden) {
           document.removeEventListener('visibilitychange', resume);

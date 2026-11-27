@@ -33,8 +33,6 @@ class Camille_PS_Live_Sync {
 	const MAX_QUEUE = 500;
 
 	const MAX_RETRIES = 5;
-	/** Seconds a live update spends copying new product photos. */
-	const PHOTO_SECONDS = 15;
 
 	/**
 	 * Product ids changed during this request, saved once at the end of it.
@@ -194,6 +192,15 @@ class Camille_PS_Live_Sync {
 	}
 
 	/**
+	 * How many products wait for a live update.
+	 *
+	 * @return int
+	 */
+	public static function backlog() {
+		return count( self::queue()['ids'] );
+	}
+
+	/**
 	 * The products waiting to be sent.
 	 *
 	 * @return array{ids:array<int,true>,full_sync:bool}
@@ -254,10 +261,10 @@ class Camille_PS_Live_Sync {
 		if ( ! $queue['ids'] ) {
 			return;
 		}
-		$ids       = array_slice( array_keys( $queue['ids'] ), 0, self::PER_UPDATE );
-		$offered   = array();
-		$image_ids = array();
-		$removed   = array();
+		$ids      = array_slice( array_keys( $queue['ids'] ), 0, self::PER_UPDATE );
+		$products = array();
+		$removed  = array();
+		$waiting  = array();
 		foreach ( $ids as $id ) {
 			$product = wc_get_product( $id );
 			if ( $product instanceof WC_Product && $product->get_parent_id() ) {
@@ -268,19 +275,14 @@ class Camille_PS_Live_Sync {
 				( $product->is_type( 'simple' ) || $product->is_type( 'variable' ) ) &&
 				Camille_PS_Product_Export::is_exportable( $product )
 			) {
-				$offered[] = $product;
-				$image_ids = array_merge( $image_ids, Camille_PS_Product_Export::image_ids( $product ) );
+				$payload    = Camille_PS_Product_Export::build( $product );
+				$products[] = $payload;
+				if ( ! empty( $payload['photosPending'] ) ) {
+					$waiting[] = (int) $product->get_id();
+				}
 			} else {
 				$removed[] = $id;
 			}
-		}
-		if ( $image_ids ) {
-			// New or replaced photos are copied first; any left over keep the site address until the nightly sync.
-			Camille_PS_Photo_Copies::ensure( $image_ids, self::PHOTO_SECONDS );
-		}
-		$products = array();
-		foreach ( $offered as $product ) {
-			$products[] = Camille_PS_Product_Export::build( $product );
 		}
 		$result = Camille_PS_API::signed(
 			'POST',
@@ -306,6 +308,11 @@ class Camille_PS_Live_Sync {
 				return;
 			}
 			// Still unreachable: the nightly sync brings these products.
+		}
+
+		if ( $waiting && 200 === $code ) {
+			// New or replaced photos: copied in the background, then these products are sent again.
+			Camille_PS_Photo_Copies::add_products( $waiting );
 		}
 
 		// Sent, refused or given up: these leave the queue. Changes made meanwhile stay in it.

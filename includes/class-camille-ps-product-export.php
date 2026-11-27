@@ -95,6 +95,8 @@ class Camille_PS_Product_Export {
 			'isInStock'        => $product->is_in_stock(),
 			'imageUrls'        => self::image_urls( array_merge( array( $product->get_image_id() ), $product->get_gallery_image_ids() ) ),
 			'variations'       => $product->is_type( 'variable' ) ? self::variations( $product ) : array(),
+			// Camille studies the product once the copies of its photos arrive.
+			'photosPending'    => Camille_PS_Photo_Copies::has_pending( $product ),
 		);
 		/**
 		 * Filters the data sent to Camille for a product.

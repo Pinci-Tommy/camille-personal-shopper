@@ -39,15 +39,123 @@ class Camille_PS_API {
 		if ( ! $connection ) {
 			return new WP_Error( 'camille_ps_not_connected', __( 'The shop is not connected to Camille.', 'camille-personal-shopper' ) );
 		}
-		$body      = null === $payload ? '' : wp_json_encode( $payload );
+		$body = null === $payload ? '' : wp_json_encode( $payload );
+		return self::request( $method, $path, $body, self::signature_headers( $connection, $method, $path, $body ), $timeout );
+	}
+
+	/**
+	 * Several signed calls to the same path at the same time (product photos). Falls back to one
+	 * after the other when the site sends its requests through a proxy.
+	 *
+	 * @param string $method   POST.
+	 * @param string $path     Path.
+	 * @param array  $payloads JSON bodies, by key.
+	 * @param int    $timeout  Seconds.
+	 * @return array<int|string,array{code:int,body:array}|WP_Error> Answers, by the same keys.
+	 */
+	public static function signed_many( $method, $path, array $payloads, $timeout = 20 ) {
+		$connection = Camille_PS_Options::connection();
+		$proxy      = new WP_HTTP_Proxy();
+		if ( ! $connection || count( $payloads ) < 2 || ! class_exists( '\WpOrg\Requests\Requests' ) || $proxy->is_enabled() ) {
+			$answers = array();
+			foreach ( $payloads as $key => $payload ) {
+				$answers[ $key ] = self::signed( $method, $path, $payload, $timeout );
+			}
+			return $answers;
+		}
+		$url      = untrailingslashit( CAMILLE_PS_SERVICE_URL ) . $path;
+		$requests = array();
+		foreach ( $payloads as $key => $payload ) {
+			$body             = wp_json_encode( $payload );
+			$requests[ $key ] = array(
+				'url'     => $url,
+				'type'    => $method,
+				'data'    => $body,
+				'headers' => array_merge( self::base_headers( $body ), self::signature_headers( $connection, $method, $path, $body ) ),
+			);
+		}
+		$responses = \WpOrg\Requests\Requests::request_multiple(
+			$requests,
+			array(
+				'timeout'         => $timeout,
+				'connect_timeout' => 10,
+				'verify'          => ABSPATH . WPINC . '/certificates/ca-bundle.crt',
+				'useragent'       => self::user_agent(),
+			)
+		);
+		$answers   = array();
+		foreach ( array_keys( $payloads ) as $key ) {
+			$response = $responses[ $key ] ?? null;
+			if ( ! $response instanceof \WpOrg\Requests\Response ) {
+				$answers[ $key ] = new WP_Error( 'http_request_failed', $response instanceof Exception ? $response->getMessage() : 'no answer' );
+				continue;
+			}
+			$answers[ $key ] = self::read_answer( (int) $response->status_code, (string) $response->body );
+		}
+		return $answers;
+	}
+
+	/**
+	 * Signature headers of a call.
+	 *
+	 * @param array  $connection Shop connection.
+	 * @param string $method     Method.
+	 * @param string $path       Path.
+	 * @param string $body       Raw body.
+	 * @return array
+	 */
+	private static function signature_headers( array $connection, $method, $path, $body ) {
 		$timestamp = (string) time();
 		$base      = $timestamp . '.' . $method . '.' . $path . '.' . hash( 'sha256', $body );
-		$headers   = array(
+		return array(
 			'X-Camille-Store'     => $connection['store_id'],
 			'X-Camille-Timestamp' => $timestamp,
 			'X-Camille-Signature' => hash_hmac( 'sha256', $base, $connection['secret'] ),
 		);
-		return self::request( $method, $path, $body, $headers, $timeout );
+	}
+
+	/**
+	 * Headers of every call.
+	 *
+	 * @param string $body Raw body.
+	 * @return array
+	 */
+	private static function base_headers( $body ) {
+		return array_merge(
+			array(
+				'Accept'     => 'application/json',
+				'User-Agent' => self::user_agent(),
+			),
+			'' === $body ? array() : array( 'Content-Type' => 'application/json' )
+		);
+	}
+
+	/**
+	 * User agent of the plugin's calls.
+	 *
+	 * @return string
+	 */
+	private static function user_agent() {
+		return 'CamillePersonalShopper/' . CAMILLE_PS_VERSION . '; WordPress';
+	}
+
+	/**
+	 * Decodes an answer. A "service disabled" answer is remembered, so Camille hides at once.
+	 *
+	 * @param int    $code HTTP status.
+	 * @param string $raw  Body.
+	 * @return array{code:int,body:array}
+	 */
+	private static function read_answer( $code, $raw ) {
+		$decoded = json_decode( $raw, true );
+		$decoded = is_array( $decoded ) ? $decoded : array();
+		if ( 503 === $code && ! empty( $decoded['isDisabled'] ) ) {
+			self::remember_status( array( 'isDisabled' => true ) );
+		}
+		return array(
+			'code' => $code,
+			'body' => $decoded,
+		);
 	}
 
 	/**
@@ -64,14 +172,7 @@ class Camille_PS_API {
 		$args = array(
 			'method'  => $method,
 			'timeout' => $timeout,
-			'headers' => array_merge(
-				array(
-					'Accept'     => 'application/json',
-					'User-Agent' => 'CamillePersonalShopper/' . CAMILLE_PS_VERSION . '; WordPress',
-				),
-				'' === $body ? array() : array( 'Content-Type' => 'application/json' ),
-				$headers
-			),
+			'headers' => array_merge( self::base_headers( $body ), $headers ),
 		);
 		if ( '' !== $body ) {
 			$args['body'] = $body;
@@ -80,16 +181,7 @@ class Camille_PS_API {
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		$code    = (int) wp_remote_retrieve_response_code( $response );
-		$decoded = json_decode( (string) wp_remote_retrieve_body( $response ), true );
-		$decoded = is_array( $decoded ) ? $decoded : array();
-		if ( 503 === $code && ! empty( $decoded['isDisabled'] ) ) {
-			self::remember_status( array( 'isDisabled' => true ) );
-		}
-		return array(
-			'code' => $code,
-			'body' => $decoded,
-		);
+		return self::read_answer( (int) wp_remote_retrieve_response_code( $response ), (string) wp_remote_retrieve_body( $response ) );
 	}
 
 	/**

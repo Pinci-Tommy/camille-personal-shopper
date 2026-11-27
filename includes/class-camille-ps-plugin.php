@@ -26,6 +26,7 @@ class Camille_PS_Plugin {
 		}
 		Camille_PS_Catalog_Sync::init();
 		Camille_PS_Live_Sync::init();
+		Camille_PS_Photo_Copies::init();
 		Camille_PS_Persona::init();
 		Camille_PS_Frontend::init();
 		Camille_PS_Privacy::init();
