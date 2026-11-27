@@ -18,12 +18,16 @@ class Camille_PS_Catalog_Sync {
 	const GROUP       = 'camille-personal-shopper';
 	const PER_PAGE    = 50;
 	const MAX_RETRIES = 5;
+	/** Seconds a page spends copying product photos before it hands over to the next round. */
+	const PHOTO_SECONDS = 20;
+	/** Rounds a page may spend on photos; past them it goes with the site addresses. */
+	const PHOTO_ROUNDS = 30;
 
 	/**
 	 * Hooks the background actions.
 	 */
 	public static function init() {
-		add_action( self::HOOK_PAGE, array( __CLASS__, 'export_page' ), 10, 3 );
+		add_action( self::HOOK_PAGE, array( __CLASS__, 'export_page' ), 10, 4 );
 		add_action( self::HOOK_FINISH, array( __CLASS__, 'finish' ), 10, 2 );
 	}
 
@@ -85,17 +89,32 @@ class Camille_PS_Catalog_Sync {
 	 * @param string $run_id  Sync id given by the service.
 	 * @param int    $page    Page number.
 	 * @param int    $attempt Tries already made for this page.
+	 * @param int    $photo_round Rounds already spent copying this page's photos.
 	 */
-	public static function export_page( $run_id, $page, $attempt ) {
+	public static function export_page( $run_id, $page, $attempt, $photo_round = 0 ) {
 		if ( ! self::is_current( $run_id ) ) {
 			return;
 		}
-		$query    = Camille_PS_Product_Export::query_page( (int) $page, self::PER_PAGE );
-		$payloads = array();
+		$query      = Camille_PS_Product_Export::query_page( (int) $page, self::PER_PAGE );
+		$exportable = array();
+		$image_ids  = array();
 		foreach ( $query['products'] as $product ) {
 			if ( Camille_PS_Product_Export::is_exportable( $product ) ) {
-				$payloads[] = Camille_PS_Product_Export::build( $product );
+				$exportable[] = $product;
+				$image_ids    = array_merge( $image_ids, Camille_PS_Product_Export::image_ids( $product ) );
 			}
+		}
+		if ( $image_ids && (int) $photo_round < self::PHOTO_ROUNDS ) {
+			// The photos go before the products, so Camille gets the address of its own copies.
+			$photos = Camille_PS_Photo_Copies::ensure( $image_ids, self::PHOTO_SECONDS );
+			if ( $photos['waiting'] > 0 && $photos['handled'] > 0 ) {
+				as_enqueue_async_action( self::HOOK_PAGE, array( $run_id, (int) $page, (int) $attempt, (int) $photo_round + 1 ), self::GROUP );
+				return;
+			}
+		}
+		$payloads = array();
+		foreach ( $exportable as $product ) {
+			$payloads[] = Camille_PS_Product_Export::build( $product );
 		}
 		if ( $payloads ) {
 			$result = Camille_PS_API::signed(

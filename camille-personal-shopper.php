@@ -3,7 +3,7 @@
  * Plugin Name:       Camille – AI Fashion Shopping Assistant & Virtual Try-On for WooCommerce
  * Plugin URI:        https://camille-ai.com
  * Description:       Camille is an AI fashion shopping assistant. She advises your customers in chat, suggests outfits from your catalog and shows them on the customer's own photo.
- * Version:           0.5.1
+ * Version:           0.5.2
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -21,7 +21,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'CAMILLE_PS_VERSION', '0.5.1' );
+define( 'CAMILLE_PS_VERSION', '0.5.2' );
 define( 'CAMILLE_PS_FILE', __FILE__ );
 define( 'CAMILLE_PS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CAMILLE_PS_URL', plugin_dir_url( __FILE__ ) );
@@ -49,6 +49,7 @@ require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-catalog-filter.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-customers.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-activity.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-language.php';
+require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-photo-copies.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-product-export.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-catalog-sync.php';
 require_once CAMILLE_PS_DIR . 'includes/class-camille-ps-live-sync.php';

@@ -4,7 +4,7 @@ Tags: ai shopping assistant, virtual try-on, ai chatbot, fashion, product recomm
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.5.1
+Stable tag: 0.5.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ Camille only suggests what you sell. She works from your own catalog, follows yo
 
 = Light on your shop =
 
-The chat button is a small script loaded after the rest of the page, and the chat loads only when a visitor opens it. Your catalog reaches Camille in the background, 50 products at a time. Changes arrive within minutes, and a full sync runs every night. Each colour of a product becomes a separate item, with its own photos and price.
+The chat button is a small script loaded after the rest of the page, and the chat loads only when a visitor opens it. Your catalog reaches Camille in the background, 50 products at a time. Changes arrive within minutes, and a full sync runs every night. Each colour of a product becomes a separate item, with its own photos and price. The first sync also copies the product photos, so it takes a few minutes longer.
 
 = Pricing =
 
@@ -46,7 +46,7 @@ Camille works with credits. A new shop gets 300 free credits, and more credits a
 This plugin connects your shop to **Pinci**, the service that runs Camille, provided by Instamark S.r.l. (Italy). Without it the plugin does nothing. Data is exchanged as follows:
 
 * **When you connect the shop** (WooCommerce > Camille), the plugin sends the email of your Pinci account, your site address, the site name and the admin language to `https://woo.pinci.ai`, which emails you a confirmation code.
-* **When the catalog is synced** (when you press the button, every night, and a few minutes after you change a product), the plugin sends the published products you chose for Camille (WooCommerce > Camille) to `https://woo.pinci.ai`: name, description, categories, tags, brand, attributes, prices, stock status, product address and photo addresses. These are public data of your shop. No order, customer or personal data is sent.
+* **When the catalog is synced** (when you press the button, every night, and a few minutes after you change a product), the plugin sends the published products you chose for Camille (WooCommerce > Camille) to `https://woo.pinci.ai`: name, description, categories, tags, brand, attributes, prices, stock status and product address. It also sends a copy of each product photo, read from your site's disk and reduced to at most 1600 pixels, once per photo (again only if the photo is replaced). Camille uses these copies for the chat and the virtual try-on, so no firewall, CDN or bot protection of your hosting can block them. A photo that cannot be read from disk is sent by its address on your site. These are public data of your shop. No order, customer or personal data is sent.
 * **When you save the billing details** (company name, VAT number, address, SDI code or PEC, invoice email), the plugin sends them to `https://woo.pinci.ai`. Instamark S.r.l. uses them only to invoice your credit purchases.
 * **When you customise the personal shopper**, the plugin sends the name, the gender and, if you upload one, the photo you chose to `https://woo.pinci.ai`.
 * **When you open the Conversations or Virtual try-ons tab, or a customer profile**, the plugin reads the chats and try-ons of your customers from `https://woo.pinci.ai`. Pinci knows a customer only by the WordPress user number: the names and emails you see come from your own site and are never sent.
@@ -109,6 +109,9 @@ No. Credits and catalog stay on your Pinci account. Connect again with the same 
 Fonts shipped with the plugin: Manrope (The Manrope Project Authors) and Cormorant Garamond (The Cormorant Project Authors), both under the SIL Open Font License 1.1, see assets/fonts.
 
 == Changelog ==
+
+= 0.5.2 =
+* Product photos are copied to Camille when the catalog is synced. Virtual try-ons no longer depend on your hosting letting outside servers download the photos.
 
 = 0.5.1 =
 * The name and photo of your personal shopper are copied to your site: visitors' browsers contact Pinci only when they open the chat.

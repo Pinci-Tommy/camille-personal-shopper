@@ -12,7 +12,7 @@ if ( ! defined( 'CAMILLE_PS_SERVICE_URL' ) ) {
 	define( 'CAMILLE_PS_SERVICE_URL', 'https://woo.pinci.ai' );
 }
 if ( ! defined( 'CAMILLE_PS_VERSION' ) ) {
-	define( 'CAMILLE_PS_VERSION', '0.5.1' );
+	define( 'CAMILLE_PS_VERSION', '0.5.2' );
 }
 require_once __DIR__ . '/includes/class-camille-ps-options.php';
 require_once __DIR__ . '/includes/class-camille-ps-api.php';
@@ -44,8 +44,10 @@ if ( empty( $camille_ps_uploads['error'] ) ) {
 	}
 }
 
-// Products left out by hand (the only data the plugin writes on products).
+// Products left out by hand, and the addresses of the photo copies kept by Camille.
 delete_post_meta_by_key( '_camille_ps_excluded' );
+delete_post_meta_by_key( '_camille_ps_photo' );
+delete_post_meta_by_key( '_camille_ps_photo_failed' );
 delete_metadata( 'user', 0, 'camille_ps_preview', '', true );
 delete_metadata( 'user', 0, 'camille_ps_admin_language', '', true );
 

@@ -209,7 +209,36 @@ class Camille_PS_Product_Export {
 	}
 
 	/**
-	 * Image URLs, large size (good enough for the virtual try-on, light enough to process).
+	 * Every photo of a product, in the order they are sent: main, gallery, then the variations'.
+	 *
+	 * @param WC_Product $product Simple or variable product.
+	 * @return int[] Attachment ids.
+	 */
+	public static function image_ids( $product ) {
+		$main = array_merge( array( $product->get_image_id() ), $product->get_gallery_image_ids() );
+		$ids  = array_slice( array_values( array_unique( array_filter( array_map( 'intval', $main ) ) ) ), 0, self::MAX_IMAGES );
+		if ( $product->is_type( 'variable' ) ) {
+			foreach ( array_slice( $product->get_children(), 0, self::MAX_VARIATIONS ) as $variation_id ) {
+				$ids[] = (int) get_post_thumbnail_id( $variation_id );
+			}
+		}
+		return array_values( array_unique( array_filter( array_map( 'intval', $ids ) ) ) );
+	}
+
+	/**
+	 * Address of a photo: Camille's copy when there is one, otherwise the large size on the site
+	 * (good enough for the virtual try-on, light enough to process).
+	 *
+	 * @param int $image_id Attachment id.
+	 * @return string
+	 */
+	private static function image_url( $image_id ) {
+		$copy = Camille_PS_Photo_Copies::url( $image_id );
+		return '' !== $copy ? $copy : (string) wp_get_attachment_image_url( $image_id, 'large' );
+	}
+
+	/**
+	 * Photo addresses of a product.
 	 *
 	 * @param array $image_ids Attachment ids.
 	 * @return string[]
@@ -217,7 +246,7 @@ class Camille_PS_Product_Export {
 	private static function image_urls( array $image_ids ) {
 		$urls = array();
 		foreach ( array_unique( array_filter( array_map( 'intval', $image_ids ) ) ) as $image_id ) {
-			$url = wp_get_attachment_image_url( $image_id, 'large' );
+			$url = self::image_url( $image_id );
 			if ( $url ) {
 				$urls[] = $url;
 			}
@@ -245,7 +274,7 @@ class Camille_PS_Product_Export {
 				'price'        => self::money( $variation->get_price() ),
 				'regularPrice' => self::money( $variation->get_regular_price() ),
 				'isInStock'    => $variation->is_in_stock(),
-				'imageUrl'     => $image_id ? (string) wp_get_attachment_image_url( $image_id, 'large' ) : '',
+				'imageUrl'     => $image_id ? self::image_url( $image_id ) : '',
 			);
 		}
 		return $out;
